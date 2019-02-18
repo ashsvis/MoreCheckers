@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Checkers
@@ -164,6 +165,89 @@ namespace Checkers
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             // рисуем доску с шашками
             _io.DrawBoard(graphics);
+        }
+
+        private void CheckersForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                var n = lvLog.SelectedIndices.Count > 0 ? lvLog.SelectedIndices[0] : -1;
+                if (n < 0 || n == _game.Log.Count - 1)
+                {
+                    _io.MouseDown(e.Location);
+                    Invalidate();
+                }
+                else
+                    if (_board_AskQuestion("Продолжить игру?", "Шашки"))
+                {
+                    var item = lvLog.Items[_game.Log.Count - 1];
+                    item.Selected = true;
+                }
+            }
+
+        }
+
+        private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            _io.MouseMove(e.Location);
+            Invalidate();
+        }
+
+        private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            _io.MouseUp(e.Location);
+            Invalidate();
+        }
+
+        private void tsmiTools_DropDownOpening(object sender, EventArgs e)
+        {
+            tsmiSelfGame.Checked = _game.WinPlayer == WinPlayer.Game && _game.Mode == PlayMode.SelfGame;
+            tsmiAutoGame.Checked = _game.WinPlayer == WinPlayer.Game && _game.Mode == PlayMode.Game;
+            tsmiNetGame.Checked = _game.WinPlayer == WinPlayer.Game && _game.Mode == PlayMode.NetGame;
+            tsmiSelfGame.Enabled = tsmiAutoGame.Enabled = tsmiNetGame.Enabled = _game.WinPlayer != WinPlayer.Game;
+        }
+
+        private void tsmiSelfGame_Click(object sender, EventArgs e)
+        {
+            var last = _game.Mode;
+            _game.Mode = PlayMode.SelfGame;
+            //if (last == PlayMode.NetGame)
+                //NetStop();
+            _game.WinPlayer = WinPlayer.Game;
+            UpdateStatus();
+        }
+
+        private void lvLog_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+        {
+            e.Item = new ListViewItem();
+            var item = _game.Log[e.ItemIndex];
+            e.Item.Text = item.Number.ToString();
+            e.Item.SubItems.Add(item.White);
+            e.Item.SubItems.Add(item.Black);
+        }
+
+        private void lvLog_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvLog.SelectedIndices.Count == 0) return;
+            var n = lvLog.SelectedIndices[0];
+            _board.Selected = null;
+
+            var semiSteps = _game.Log[n].GetMapSemiSteps();
+            foreach (var item in semiSteps)
+            {
+                var map = item.DeepClone();
+                _board.SetMap(map);
+                Refresh();
+                Thread.Sleep(200);
+            }
+
+            if (n == _game.Log.Count - 1)
+            {
+                lvLog.SelectedIndices.Clear();
+                UpdateStatus();
+            }
+            else
+                UpdateStatusText(string.Format("Положение фигур после {0}-го хода.", n + 1));
         }
     }
 

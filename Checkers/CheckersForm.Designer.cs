@@ -34,6 +34,7 @@
             this.saveGameDialog = new System.Windows.Forms.SaveFileDialog();
             this.mainStatus = new System.Windows.Forms.StatusStrip();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslDateTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainTools = new System.Windows.Forms.ToolStrip();
             this.tsbNewGame = new System.Windows.Forms.ToolStripButton();
             this.tsbSaveGame = new System.Windows.Forms.ToolStripButton();
@@ -68,7 +69,6 @@
             this.lbBlackScore = new System.Windows.Forms.Label();
             this.lbWhiteScore = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tsslDateTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainStatus.SuspendLayout();
             this.mainTools.SuspendLayout();
             this.mainMenu.SuspendLayout();
@@ -107,6 +107,14 @@
             this.status.Spring = true;
             this.status.Text = "Готово";
             this.status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tsslDateTime
+            // 
+            this.tsslDateTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.tsslDateTime.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
+            this.tsslDateTime.Name = "tsslDateTime";
+            this.tsslDateTime.Size = new System.Drawing.Size(130, 19);
+            this.tsslDateTime.Text = "Нет связи с сервером";
             // 
             // mainTools
             // 
@@ -244,12 +252,14 @@
             this.tsmiTools.Name = "tsmiTools";
             this.tsmiTools.Size = new System.Drawing.Size(79, 20);
             this.tsmiTools.Text = "&Настройки";
+            this.tsmiTools.DropDownOpening += new System.EventHandler(this.tsmiTools_DropDownOpening);
             // 
             // tsmiSelfGame
             // 
             this.tsmiSelfGame.Name = "tsmiSelfGame";
             this.tsmiSelfGame.Size = new System.Drawing.Size(192, 22);
             this.tsmiSelfGame.Text = "Игра с самим собой";
+            this.tsmiSelfGame.Click += new System.EventHandler(this.tsmiSelfGame_Click);
             // 
             // tsmiAutoGame
             // 
@@ -330,6 +340,7 @@
             this.chStep,
             this.chWhite,
             this.chBlack});
+            this.lvLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lvLog.FullRowSelect = true;
             this.lvLog.GridLines = true;
             this.lvLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -344,6 +355,8 @@
             this.lvLog.UseCompatibleStateImageBehavior = false;
             this.lvLog.View = System.Windows.Forms.View.Details;
             this.lvLog.VirtualMode = true;
+            this.lvLog.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.lvLog_RetrieveVirtualItem);
+            this.lvLog.SelectedIndexChanged += new System.EventHandler(this.lvLog_SelectedIndexChanged);
             // 
             // chStep
             // 
@@ -401,14 +414,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Партия:";
             // 
-            // tsslDateTime
-            // 
-            this.tsslDateTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.tsslDateTime.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
-            this.tsslDateTime.Name = "tsslDateTime";
-            this.tsslDateTime.Size = new System.Drawing.Size(130, 19);
-            this.tsslDateTime.Text = "Нет связи с сервером";
-            // 
             // CheckersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -425,6 +430,9 @@
             this.Text = "Шашки";
             this.Load += new System.EventHandler(this.CheckersForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.CheckersForm_Paint);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CheckersForm_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CheckersForm_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CheckersForm_MouseUp);
             this.mainStatus.ResumeLayout(false);
             this.mainStatus.PerformLayout();
             this.mainTools.ResumeLayout(false);
