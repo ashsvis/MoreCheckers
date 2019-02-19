@@ -63,6 +63,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Engine.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Io.cs" />
     <Compile Include="LogItem.cs" />

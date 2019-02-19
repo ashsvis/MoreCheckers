@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Checkers
@@ -11,6 +12,11 @@ namespace Checkers
         private Io _io;
         private Board _board;
         private Game _game;
+
+        private string _host = "localhost";
+        private int _dataPort = 5528;
+        private bool _connected;
+        private Engine _engine;
 
         public CheckersForm()
         {
@@ -28,6 +34,76 @@ namespace Checkers
             //_net.DisplayPeerMessage += _net_DisplayPeerMessage;
             //_net.CaptionChanged += _net_CaptionChanged;
             _io = new Io(_game, _board, new Size(0, mainMenu.Height + mainTools.Height));
+
+            _engine = new Engine();
+        }
+
+        private void CheckersForm_Paint(object sender, PaintEventArgs e)
+        {
+            var graphics = e.Graphics;
+            graphics.SmoothingMode = SmoothingMode.HighQuality;
+            //graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            // рисуем доску с шашками
+            _io.DrawBoard(graphics);
+            _engine.Draw(graphics);
+        }
+
+        /// <summary>
+        /// Метод открытия соединения с сервером приложения
+        /// </summary>
+        private void Connect()
+        {
+            Client.Connect(_host, _dataPort, ShowStatus, ConnectionUpdated);
+            var n = 10;
+            while (true)
+            {
+                var dt = Client.GetDate();
+                if (dt != DateTime.MinValue)
+                    break;
+                Thread.Sleep(500);
+                n--;
+                if (n < 0) break;
+            }
+        }
+
+        private void ConnectionUpdated(ConnectionState state)
+        {
+            switch (state)
+            {
+                case ConnectionState.Opening:
+                    ShowStatus("Открытие соединения...");
+                    break;
+                case ConnectionState.Opened:
+                    _connected = true;
+                    ShowStatus("Соединение установлено");
+                    //SaveConnectConfig();
+                    break;
+                case ConnectionState.Closing:
+                    _connected = false;
+                    ShowStatus("Закрытие соединения...");
+                    break;
+                case ConnectionState.Closed:
+                    _connected = false;
+                    ShowStatus("Соединение закрыто");
+                    break;
+                case ConnectionState.Faulted:
+                    _connected = false;
+                    ShowStatus("Соединение не установлено");
+                    break;
+            }
+        }
+
+        private void ShowStatus(string errormessage)
+        {
+            var method = new MethodInvoker(() => 
+            {
+                tsslDateTime.Text = errormessage;
+                mainStatus.Refresh();
+            });
+            if (InvokeRequired)
+                BeginInvoke(method);
+            else
+                method();
         }
 
         private void _board_CheckerMoved(bool direction, Address startPos, Address endPos, MoveResult moveResult, int stepCount)
@@ -139,6 +215,49 @@ namespace Checkers
             ClientSize = size;
             //UpdateStatus();
             CenterToScreen();
+
+            // соединяемся к сервису без блокировки интерфейса
+            new Task(() =>
+            {
+                // подключение к серверу
+                Connect();
+            }).Start();
+
+            var txt = @"
+m1 = 35;123
+m2 = 35;156
+m3 = 67;156
+m4 = 74;149
+m5 = 74;123
+m6 = 74;134
+
+TEXT  = Speed
+TEXT2 = P34
+
+scale m1 2,5
+
+//frame
+poly m1 m2 m3 m4 m5
+FillOpacity = 100
+draw
+fill
+
+//text1
+FillOpacity = 150
+FillColor   =  0;251;251
+FontSize    = 9
+text m1 TEXT
+fill
+
+//text2
+FillOpacity = 250
+FillColor   =  149;255;255
+FontSize    = 15
+TextAlign   = BottomLeft
+text m6 TEXT2
+fill";
+            _engine.Parse(txt);
+            Invalidate();
         }
 
         /// <summary>
@@ -156,15 +275,6 @@ namespace Checkers
             // получаем текущую дату и время с сервера
             // заодно (и это важно) периодический вызов диагностирует состояние связи
             UpdateClock();
-        }
-
-        private void CheckersForm_Paint(object sender, PaintEventArgs e)
-        {
-            var graphics = e.Graphics;
-            graphics.SmoothingMode = SmoothingMode.HighQuality;
-            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            // рисуем доску с шашками
-            _io.DrawBoard(graphics);
         }
 
         private void CheckersForm_MouseDown(object sender, MouseEventArgs e)
