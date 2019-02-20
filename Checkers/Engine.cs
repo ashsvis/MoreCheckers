@@ -18,6 +18,7 @@ namespace Checkers
         public Dictionary<string, Color> Colors { get; private set; } = new Dictionary<string, Color>();
         public Dictionary<string, float> Floats { get; private set; } = new Dictionary<string, float>();
         public Dictionary<string, string> Strings { get; private set; } = new Dictionary<string, string>();
+        public Dictionary<string, RectangleF> Rects { get; private set; } = new Dictionary<string, RectangleF>();
 
         public void Draw(Graphics gr)
         {
@@ -37,11 +38,20 @@ namespace Checkers
                 var args = string.Join(" ", items, 1, items.Length - 1);
                 switch (items[0])
                 {
+                    case "offset":
+                        compiled.Add(Offset(args));
+                        break;
                     case "scale":
                         compiled.Add(Scale(args));
                         break;
+                    case "rotate":
+                        compiled.Add(Rotate(args));
+                        break;
                     case "poly":
                         compiled.Add(Poly(args));
+                        break;
+                    case "circle":
+                        compiled.Add(Circle(args));
                         break;
                     case "text":
                         compiled.Add(Text(args));
@@ -58,8 +68,10 @@ namespace Checkers
                             var vals = items[2].Split(new[] { ';' });
                             if (vals.Length == 1)
                             {
-                                if (float.TryParse(vals[0], out float f))
-                                    Floats[items[0]] = f;
+                                if (items[0].StartsWith("TEXT"))
+                                    Strings[items[0]] = vals[0];
+                                else if (float.TryParse(vals[0], out float fval))
+                                    Floats[items[0]] = fval;
                                 else
                                     Strings[items[0]] = vals[0];
                             }
@@ -70,15 +82,74 @@ namespace Checkers
                                 Markers[items[0]] = new PointF(x, y);
                             else
                             if (vals.Length == 3 &&
-                                int.TryParse(vals[0], out int r) &&
-                                int.TryParse(vals[1], out int g) &&
-                                int.TryParse(vals[2], out int b))
-                                Colors[items[0]] = Color.FromArgb(r, g, b);
+                                int.TryParse(vals[0], out int red) &&
+                                int.TryParse(vals[1], out int green) &&
+                                int.TryParse(vals[2], out int blue))
+                                Colors[items[0]] = Color.FromArgb(red, green, blue);
+                            else
+                            if (vals.Length == 4 &&
+                                float.TryParse(vals[0], out float left) &&
+                                float.TryParse(vals[1], out float top) &&
+                                float.TryParse(vals[2], out float width) &&
+                                float.TryParse(vals[3], out float height))
+                                Rects[items[0]] = new RectangleF(left, top, width, height);
                         }
                         break;
                 }
             }
 
+        }
+
+        private Action Circle(string args)
+        {
+            var ar = new Args(this, args);
+            if (ar.Rects.Count < 1)
+                throw new Exception("Expected one rectangle");
+            return () =>
+            {
+                Path.Reset();
+                var rect = ar.Rects[0];
+                Path.AddEllipse(rect);
+                //var c = ar.Markers[0];
+                //var m = ar.Markers[1];
+                //var dx = m.X - c.X;
+                //var dy = m.Y - c.Y;
+                //var r = (float)Math.Sqrt(dx * dx + dy * dy);
+                //Path.AddEllipse(c.X - r / 2, c.Y - r / 2, 2 * r, 2 * r);
+            };
+        }
+
+        private Action Rotate(string args)
+        {
+            var ar = new Args(this, args);
+            if (ar.Markers.Count < 1)
+                throw new Exception("Expected one marker");
+
+            if (ar.Floats.Count < 1)
+                throw new Exception("Expected one float value");
+
+            return () =>
+            {
+                var angle = ar.Floats[0];
+                var c = ar.Markers[0];
+                Graphics.TranslateTransform(c.X, c.Y);
+                Graphics.RotateTransform(angle);
+                Graphics.TranslateTransform(-c.X, -c.Y);
+            };
+        }
+
+        private Action Offset(string args)
+        {
+            var ar = new Args(this, args);
+            if (ar.Floats.Count < 2)
+                throw new Exception("Expected two float values");
+
+            return () =>
+            {
+                var x = ar.Floats[0];
+                var y = ar.Floats[1];
+                Graphics.TranslateTransform(x, y);
+            };
         }
 
         private Action Scale(string args)
@@ -111,6 +182,7 @@ namespace Checkers
             var emSize = Floats.ContainsKey("FontSize") ? Floats["FontSize"] : 8;
             return () =>
             {
+                Path.Reset();
                 Path.AddString(ar.Strings[0], new FontFamily("Arial"), 0, emSize, ar.Markers[0], null);
             };
         }
@@ -122,6 +194,7 @@ namespace Checkers
                 throw new Exception("Expected two markers");
             return () =>
             {
+                Path.Reset();
                 Path.AddPolygon(ar.Markers.ToArray());
             };
         }
@@ -147,32 +220,5 @@ namespace Checkers
                     Graphics.DrawPath(pen, Path);
             };
         }
-    }
-
-    internal class Args
-    {
-        private readonly Engine engine;
-
-        public Args(Engine engine, string args)
-        {
-            this.engine = engine;
-            var items = args.Split(new[] { ' ' });
-            foreach (var item in items)
-            {
-                if (engine.Markers.ContainsKey(item))
-                    Markers.Add(engine.Markers[item]);
-                else if (engine.Strings.ContainsKey(item))
-                    Strings.Add(engine.Strings[item]);
-                else if (engine.Floats.ContainsKey(item))
-                    Floats.Add(engine.Floats[item]);
-                else if (float.TryParse(item, out float f))
-                    Floats.Add(f);
-            }
-        }
-
-        public List<PointF> Markers { get; private set; } = new List<PointF>();
-        public List<Color> Colors { get; private set; } = new List<Color>();
-        public List<float> Floats { get; private set; } = new List<float>();
-        public List<string> Strings { get; private set; } = new List<string>();
     }
 }

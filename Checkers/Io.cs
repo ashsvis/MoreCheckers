@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 
 namespace Checkers
 {
@@ -95,6 +96,179 @@ namespace Checkers
             cell = null;
             return _board.GetCell(GetCellAddress(mouse), out cell);
         }
+
+        public string DrawBoardText()
+        {
+            var sb = new StringBuilder();
+            // закраска фона доски
+            var side = _game.Player == Player.Black; // переворот доски
+            var fields = _board.GetFields();
+            var map = _board.GetMap();
+            var cellsCount = _board.SideSize;
+            var boardSize = GetDrawBoardSize();
+            var boardRect = new Rectangle(new Point(_topLeftSize.Width, _topLeftSize.Height), boardSize);
+            sb.AppendLine(string.Format("m1 = {0};{1}", boardRect.X, boardRect.Y));
+            sb.AppendLine(string.Format("m2 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y));
+            sb.AppendLine(string.Format("m3 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y + boardRect.Height));
+            sb.AppendLine(string.Format("m4 = {0};{1}", boardRect.X, boardRect.Y + boardRect.Height));
+            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 234, 206, 175));
+            sb.AppendLine("poly m1 m2 m3 m4");
+            sb.AppendLine("fill");
+            DrawCharBorder(sb, boardRect, cellsCount, side);
+            DrawNumberBorder(sb, boardRect, cellsCount, side);
+            // рисуем поля доски
+            for (var i = 0; i < cellsCount; i++)
+            {
+                var ix = side ? cellsCount - i - 1 : i;
+                for (var j = 0; j < cellsCount; j++)
+                {
+                    var jx = side ? cellsCount - j - 1 : j;
+                    var rect = new Rectangle(_topLeftSize.Width + BorderWidth + jx * CellSize,
+                        _topLeftSize.Height + BorderWidth + ix * CellSize, CellSize, CellSize);
+                    sb.AppendLine(string.Format("m9 = {0};{1}", rect.X, rect.Y));
+                    sb.AppendLine(string.Format("m10 = {0};{1}", rect.X + rect.Width, rect.Y));
+                    sb.AppendLine(string.Format("m11 = {0};{1}", rect.X + rect.Width, rect.Y + rect.Height));
+                    sb.AppendLine(string.Format("m12 = {0};{1}", rect.X, rect.Y + rect.Height));
+
+                    var address = new Address(j, i);
+                    var fieldState = (State)fields[address]; // цвет поля доски
+                    var mapCell = (Cell)map[address];        // наличие и цвет фигур
+
+                    if (fieldState == State.Black)
+                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 129, 112, 94));
+                    else
+                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 233, 217, 200));
+
+                    if (_hoverCells.Contains(mapCell) && !_down)
+                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
+                    else if (_board.GetSteps().Contains(mapCell))
+                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
+                    else if (_board.GetBattles().Contains(mapCell))
+                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
+
+                    sb.AppendLine("poly m9 m10 m11 m12");
+                    sb.AppendLine("fill");
+                    if (mapCell != _board.Selected || !_down)
+                        DrawChecker(sb, rect, mapCell);
+                }
+            }
+            if (_down)
+                DrawChecker(sb, _moveRect, _board.Selected, true);
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Рисуем шашку
+        /// </summary>
+        /// <param name="sb">Накопитель текста</param>
+        /// <param name="rect">Прямоугольник рисования</param>
+        /// <param name="mapCell">Ссылка на ячейку с фишкой</param>
+        /// <param name="shadow">Тень под фишкой</param>
+        private static void DrawChecker(StringBuilder sb, Rectangle rect, Cell mapCell, bool shadow = false)
+        {
+            if (mapCell == null) return;
+            if (mapCell.State == State.White || mapCell.State == State.Black)
+            {
+                var sizeW = CellSize - (int)(CellSize * 0.91);
+                var sizeH = CellSize - (int)(CellSize * 0.91);
+                rect.Inflate(-sizeW, -sizeH);
+                if (shadow)
+                {
+                    const int shadowOffset = 6;
+                    rect.Offset(shadowOffset, shadowOffset);
+                    //using (var brush = new SolidBrush(Color.FromArgb(128, Color.Black)))
+                    //    graphics.FillEllipse(brush, rect);
+                    rect.Offset(-shadowOffset, -shadowOffset);
+                }
+                if (mapCell.State == State.Black)
+                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 10, 10, 10));
+                else
+                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 250, 250, 250));
+                sb.AppendLine(string.Format("r1 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
+                sb.AppendLine("circle r1");
+                sb.AppendLine("fill");
+                rect.Inflate(-sizeW, -sizeH);
+                sb.AppendLine(string.Format("DrawColor = {0};{1};{2}", 192, 192, 192));
+                sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
+                sb.AppendLine("circle r2");
+                sb.AppendLine("draw");
+                if (!mapCell.King)
+                {
+                    rect.Inflate(-sizeW, -sizeH);
+                    sb.AppendLine(string.Format("r3 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
+                    sb.AppendLine("circle r3");
+                    sb.AppendLine("draw");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Рисование букв столбцов по обеим сторонам доски
+        /// </summary>
+        /// <param name="sb">Накопитель текста</param>
+        /// <param name="boardRect">Размер доски вместе с рамкой</param>
+        /// <param name="cellsCount">Количество клеток по стороне</param>
+        /// <param name="side">Сторона игрока (нижняя): false - белые, true - чёрные</param>
+        private void DrawCharBorder(StringBuilder sb, Rectangle boardRect, int cellsCount, bool side)
+        {
+            var chars = side ? "HGFEDCBA" : "ABCDEFGH";
+            for (var j = 0; j < cellsCount; j++)
+            {
+                var topRect = new Rectangle(BorderWidth + j * CellSize, _topLeftSize.Height, CellSize, BorderWidth);
+                var bottomRect = new Rectangle(BorderWidth + j * CellSize,
+                                           _topLeftSize.Height + boardRect.Height - BorderWidth, CellSize, BorderWidth);
+                sb.AppendLine(string.Format("m5 = {0};{1}", topRect.X, topRect.Y));
+                sb.AppendLine(string.Format("m6 = {0};{1}", bottomRect.X, bottomRect.Y));
+                using (var sf = new StringFormat())
+                {
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Center;
+                    var ch = chars.ToCharArray()[j].ToString();
+                    sb.AppendLine(string.Format("TEXT = {0}", ch));
+                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
+                    sb.AppendLine(string.Format("FontSize = {0}", 10));
+                    sb.AppendLine("text m5 TEXT");
+                    sb.AppendLine("fill");
+                    sb.AppendLine("text m6 TEXT");
+                    sb.AppendLine("fill");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Рисование номеров строк по обеим сторонам доски
+        /// </summary>
+        /// <param name="sb">Накопитель текста</param>
+        /// <param name="boardRect">Размер доски вместе с рамкой</param>
+        /// <param name="cellsCount">Количество клеток по стороне</param>
+        /// <param name="side">Сторона игрока (нижняя): false - белые, true - чёрные</param>
+        private void DrawNumberBorder(StringBuilder sb, Rectangle boardRect, int cellsCount, bool side)
+        {
+            var chars = side ? "12345678" : "87654321";
+            for (var i = 0; i < cellsCount; i++)
+            {
+                var topRect = new Rectangle(0, _topLeftSize.Height + BorderWidth + i * CellSize, BorderWidth, CellSize);
+                var bottomRect = new Rectangle(boardRect.Width - BorderWidth,
+                                               _topLeftSize.Height + BorderWidth + i * CellSize, BorderWidth, CellSize);
+                sb.AppendLine(string.Format("m7 = {0};{1}", topRect.X, topRect.Y));
+                sb.AppendLine(string.Format("m8 = {0};{1}", bottomRect.X, bottomRect.Y));
+                using (var sf = new StringFormat())
+                {
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Center;
+                    var ch = chars.ToCharArray()[i].ToString();
+                    sb.AppendLine(string.Format("TEXT1 = {0}", ch));
+                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
+                    sb.AppendLine(string.Format("FontSize = {0}", 10));
+                    sb.AppendLine("text m7 TEXT1");
+                    sb.AppendLine("fill");
+                    sb.AppendLine("text m8 TEXT1");
+                    sb.AppendLine("fill");
+                }
+            }
+        }
+
 
         /// <summary>
         /// Рисование доски

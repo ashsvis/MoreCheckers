@@ -36,15 +36,53 @@ namespace Checkers
             _io = new Io(_game, _board, new Size(0, mainMenu.Height + mainTools.Height));
 
             _engine = new Engine();
+
+            var txt = @"
+m1 = 35;23
+m2 = 35;56
+m3 = 67;56
+m4 = 74;49
+m5 = 74;23
+m6 = 74;34
+
+TEXT  = Speed
+TEXT2 = P34
+
+offset 50 75
+scale m1 2,5
+rotate m1 45
+
+//frame
+poly m1 m2 m3 m4 m5
+FillOpacity = 100
+FillColor   = 0;0;251
+DrawColor   = 255;0;0
+draw
+fill
+
+//text1
+FillOpacity = 150
+FillColor   = 0;251;251
+FontSize    = 9
+text m1 TEXT
+fill
+
+//text2
+FillOpacity = 250
+FillColor   = 149;255;255
+FontSize    = 15
+TextAlign   = BottomLeft
+text m6 TEXT2
+fill";
         }
 
         private void CheckersForm_Paint(object sender, PaintEventArgs e)
         {
             var graphics = e.Graphics;
             graphics.SmoothingMode = SmoothingMode.HighQuality;
-            //graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             // рисуем доску с шашками
-            _io.DrawBoard(graphics);
+            //_io.DrawBoard(graphics);
             _engine.Draw(graphics);
         }
 
@@ -168,6 +206,8 @@ namespace Checkers
 
         private void _board_ActivePlayerChanged()
         {
+            _engine.Parse(_io.DrawBoardText());
+            Invalidate();
             UpdateStatus();
             //_net.SendNetGameStatus();
         }
@@ -223,41 +263,7 @@ namespace Checkers
                 Connect();
             }).Start();
 
-            var txt = @"
-m1 = 35;123
-m2 = 35;156
-m3 = 67;156
-m4 = 74;149
-m5 = 74;123
-m6 = 74;134
-
-TEXT  = Speed
-TEXT2 = P34
-
-scale m1 2,5
-
-//frame
-poly m1 m2 m3 m4 m5
-FillOpacity = 100
-draw
-fill
-
-//text1
-FillOpacity = 150
-FillColor   =  0;251;251
-FontSize    = 9
-text m1 TEXT
-fill
-
-//text2
-FillOpacity = 250
-FillColor   =  149;255;255
-FontSize    = 15
-TextAlign   = BottomLeft
-text m6 TEXT2
-fill";
-            _engine.Parse(txt);
-            Invalidate();
+            _engine.Parse(_io.DrawBoardText());
         }
 
         /// <summary>
