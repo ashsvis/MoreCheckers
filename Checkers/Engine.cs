@@ -50,6 +50,9 @@ namespace Checkers
                     case "poly":
                         compiled.Add(Poly(args));
                         break;
+                    case "rect":
+                        compiled.Add(Rect(args));
+                        break;
                     case "circle":
                         compiled.Add(Circle(args));
                         break;
@@ -98,6 +101,19 @@ namespace Checkers
                 }
             }
 
+        }
+
+        private Action Rect(string args)
+        {
+            var ar = new Args(this, args);
+            if (ar.Rects.Count < 1)
+                throw new Exception("Expected one rectangle");
+            return () =>
+            {
+                Path.Reset();
+                var rect = ar.Rects[0];
+                Path.AddRectangle(rect);
+            };
         }
 
         private Action Circle(string args)

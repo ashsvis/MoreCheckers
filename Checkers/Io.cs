@@ -107,12 +107,16 @@ namespace Checkers
             var cellsCount = _board.SideSize;
             var boardSize = GetDrawBoardSize();
             var boardRect = new Rectangle(new Point(_topLeftSize.Width, _topLeftSize.Height), boardSize);
-            sb.AppendLine(string.Format("m1 = {0};{1}", boardRect.X, boardRect.Y));
-            sb.AppendLine(string.Format("m2 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y));
-            sb.AppendLine(string.Format("m3 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y + boardRect.Height));
-            sb.AppendLine(string.Format("m4 = {0};{1}", boardRect.X, boardRect.Y + boardRect.Height));
+            //sb.AppendLine(string.Format("m1 = {0};{1}", boardRect.X, boardRect.Y));
+            //sb.AppendLine(string.Format("m2 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y));
+            //sb.AppendLine(string.Format("m3 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y + boardRect.Height));
+            //sb.AppendLine(string.Format("m4 = {0};{1}", boardRect.X, boardRect.Y + boardRect.Height));
             sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 234, 206, 175));
-            sb.AppendLine("poly m1 m2 m3 m4");
+
+            sb.AppendLine(string.Format("r1 = {0};{1};{2};{3}", boardRect.X, boardRect.Y, boardRect.Width, boardRect.Height));
+            sb.AppendLine("rect r1");
+
+            //sb.AppendLine("poly m1 m2 m3 m4");
             sb.AppendLine("fill");
             DrawCharBorder(sb, boardRect, cellsCount, side);
             DrawNumberBorder(sb, boardRect, cellsCount, side);
@@ -125,10 +129,11 @@ namespace Checkers
                     var jx = side ? cellsCount - j - 1 : j;
                     var rect = new Rectangle(_topLeftSize.Width + BorderWidth + jx * CellSize,
                         _topLeftSize.Height + BorderWidth + ix * CellSize, CellSize, CellSize);
-                    sb.AppendLine(string.Format("m9 = {0};{1}", rect.X, rect.Y));
-                    sb.AppendLine(string.Format("m10 = {0};{1}", rect.X + rect.Width, rect.Y));
-                    sb.AppendLine(string.Format("m11 = {0};{1}", rect.X + rect.Width, rect.Y + rect.Height));
-                    sb.AppendLine(string.Format("m12 = {0};{1}", rect.X, rect.Y + rect.Height));
+                    //sb.AppendLine(string.Format("m9 = {0};{1}", rect.X, rect.Y));
+                    //sb.AppendLine(string.Format("m10 = {0};{1}", rect.X + rect.Width, rect.Y));
+                    //sb.AppendLine(string.Format("m11 = {0};{1}", rect.X + rect.Width, rect.Y + rect.Height));
+                    //sb.AppendLine(string.Format("m12 = {0};{1}", rect.X, rect.Y + rect.Height));
+                    sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
 
                     var address = new Address(j, i);
                     var fieldState = (State)fields[address]; // цвет поля доски
@@ -146,7 +151,8 @@ namespace Checkers
                     else if (_board.GetBattles().Contains(mapCell))
                         sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
 
-                    sb.AppendLine("poly m9 m10 m11 m12");
+                    //sb.AppendLine("poly m9 m10 m11 m12");
+                    sb.AppendLine("rect r2");
                     sb.AppendLine("fill");
                     if (mapCell != _board.Selected || !_down)
                         DrawChecker(sb, rect, mapCell);
