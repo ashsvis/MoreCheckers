@@ -16,7 +16,8 @@ namespace Checkers
         private string _host = "localhost";
         private int _dataPort = 5528;
         private bool _connected;
-        private Engine _engine;
+        private Engine _engineBoard;
+        private Engine _engineChecker;
 
         public CheckersForm()
         {
@@ -35,7 +36,8 @@ namespace Checkers
             //_net.CaptionChanged += _net_CaptionChanged;
             _io = new Io(_game, _board, new Size(0, mainMenu.Height + mainTools.Height));
 
-            _engine = new Engine();
+            _engineBoard = new Engine();
+            _engineChecker = new Engine();
 
             var txt = @"
 m1 = 35;23
@@ -83,7 +85,8 @@ fill";
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             // рисуем доску с шашками
             //_io.DrawBoard(graphics);
-            _engine.Draw(graphics);
+            _engineBoard.Draw(graphics);
+            _engineChecker.Draw(graphics);
         }
 
         /// <summary>
@@ -206,7 +209,7 @@ fill";
 
         private void _board_ActivePlayerChanged()
         {
-            _engine.Parse(_io.DrawBoardText());
+            _engineBoard.Parse(_io.DrawBoardScript());
             Invalidate();
             UpdateStatus();
             //_net.SendNetGameStatus();
@@ -263,7 +266,7 @@ fill";
                 Connect();
             }).Start();
 
-            _engine.Parse(_io.DrawBoardText());
+            _engineBoard.Parse(_io.DrawBoardScript());
         }
 
         /// <summary>
@@ -291,6 +294,7 @@ fill";
                 if (n < 0 || n == _game.Log.Count - 1)
                 {
                     _io.MouseDown(e.Location);
+                    _engineBoard.Parse(_io.DrawBoardScript());
                     Invalidate();
                 }
                 else
@@ -312,6 +316,7 @@ fill";
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
         {
             _io.MouseUp(e.Location);
+            _engineBoard.Parse(_io.DrawBoardScript());
             Invalidate();
         }
 

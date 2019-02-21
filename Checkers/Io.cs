@@ -97,7 +97,7 @@ namespace Checkers
             return _board.GetCell(GetCellAddress(mouse), out cell);
         }
 
-        public string DrawBoardText()
+        public string DrawBoardScript()
         {
             var sb = new StringBuilder();
             // закраска фона доски
@@ -107,16 +107,11 @@ namespace Checkers
             var cellsCount = _board.SideSize;
             var boardSize = GetDrawBoardSize();
             var boardRect = new Rectangle(new Point(_topLeftSize.Width, _topLeftSize.Height), boardSize);
-            //sb.AppendLine(string.Format("m1 = {0};{1}", boardRect.X, boardRect.Y));
-            //sb.AppendLine(string.Format("m2 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y));
-            //sb.AppendLine(string.Format("m3 = {0};{1}", boardRect.X + boardRect.Width, boardRect.Y + boardRect.Height));
-            //sb.AppendLine(string.Format("m4 = {0};{1}", boardRect.X, boardRect.Y + boardRect.Height));
             sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 234, 206, 175));
 
             sb.AppendLine(string.Format("r1 = {0};{1};{2};{3}", boardRect.X, boardRect.Y, boardRect.Width, boardRect.Height));
             sb.AppendLine("rect r1");
 
-            //sb.AppendLine("poly m1 m2 m3 m4");
             sb.AppendLine("fill");
             DrawCharBorder(sb, boardRect, cellsCount, side);
             DrawNumberBorder(sb, boardRect, cellsCount, side);
@@ -129,10 +124,6 @@ namespace Checkers
                     var jx = side ? cellsCount - j - 1 : j;
                     var rect = new Rectangle(_topLeftSize.Width + BorderWidth + jx * CellSize,
                         _topLeftSize.Height + BorderWidth + ix * CellSize, CellSize, CellSize);
-                    //sb.AppendLine(string.Format("m9 = {0};{1}", rect.X, rect.Y));
-                    //sb.AppendLine(string.Format("m10 = {0};{1}", rect.X + rect.Width, rect.Y));
-                    //sb.AppendLine(string.Format("m11 = {0};{1}", rect.X + rect.Width, rect.Y + rect.Height));
-                    //sb.AppendLine(string.Format("m12 = {0};{1}", rect.X, rect.Y + rect.Height));
                     sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
 
                     var address = new Address(j, i);
@@ -151,15 +142,15 @@ namespace Checkers
                     else if (_board.GetBattles().Contains(mapCell))
                         sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
 
-                    //sb.AppendLine("poly m9 m10 m11 m12");
                     sb.AppendLine("rect r2");
                     sb.AppendLine("fill");
                     if (mapCell != _board.Selected || !_down)
-                        DrawChecker(sb, rect, mapCell);
+                        sb.Append(DrawCheckerScript(rect, mapCell));
                 }
             }
+
             if (_down)
-                DrawChecker(sb, _moveRect, _board.Selected, true);
+                sb.Append(DrawCheckerScript(_moveRect, _board.Selected, true));
 
             return sb.ToString();
         }
@@ -171,21 +162,27 @@ namespace Checkers
         /// <param name="rect">Прямоугольник рисования</param>
         /// <param name="mapCell">Ссылка на ячейку с фишкой</param>
         /// <param name="shadow">Тень под фишкой</param>
-        private static void DrawChecker(StringBuilder sb, Rectangle rect, Cell mapCell, bool shadow = false)
+        public static string DrawCheckerScript(Rectangle rect, Cell mapCell, bool shadow = false)
         {
-            if (mapCell == null) return;
-            if (mapCell.State == State.White || mapCell.State == State.Black)
+            var sb = new StringBuilder();
+            sb.AppendLine(string.Format("CheckerRect = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
+            if (mapCell != null && (mapCell.State == State.White || mapCell.State == State.Black))
             {
                 var sizeW = CellSize - (int)(CellSize * 0.91);
                 var sizeH = CellSize - (int)(CellSize * 0.91);
                 rect.Inflate(-sizeW, -sizeH);
                 if (shadow)
                 {
-                    const int shadowOffset = 6;
-                    rect.Offset(shadowOffset, shadowOffset);
-                    //using (var brush = new SolidBrush(Color.FromArgb(128, Color.Black)))
-                    //    graphics.FillEllipse(brush, rect);
-                    rect.Offset(-shadowOffset, -shadowOffset);
+                    sb.AppendLine(string.Format("mc = {0};{1}", rect.X + rect.Width / 2, rect.Y + rect.Height / 2));
+                    sb.AppendLine("scale mc 0,91");
+                    sb.AppendLine("FillOpacity = 128");
+                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
+                    sb.AppendLine("offset 6 6");
+                    sb.AppendLine("circle CheckerRect");
+                    sb.AppendLine("fill");
+                    sb.AppendLine("offset -6 -6");
+                    sb.AppendLine("FillOpacity = 255");
+                    sb.AppendLine("scale mc 1,1");
                 }
                 if (mapCell.State == State.Black)
                     sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 10, 10, 10));
@@ -207,6 +204,7 @@ namespace Checkers
                     sb.AppendLine("draw");
                 }
             }
+            return sb.ToString();
         }
 
         /// <summary>
