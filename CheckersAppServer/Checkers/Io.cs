@@ -186,7 +186,7 @@ namespace Checkers
                 sb.AppendLine("circle r1");
                 sb.AppendLine("fill");
                 rect.Inflate(-sizeW, -sizeH);
-                sb.AppendLine(string.Format("DrawColor = {0};{1};{2}", 192, 192, 192));
+                sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 192, 192, 192));
                 sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
                 sb.AppendLine("circle r2");
                 sb.AppendLine("draw");
@@ -211,26 +211,27 @@ namespace Checkers
         private void DrawCharBorder(StringBuilder sb, Rectangle boardRect, int cellsCount, bool side)
         {
             var chars = side ? "HGFEDCBA" : "ABCDEFGH";
+            sb.AppendLine("FontName = Courier New");
+            sb.AppendLine("FontSize = 12");
+            sb.AppendLine("TextAlign = MiddleCenter");
+            sb.AppendLine("FillOpacity = 255");
+            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
             for (var j = 0; j < cellsCount; j++)
             {
-                var topRect = new Rectangle(BorderWidth + j * CellSize, 0, CellSize, BorderWidth);
-                var bottomRect = new Rectangle(BorderWidth + j * CellSize,
+                var topRect = new RectangleF(BorderWidth + j * CellSize, 0, CellSize, BorderWidth);
+                var bottomRect = new RectangleF(BorderWidth + j * CellSize,
                                                boardRect.Height - BorderWidth, CellSize, BorderWidth);
                 sb.AppendLine(string.Format("m5 = {0};{1}", topRect.X, topRect.Y));
+                sb.AppendLine(string.Format("m51 = {0};{1}", topRect.X + CellSize, topRect.Y));
+                sb.AppendLine(string.Format("m52 = {0};{1}", topRect.X, topRect.Y + BorderWidth));
                 sb.AppendLine(string.Format("m6 = {0};{1}", bottomRect.X, bottomRect.Y));
-                using (var sf = new StringFormat())
-                {
-                    sf.Alignment = StringAlignment.Center;
-                    sf.LineAlignment = StringAlignment.Center;
-                    var ch = chars.ToCharArray()[j].ToString();
-                    sb.AppendLine(string.Format("TEXT = {0}", ch));
-                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
-                    sb.AppendLine(string.Format("FontSize = {0}", 10));
-                    sb.AppendLine("text m5 TEXT");
-                    sb.AppendLine("fill");
-                    sb.AppendLine("text m6 TEXT");
-                    sb.AppendLine("fill");
-                }
+                sb.AppendLine(string.Format("m61 = {0};{1}", bottomRect.X + CellSize, bottomRect.Y));
+                sb.AppendLine(string.Format("m62 = {0};{1}", bottomRect.X, bottomRect.Y + BorderWidth));
+                var ch = chars.ToCharArray()[j].ToString();
+                sb.AppendLine(string.Format("text m5 m51 m52 {0}",ch));
+                sb.AppendLine("fill");
+                sb.AppendLine(string.Format("text m6 m61 m62 {0}", ch));
+                sb.AppendLine("fill");
             }
         }
 
@@ -244,26 +245,28 @@ namespace Checkers
         private void DrawNumberBorder(StringBuilder sb, Rectangle boardRect, int cellsCount, bool side)
         {
             var chars = side ? "12345678" : "87654321";
+            sb.AppendLine("FontName = Courier New");
+            sb.AppendLine("FontSize = 12");
+            sb.AppendLine("TextAlign = MiddleCenter");
+            sb.AppendLine("FillOpacity = 255");
+            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
             for (var i = 0; i < cellsCount; i++)
             {
                 var topRect = new Rectangle(0, BorderWidth + i * CellSize, BorderWidth, CellSize);
                 var bottomRect = new Rectangle(boardRect.Width - BorderWidth,
                                                BorderWidth + i * CellSize, BorderWidth, CellSize);
                 sb.AppendLine(string.Format("m7 = {0};{1}", topRect.X, topRect.Y));
+                sb.AppendLine(string.Format("m71 = {0};{1}", topRect.X + BorderWidth, topRect.Y));
+                sb.AppendLine(string.Format("m72 = {0};{1}", topRect.X, topRect.Y + CellSize));
                 sb.AppendLine(string.Format("m8 = {0};{1}", bottomRect.X, bottomRect.Y));
-                using (var sf = new StringFormat())
-                {
-                    sf.Alignment = StringAlignment.Center;
-                    sf.LineAlignment = StringAlignment.Center;
-                    var ch = chars.ToCharArray()[i].ToString();
-                    sb.AppendLine(string.Format("TEXT1 = {0}", ch));
-                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
-                    sb.AppendLine(string.Format("FontSize = {0}", 10));
-                    sb.AppendLine("text m7 TEXT1");
-                    sb.AppendLine("fill");
-                    sb.AppendLine("text m8 TEXT1");
-                    sb.AppendLine("fill");
-                }
+                sb.AppendLine(string.Format("m81 = {0};{1}", bottomRect.X + BorderWidth, bottomRect.Y));
+                sb.AppendLine(string.Format("m82 = {0};{1}", bottomRect.X, bottomRect.Y + CellSize));
+                var ch = chars.ToCharArray()[i].ToString();
+                sb.AppendLine(string.Format("TEXT = {0}", ch));
+                sb.AppendLine("text m7 m71 m72 TEXT");
+                sb.AppendLine("fill");
+                sb.AppendLine("text m8 m81 m82 TEXT");
+                sb.AppendLine("fill");
             }
         }
 

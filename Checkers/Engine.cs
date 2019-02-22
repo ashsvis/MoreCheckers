@@ -66,7 +66,7 @@ namespace Checkers
                         compiled.Add(Fill());
                         break;
                     default:
-                        if (items.Length == 3 && items[1].Contains("="))
+                        if (items.Length > 2 && items[1].Contains("="))
                         {
                             var vals = items[2].Split(new[] { ';' });
                             if (vals.Length == 1)
@@ -76,7 +76,7 @@ namespace Checkers
                                 else if (float.TryParse(vals[0], out float fval))
                                     Floats[items[0]] = fval;
                                 else
-                                    Strings[items[0]] = vals[0];
+                                    Strings[items[0]] = string.Join(" ", items, 2, items.Length - 2);
                             }
                             else
                             if (vals.Length == 2 &&
@@ -193,28 +193,102 @@ namespace Checkers
             var ar = new Args(this, args);
             if (ar.Markers.Count < 1)
                 throw new Exception("Expected one marker");
-            if (ar.Strings.Count < 1)
-                throw new Exception("Expected text");
+            var text = ar.Strings.Count > 0 ? ar.Strings[0] : ar.Text;
             var emSize = Floats.ContainsKey("FontSize") ? Floats["FontSize"] : 8;
-            return () =>
-            {
-                Path.Reset();
-                Path.AddString(ar.Strings[0], new FontFamily("Arial"), 0, emSize, ar.Markers[0], null);
-            };
+            var fontName = Strings.ContainsKey("FontName") ? Strings["FontName"] : "Arial";
+            var textAlign = Strings.ContainsKey("TextAlign") ? Strings["TextAlign"] : "TopLeft";
+            if (ar.Markers.Count == 1)
+                return () =>
+                {
+                    Path.Reset();
+                    using (var sf = GetTextAlign(textAlign))
+                        Path.AddString(text, new FontFamily(fontName), 0, emSize, ar.Markers[0], sf);
+                };
+            if (ar.Markers.Count == 3)
+                return () =>
+                {
+                    Path.Reset();
+                    var layoutRect = new RectangleF(ar.Markers[0], 
+                        new SizeF(ar.Markers[1].X - ar.Markers[0].X, ar.Markers[2].Y - ar.Markers[0].Y));
+                    using (var sf = GetTextAlign(textAlign))
+                        Path.AddString(text, new FontFamily(fontName), 0, emSize, layoutRect, sf);
+                };
+            return () => { };
         }
 
+        private StringFormat GetTextAlign(string alignment)
+        {
+            var sf = new StringFormat();
+            switch (alignment)
+            {
+                case "TopLeft":
+                    sf.Alignment = StringAlignment.Near;
+                    sf.LineAlignment = StringAlignment.Near;
+                    break;
+                case "TopCenter":
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Near;
+                    break;
+                case "TopRight":
+                    sf.Alignment = StringAlignment.Far;
+                    sf.LineAlignment = StringAlignment.Near;
+                    break;
+                case "BottomLeft":
+                    sf.Alignment = StringAlignment.Near;
+                    sf.LineAlignment = StringAlignment.Far;
+                    break;
+                case "BottomCenter":
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Far;
+                    break;
+                case "BottomRight":
+                    sf.Alignment = StringAlignment.Far;
+                    sf.LineAlignment = StringAlignment.Far;
+                    break;
+                case "MiddleLeft":
+                    sf.Alignment = StringAlignment.Near;
+                    sf.LineAlignment = StringAlignment.Center;
+                    break;
+                case "MiddleCenter":
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Center;
+                    break;
+                case "MiddleRight":
+                    sf.Alignment = StringAlignment.Far;
+                    sf.LineAlignment = StringAlignment.Center;
+                    break;
+            }
+            return sf;
+        }
+
+        /// <summary>
+        /// Задание пути полигоном
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private Action Poly(string args)
         {
             var ar = new Args(this, args);
             if (ar.Markers.Count < 2)
                 throw new Exception("Expected two markers");
-            return () =>
-            {
-                Path.Reset();
-                Path.AddPolygon(ar.Markers.ToArray());
-            };
+            if (ar.Floats.Count > 0)
+                return () =>
+                {
+                    Path.Reset();
+                    Path.AddCurve(ar.Markers.ToArray(), ar.Floats[0]);
+                };
+            else
+                return () =>
+                {
+                    Path.Reset();
+                    Path.AddPolygon(ar.Markers.ToArray());
+                };
         }
 
+        /// <summary>
+        /// Заливка контура пути
+        /// </summary>
+        /// <returns></returns>
         private Action Fill()
         {
             var fillColor = Colors.ContainsKey("FillColor") ? Colors["FillColor"] : Color.White;
@@ -226,13 +300,18 @@ namespace Checkers
             };
         }
 
+        /// <summary>
+        /// Рисоание контура пути
+        /// </summary>
+        /// <returns></returns>
         private Action Draw()
         {
-            var drawColor = Colors.ContainsKey("DrawColor") ? Colors["DrawColor"] : Color.Black;
-            var drawOpacity = Floats.ContainsKey("DrawOpacity") ? (int)Floats["DrawOpacity"] : 255;
+            var fillColor = Colors.ContainsKey("FillColor") ? Colors["FillColor"] : Color.Black;
+            var fillOpacity = Floats.ContainsKey("FillOpacity") ? (int)Floats["FillOpacity"] : 255;
+            var penWidth = Floats.ContainsKey("PenWidth") ? Floats["PenWidth"] : 1;
             return () =>
             {
-                using (var pen = new Pen(Color.FromArgb(drawOpacity, drawColor)))
+                using (var pen = new Pen(Color.FromArgb(fillOpacity, fillColor), penWidth))
                     Graphics.DrawPath(pen, Path);
             };
         }

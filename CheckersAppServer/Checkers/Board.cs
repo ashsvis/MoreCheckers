@@ -507,6 +507,8 @@ namespace Checkers
                         OnCheckerMoved(lastDirection, startPos, endPos, moveResult, _movedCount);
                     }
                 }
+                else
+                    Selected = null;
             }
         }
 

@@ -11,6 +11,7 @@ namespace Checkers
         {
             this.engine = engine;
             var items = args.Split(new[] { ' ' });
+            var others = new List<string>();
             foreach (var item in items)
             {
                 if (engine.Markers.ContainsKey(item))
@@ -23,7 +24,11 @@ namespace Checkers
                     Floats.Add(engine.Floats[item]);
                 else if (float.TryParse(item, out float f))
                     Floats.Add(f);
+                else
+                    others.Add(item);
             }
+            if (others.Count > 0)
+                Text = string.Join(" ", others);
         }
 
         public List<PointF> Markers { get; private set; } = new List<PointF>();
@@ -31,5 +36,6 @@ namespace Checkers
         public List<float> Floats { get; private set; } = new List<float>();
         public List<string> Strings { get; private set; } = new List<string>();
         public List<RectangleF> Rects { get; private set; } = new List<RectangleF>();
+        public string Text { get; private set; } = string.Empty;
     }
 }
