@@ -34,8 +34,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,13 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckersGameService.cs" />
+    <Compile Include="Checkers\Address.cs" />
     <Compile Include="AppData.cs" />
+    <Compile Include="Checkers\Board.cs" />
+    <Compile Include="Checkers\Cell.cs" />
     <Compile Include="CheckersService.cs" />
     <Compile Include="CheckersUsersService.cs" />
+    <Compile Include="Checkers\Game.cs" />
     <Compile Include="ICheckersService.cs" />
+    <Compile Include="Checkers\Io.cs" />
+    <Compile Include="Checkers\LogItem.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="MemIniFile.cs" />
+    <Compile Include="Checkers\ObjectCloner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Checkers\State.cs" />
     <Compile Include="WcfCheckersService.cs" />
     <Compile Include="WinWorklogService.cs">
       <SubType>Component</SubType>

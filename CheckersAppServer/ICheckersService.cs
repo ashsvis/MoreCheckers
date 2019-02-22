@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.ServiceModel;
 
 namespace CheckersAppServer
@@ -24,6 +25,21 @@ namespace CheckersAppServer
         [OperationContract]
         bool DeleteUser(string id);
 
+
+        [OperationContract]
+        Guid CreateGame();
+
+        [OperationContract]
+        string GetDrawBoardScript(Guid gameId);
+
+        [OperationContract]
+        bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys);
+
+        [OperationContract]
+        bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys);
+
+        [OperationContract]
+        bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys);
 
 
         [OperationContract]

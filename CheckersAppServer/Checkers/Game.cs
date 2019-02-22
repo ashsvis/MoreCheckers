@@ -42,9 +42,56 @@ namespace Checkers
 
         public PlayMode Mode { get; set; }
 
+        public Board Board { get; set; }
+
+        public Io Io { get; set; }
+
         public Game()
         {
+            Mode = PlayMode.SelfGame;
+            WinPlayer = WinPlayer.Game;
             Log = new List<LogItem>();
+            Board = new Board(this);
+            Board.CheckerMoved += Board_CheckerMoved;
+            Board.ResetMap();
+            Io = new Io(this, Board);
+        }
+
+        private void Board_CheckerMoved(bool direction, Address startPos, Address endPos, MoveResult moveResult, int stepCount)
+        {
+            UpdateLog(direction, startPos, endPos, moveResult, stepCount);
+        }
+
+        private void UpdateLog(bool direction, Address startPos, Address endPos, MoveResult moveResult, int stepCount)
+        {
+            var result = string.Format("{0}{1}{2}",
+                    startPos, moveResult == MoveResult.SuccessfullCombat ? ":" : "-", endPos);
+            if (!direction)
+            {
+                // ходят "белые"
+                if (stepCount == 1) // первый ход (из, возможно, серии ходов)
+                {
+                    var item = new LogItem() { Number = Log.Count + 1, White = result };
+                    item.AddToMap(Board.GetMap().DeepClone());
+                    Log.Add(item);
+                }
+                else
+                {
+                    var item = Log[Log.Count - 1];
+                    item.White += ":" + endPos;
+                    item.AddToMap(Board.GetMap().DeepClone());
+                }
+            }
+            else
+            {
+                // ходят "чёрные"
+                var item = Log[Log.Count - 1];
+                if (stepCount == 1) // первый ход (из, возможно, серии ходов)
+                    item.Black = result;
+                else
+                    item.Black += ":" + endPos;
+                item.AddToMap(Board.GetMap().DeepClone());
+            }
         }
 
         public void CheckWin()

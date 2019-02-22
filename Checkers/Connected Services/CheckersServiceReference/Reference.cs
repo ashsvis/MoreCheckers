@@ -51,6 +51,36 @@ namespace Checkers.CheckersServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/DeleteUser", ReplyAction="http://tempuri.org/ICheckersService/DeleteUserResponse")]
         System.Threading.Tasks.Task<bool> DeleteUserAsync(string id);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/CreateGame", ReplyAction="http://tempuri.org/ICheckersService/CreateGameResponse")]
+        System.Guid CreateGame();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/CreateGame", ReplyAction="http://tempuri.org/ICheckersService/CreateGameResponse")]
+        System.Threading.Tasks.Task<System.Guid> CreateGameAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDrawBoardScript", ReplyAction="http://tempuri.org/ICheckersService/GetDrawBoardScriptResponse")]
+        string GetDrawBoardScript(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDrawBoardScript", ReplyAction="http://tempuri.org/ICheckersService/GetDrawBoardScriptResponse")]
+        System.Threading.Tasks.Task<string> GetDrawBoardScriptAsync(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseDown", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseDownResponse")]
+        bool OnBoardMouseDown(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseDown", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseDownResponse")]
+        System.Threading.Tasks.Task<bool> OnBoardMouseDownAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseMove", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseMoveResponse")]
+        bool OnBoardMouseMove(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseMove", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseMoveResponse")]
+        System.Threading.Tasks.Task<bool> OnBoardMouseMoveAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseUp", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse")]
+        bool OnBoardMouseUp(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseUp", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse")]
+        System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDate", ReplyAction="http://tempuri.org/ICheckersService/GetDateResponse")]
         System.DateTime GetDate();
         
@@ -131,6 +161,46 @@ namespace Checkers.CheckersServiceReference {
         
         public System.Threading.Tasks.Task<bool> DeleteUserAsync(string id) {
             return base.Channel.DeleteUserAsync(id);
+        }
+        
+        public System.Guid CreateGame() {
+            return base.Channel.CreateGame();
+        }
+        
+        public System.Threading.Tasks.Task<System.Guid> CreateGameAsync() {
+            return base.Channel.CreateGameAsync();
+        }
+        
+        public string GetDrawBoardScript(System.Guid gameId) {
+            return base.Channel.GetDrawBoardScript(gameId);
+        }
+        
+        public System.Threading.Tasks.Task<string> GetDrawBoardScriptAsync(System.Guid gameId) {
+            return base.Channel.GetDrawBoardScriptAsync(gameId);
+        }
+        
+        public bool OnBoardMouseDown(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
+            return base.Channel.OnBoardMouseDown(gameId, location, modifierKeys);
+        }
+        
+        public System.Threading.Tasks.Task<bool> OnBoardMouseDownAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
+            return base.Channel.OnBoardMouseDownAsync(gameId, location, modifierKeys);
+        }
+        
+        public bool OnBoardMouseMove(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
+            return base.Channel.OnBoardMouseMove(gameId, location, modifierKeys);
+        }
+        
+        public System.Threading.Tasks.Task<bool> OnBoardMouseMoveAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
+            return base.Channel.OnBoardMouseMoveAsync(gameId, location, modifierKeys);
+        }
+        
+        public bool OnBoardMouseUp(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
+            return base.Channel.OnBoardMouseUp(gameId, location, modifierKeys);
+        }
+        
+        public System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
+            return base.Channel.OnBoardMouseUpAsync(gameId, location, modifierKeys);
         }
         
         public System.DateTime GetDate() {

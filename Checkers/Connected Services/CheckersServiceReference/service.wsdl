@@ -71,6 +71,7 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Drawing" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ICheckersService_GetUserPasswordHash_InputMessage">
@@ -109,6 +110,36 @@
   <wsdl:message name="ICheckersService_DeleteUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
   </wsdl:message>
+  <wsdl:message name="ICheckersService_CreateGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateGame" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_CreateGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_GetDrawBoardScript_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDrawBoardScript" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_GetDrawBoardScript_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDrawBoardScriptResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_OnBoardMouseDown_InputMessage">
+    <wsdl:part name="parameters" element="tns:OnBoardMouseDown" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_OnBoardMouseDown_OutputMessage">
+    <wsdl:part name="parameters" element="tns:OnBoardMouseDownResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_OnBoardMouseMove_InputMessage">
+    <wsdl:part name="parameters" element="tns:OnBoardMouseMove" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_OnBoardMouseMove_OutputMessage">
+    <wsdl:part name="parameters" element="tns:OnBoardMouseMoveResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_OnBoardMouseUp_InputMessage">
+    <wsdl:part name="parameters" element="tns:OnBoardMouseUp" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_OnBoardMouseUp_OutputMessage">
+    <wsdl:part name="parameters" element="tns:OnBoardMouseUpResponse" />
+  </wsdl:message>
   <wsdl:message name="ICheckersService_GetDate_InputMessage">
     <wsdl:part name="parameters" element="tns:GetDate" />
   </wsdl:message>
@@ -139,6 +170,26 @@
     <wsdl:operation name="DeleteUser">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/DeleteUser" message="tns:ICheckersService_DeleteUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/DeleteUserResponse" message="tns:ICheckersService_DeleteUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/CreateGame" message="tns:ICheckersService_CreateGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/CreateGameResponse" message="tns:ICheckersService_CreateGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDrawBoardScript">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/GetDrawBoardScript" message="tns:ICheckersService_GetDrawBoardScript_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/GetDrawBoardScriptResponse" message="tns:ICheckersService_GetDrawBoardScript_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseDown">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/OnBoardMouseDown" message="tns:ICheckersService_OnBoardMouseDown_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/OnBoardMouseDownResponse" message="tns:ICheckersService_OnBoardMouseDown_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseMove">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/OnBoardMouseMove" message="tns:ICheckersService_OnBoardMouseMove_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/OnBoardMouseMoveResponse" message="tns:ICheckersService_OnBoardMouseMove_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseUp">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/OnBoardMouseUp" message="tns:ICheckersService_OnBoardMouseUp_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse" message="tns:ICheckersService_OnBoardMouseUp_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetDate">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/GetDate" message="tns:ICheckersService_GetDate_InputMessage" />
@@ -196,6 +247,51 @@
     </wsdl:operation>
     <wsdl:operation name="DeleteUser">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/CreateGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDrawBoardScript">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetDrawBoardScript" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseDown">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/OnBoardMouseDown" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseMove">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/OnBoardMouseMove" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseUp">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/OnBoardMouseUp" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -264,6 +360,51 @@
     </wsdl:operation>
     <wsdl:operation name="DeleteUser">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/CreateGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDrawBoardScript">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetDrawBoardScript" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseDown">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/OnBoardMouseDown" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseMove">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/OnBoardMouseMove" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBoardMouseUp">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/OnBoardMouseUp" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

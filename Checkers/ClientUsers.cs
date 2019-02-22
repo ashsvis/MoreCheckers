@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Checkers
 {
@@ -58,7 +54,5 @@ namespace Checkers
         {
             return GetMethod("GetUserNames", () => _proxy.GetUserNames(), new string[] { });
         }
-
-
     }
 }

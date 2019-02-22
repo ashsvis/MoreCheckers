@@ -50,14 +50,6 @@
             this.tsmiSaveGame = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTools = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSelfGame = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAutoGame = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiNetGame = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSelectNetGameEnemy = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCreateSelfNetGame = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiTunings = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRules = new System.Windows.Forms.ToolStripMenuItem();
             this.panelLog = new System.Windows.Forms.Panel();
@@ -105,7 +97,7 @@
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(359, 19);
             this.status.Spring = true;
-            this.status.Text = "Готово";
+            this.status.Text = "Инициализация...";
             this.status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tsslDateTime
@@ -137,6 +129,7 @@
             this.tsbNewGame.Name = "tsbNewGame";
             this.tsbNewGame.Size = new System.Drawing.Size(23, 22);
             this.tsbNewGame.Text = "&Новая игра";
+            this.tsbNewGame.Click += new System.EventHandler(this.tsmiNewGame_Click);
             // 
             // tsbSaveGame
             // 
@@ -175,7 +168,6 @@
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiGame,
-            this.tsmiTools,
             this.tsmiHelp});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
@@ -196,6 +188,7 @@
             this.tsmiGame.Name = "tsmiGame";
             this.tsmiGame.Size = new System.Drawing.Size(46, 20);
             this.tsmiGame.Text = "&Игра";
+            this.tsmiGame.DropDownOpening += new System.EventHandler(this.tsmiGame_DropDownOpening);
             // 
             // tsmiNewGame
             // 
@@ -205,6 +198,7 @@
             this.tsmiNewGame.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.tsmiNewGame.Size = new System.Drawing.Size(172, 22);
             this.tsmiNewGame.Text = "&Новая";
+            this.tsmiNewGame.Click += new System.EventHandler(this.tsmiNewGame_Click);
             // 
             // tsmiOpenGame
             // 
@@ -240,65 +234,6 @@
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.Size = new System.Drawing.Size(172, 22);
             this.tsmiExit.Text = "Вы&ход";
-            // 
-            // tsmiTools
-            // 
-            this.tsmiTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiSelfGame,
-            this.tsmiAutoGame,
-            this.tsmiNetGame,
-            this.toolStripMenuItem1,
-            this.tsmiTunings});
-            this.tsmiTools.Name = "tsmiTools";
-            this.tsmiTools.Size = new System.Drawing.Size(79, 20);
-            this.tsmiTools.Text = "&Настройки";
-            this.tsmiTools.DropDownOpening += new System.EventHandler(this.tsmiTools_DropDownOpening);
-            // 
-            // tsmiSelfGame
-            // 
-            this.tsmiSelfGame.Name = "tsmiSelfGame";
-            this.tsmiSelfGame.Size = new System.Drawing.Size(192, 22);
-            this.tsmiSelfGame.Text = "Игра с самим собой";
-            this.tsmiSelfGame.Click += new System.EventHandler(this.tsmiSelfGame_Click);
-            // 
-            // tsmiAutoGame
-            // 
-            this.tsmiAutoGame.Name = "tsmiAutoGame";
-            this.tsmiAutoGame.Size = new System.Drawing.Size(192, 22);
-            this.tsmiAutoGame.Text = "Игра с компьютером";
-            // 
-            // tsmiNetGame
-            // 
-            this.tsmiNetGame.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiSelectNetGameEnemy,
-            this.tsmiCreateSelfNetGame});
-            this.tsmiNetGame.Name = "tsmiNetGame";
-            this.tsmiNetGame.Size = new System.Drawing.Size(192, 22);
-            this.tsmiNetGame.Text = "Игра по сети";
-            // 
-            // tsmiSelectNetGameEnemy
-            // 
-            this.tsmiSelectNetGameEnemy.Name = "tsmiSelectNetGameEnemy";
-            this.tsmiSelectNetGameEnemy.Size = new System.Drawing.Size(198, 22);
-            this.tsmiSelectNetGameEnemy.Text = "Выбрать противника...";
-            // 
-            // tsmiCreateSelfNetGame
-            // 
-            this.tsmiCreateSelfNetGame.Name = "tsmiCreateSelfNetGame";
-            this.tsmiCreateSelfNetGame.Size = new System.Drawing.Size(198, 22);
-            this.tsmiCreateSelfNetGame.Text = "Создать свою игру...";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(189, 6);
-            // 
-            // tsmiTunings
-            // 
-            this.tsmiTunings.Enabled = false;
-            this.tsmiTunings.Name = "tsmiTunings";
-            this.tsmiTunings.Size = new System.Drawing.Size(192, 22);
-            this.tsmiTunings.Text = "&Параметры...";
             // 
             // tsmiHelp
             // 
@@ -467,14 +402,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveGame;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmiExit;
-        private System.Windows.Forms.ToolStripMenuItem tsmiTools;
-        private System.Windows.Forms.ToolStripMenuItem tsmiSelfGame;
-        private System.Windows.Forms.ToolStripMenuItem tsmiAutoGame;
-        private System.Windows.Forms.ToolStripMenuItem tsmiNetGame;
-        private System.Windows.Forms.ToolStripMenuItem tsmiSelectNetGameEnemy;
-        private System.Windows.Forms.ToolStripMenuItem tsmiCreateSelfNetGame;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem tsmiTunings;
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
         private System.Windows.Forms.ToolStripMenuItem tsmiRules;
         private System.Windows.Forms.Panel panelLog;
