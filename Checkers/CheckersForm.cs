@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Checkers.Properties;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Threading;
@@ -21,8 +22,26 @@ namespace Checkers
 
             DoubleBuffered = true;
 
+            _host = Settings.Default.ServerHost;
+            _dataPort = Settings.Default.ServerPort;
+
             _offsetBoard = new Point(0, mainMenu.Height + mainTools.Height);
             _engineBoard = new Engine();
+        }
+
+        private void CheckersForm_Load(object sender, EventArgs e)
+        {
+            tsslIpAddress.Text = _host;
+
+            CenterToScreen();
+
+            // соединяемся к сервису без блокировки интерфейса
+            new Task(() =>
+            {
+                // подключение к серверу
+                Connect();
+            }).Start();
+
         }
 
         private void CheckersForm_Paint(object sender, PaintEventArgs e)
@@ -63,6 +82,7 @@ namespace Checkers
                 case ConnectionState.Opened:
                     _connected = true;
                     ShowStatus("Соединение установлено");
+
                     break;
                 case ConnectionState.Closing:
                     _connected = false;
@@ -118,19 +138,6 @@ namespace Checkers
         //    else
         //        method();
         //}
-
-        private void CheckersForm_Load(object sender, EventArgs e)
-        {
-            CenterToScreen();
-
-            // соединяемся к сервису без блокировки интерфейса
-            new Task(() =>
-            {
-                // подключение к серверу
-                Connect();
-            }).Start();
-
-        }
 
         /// <summary>
         /// Метод проверки соединения с сервером приложения
@@ -273,6 +280,19 @@ namespace Checkers
             }
             CenterToScreen();
             Invalidate();
+        }
+
+        private void tsmiServerIpAddress_Click(object sender, EventArgs e)
+        {
+            var frm = new ServerIpAddressForm() { IpAddress = _host };
+            if (frm.ShowDialog(this) == DialogResult.OK)
+            {
+                _host = frm.IpAddress;
+                tsslIpAddress.Text = _host;
+                Settings.Default.ServerHost = _host;
+                Settings.Default.Save();
+                Client.Reconnect(_host, _dataPort);
+            }
         }
     }
 

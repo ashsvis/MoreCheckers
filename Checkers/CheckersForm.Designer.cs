@@ -61,6 +61,9 @@
             this.lbBlackScore = new System.Windows.Forms.Label();
             this.lbWhiteScore = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tsmiTuning = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiServerIpAddress = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsslIpAddress = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainStatus.SuspendLayout();
             this.mainTools.SuspendLayout();
             this.mainMenu.SuspendLayout();
@@ -83,6 +86,7 @@
             // 
             this.mainStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.status,
+            this.tsslIpAddress,
             this.tsslDateTime});
             this.mainStatus.Location = new System.Drawing.Point(0, 396);
             this.mainStatus.Name = "mainStatus";
@@ -95,7 +99,7 @@
             // status
             // 
             this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(359, 19);
+            this.status.Size = new System.Drawing.Size(300, 19);
             this.status.Spring = true;
             this.status.Text = "Инициализация...";
             this.status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -168,6 +172,7 @@
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiGame,
+            this.tsmiTuning,
             this.tsmiHelp});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
@@ -349,6 +354,29 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Партия:";
             // 
+            // tsmiTuning
+            // 
+            this.tsmiTuning.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiServerIpAddress});
+            this.tsmiTuning.Name = "tsmiTuning";
+            this.tsmiTuning.Size = new System.Drawing.Size(78, 20);
+            this.tsmiTuning.Text = "Настройка";
+            // 
+            // tsmiServerIpAddress
+            // 
+            this.tsmiServerIpAddress.Name = "tsmiServerIpAddress";
+            this.tsmiServerIpAddress.Size = new System.Drawing.Size(180, 22);
+            this.tsmiServerIpAddress.Text = "Адрес cервера...";
+            this.tsmiServerIpAddress.Click += new System.EventHandler(this.tsmiServerIpAddress_Click);
+            // 
+            // tsslIpAddress
+            // 
+            this.tsslIpAddress.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.tsslIpAddress.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
+            this.tsslIpAddress.Name = "tsslIpAddress";
+            this.tsslIpAddress.Size = new System.Drawing.Size(59, 19);
+            this.tsslIpAddress.Text = "localhost";
+            // 
             // CheckersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,6 +442,9 @@
         private System.Windows.Forms.Label lbWhiteScore;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripStatusLabel tsslDateTime;
+        private System.Windows.Forms.ToolStripStatusLabel tsslIpAddress;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTuning;
+        private System.Windows.Forms.ToolStripMenuItem tsmiServerIpAddress;
     }
 }
 
