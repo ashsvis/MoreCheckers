@@ -30,6 +30,12 @@ namespace CheckersAppServer
         Guid CreateGame();
 
         [OperationContract]
+        bool StartNewGame(Guid gameId);
+
+        [OperationContract]
+        bool EndGame(Guid gameId);
+
+        [OperationContract]
         string GetDrawBoardScript(Guid gameId);
 
         [OperationContract]

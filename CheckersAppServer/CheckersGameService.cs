@@ -17,6 +17,25 @@ namespace CheckersAppServer
             return guid;
         }
 
+        public bool StartNewGame(Guid gameId)
+        {
+            if (!_games.ContainsKey(gameId)) return false;
+            var game = _games[gameId];
+            game.Board.ResetMap(false);
+            game.Mode = PlayMode.SelfGame;
+            game.WinPlayer = WinPlayer.Game;
+            return true;
+        }
+
+        public bool EndGame(Guid gameId)
+        {
+            if (!_games.ContainsKey(gameId)) return false;
+            var game = _games[gameId];
+            game.Board.ResetMap(true);
+            game.WinPlayer = WinPlayer.None;
+            return true;
+        }
+
         public string GetDrawBoardScript(Guid gameId)
         {
             return _games.ContainsKey(gameId) ? _games[gameId].Io.DrawBoardScript() : "";

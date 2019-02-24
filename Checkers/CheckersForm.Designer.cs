@@ -44,7 +44,7 @@
             this.tsmiNewGame = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTuning = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiServerIpAddress = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRules = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,10 +84,10 @@
             this.status,
             this.tsslIpAddress,
             this.tsslDateTime});
-            this.mainStatus.Location = new System.Drawing.Point(0, 396);
+            this.mainStatus.Location = new System.Drawing.Point(0, 449);
             this.mainStatus.Name = "mainStatus";
             this.mainStatus.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-            this.mainStatus.Size = new System.Drawing.Size(448, 24);
+            this.mainStatus.Size = new System.Drawing.Size(442, 24);
             this.mainStatus.SizingGrip = false;
             this.mainStatus.TabIndex = 7;
             this.mainStatus.Text = "statusStrip1";
@@ -95,7 +95,7 @@
             // status
             // 
             this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(300, 19);
+            this.status.Size = new System.Drawing.Size(242, 19);
             this.status.Spring = true;
             this.status.Text = "Инициализация...";
             this.status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -138,12 +138,12 @@
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiGame,
-            this.tsmiTuning,
+            this.tsmiView,
             this.tsmiHelp});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.mainMenu.Size = new System.Drawing.Size(448, 24);
+            this.mainMenu.Size = new System.Drawing.Size(442, 24);
             this.mainMenu.TabIndex = 6;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -179,21 +179,22 @@
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.Size = new System.Drawing.Size(180, 22);
             this.tsmiExit.Text = "Вы&ход";
+            this.tsmiExit.Click += new System.EventHandler(this.tsmiExit_Click);
             // 
-            // tsmiTuning
+            // tsmiView
             // 
-            this.tsmiTuning.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiShowGamePanel,
             this.toolStripMenuItem1,
             this.tsmiServerIpAddress});
-            this.tsmiTuning.Name = "tsmiTuning";
-            this.tsmiTuning.Size = new System.Drawing.Size(78, 20);
-            this.tsmiTuning.Text = "Настройка";
+            this.tsmiView.Name = "tsmiView";
+            this.tsmiView.Size = new System.Drawing.Size(39, 20);
+            this.tsmiView.Text = "Вид";
             // 
             // tsmiServerIpAddress
             // 
             this.tsmiServerIpAddress.Name = "tsmiServerIpAddress";
-            this.tsmiServerIpAddress.Size = new System.Drawing.Size(180, 22);
+            this.tsmiServerIpAddress.Size = new System.Drawing.Size(188, 22);
             this.tsmiServerIpAddress.Text = "Адрес cервера...";
             this.tsmiServerIpAddress.Click += new System.EventHandler(this.tsmiServerIpAddress_Click);
             // 
@@ -216,16 +217,16 @@
             // 
             // panelGame
             // 
-            this.panelGame.BackColor = System.Drawing.Color.DarkGray;
+            this.panelGame.BackColor = System.Drawing.Color.LightGray;
             this.panelGame.Controls.Add(this.lvLog);
             this.panelGame.Controls.Add(this.label2);
             this.panelGame.Controls.Add(this.lbBlackScore);
             this.panelGame.Controls.Add(this.lbWhiteScore);
             this.panelGame.Controls.Add(this.label1);
             this.panelGame.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelGame.Location = new System.Drawing.Point(211, 24);
+            this.panelGame.Location = new System.Drawing.Point(205, 24);
             this.panelGame.Name = "panelGame";
-            this.panelGame.Size = new System.Drawing.Size(237, 372);
+            this.panelGame.Size = new System.Drawing.Size(237, 425);
             this.panelGame.TabIndex = 10;
             this.panelGame.Visible = false;
             // 
@@ -248,7 +249,7 @@
             this.lvLog.Name = "lvLog";
             this.lvLog.ShowGroups = false;
             this.lvLog.ShowItemToolTips = true;
-            this.lvLog.Size = new System.Drawing.Size(221, 290);
+            this.lvLog.Size = new System.Drawing.Size(221, 343);
             this.lvLog.TabIndex = 1;
             this.lvLog.UseCompatibleStateImageBehavior = false;
             this.lvLog.View = System.Windows.Forms.View.Details;
@@ -318,11 +319,12 @@
             this.tsmiEndGame.Name = "tsmiEndGame";
             this.tsmiEndGame.Size = new System.Drawing.Size(180, 22);
             this.tsmiEndGame.Text = "Завершить";
+            this.tsmiEndGame.Click += new System.EventHandler(this.tsmiEndGame_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(185, 6);
             // 
             // tsmiShowGamePanel
             // 
@@ -337,8 +339,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(448, 420);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(442, 473);
             this.Controls.Add(this.panelGame);
             this.Controls.Add(this.mainStatus);
             this.Controls.Add(this.mainMenu);
@@ -347,6 +349,7 @@
             this.Name = "CheckersForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Шашки";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CheckersForm_FormClosing);
             this.Load += new System.EventHandler(this.CheckersForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.CheckersForm_Paint);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CheckersForm_MouseDown);
@@ -390,7 +393,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripStatusLabel tsslDateTime;
         private System.Windows.Forms.ToolStripStatusLabel tsslIpAddress;
-        private System.Windows.Forms.ToolStripMenuItem tsmiTuning;
+        private System.Windows.Forms.ToolStripMenuItem tsmiView;
         private System.Windows.Forms.ToolStripMenuItem tsmiServerIpAddress;
         private System.Windows.Forms.ToolStripMenuItem tsmiEndGame;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;

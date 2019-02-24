@@ -116,6 +116,18 @@
   <wsdl:message name="ICheckersService_CreateGame_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateGameResponse" />
   </wsdl:message>
+  <wsdl:message name="ICheckersService_StartNewGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartNewGame" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_StartNewGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartNewGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_EndGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndGame" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_EndGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EndGameResponse" />
+  </wsdl:message>
   <wsdl:message name="ICheckersService_GetDrawBoardScript_InputMessage">
     <wsdl:part name="parameters" element="tns:GetDrawBoardScript" />
   </wsdl:message>
@@ -174,6 +186,14 @@
     <wsdl:operation name="CreateGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/CreateGame" message="tns:ICheckersService_CreateGame_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/CreateGameResponse" message="tns:ICheckersService_CreateGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartNewGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/StartNewGame" message="tns:ICheckersService_StartNewGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/StartNewGameResponse" message="tns:ICheckersService_StartNewGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/EndGame" message="tns:ICheckersService_EndGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/EndGameResponse" message="tns:ICheckersService_EndGame_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetDrawBoardScript">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/GetDrawBoardScript" message="tns:ICheckersService_GetDrawBoardScript_InputMessage" />
@@ -256,6 +276,24 @@
     </wsdl:operation>
     <wsdl:operation name="CreateGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/CreateGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartNewGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/StartNewGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/EndGame" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -376,6 +414,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="StartNewGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/StartNewGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/EndGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetDrawBoardScript">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetDrawBoardScript" style="document" />
       <wsdl:input>
@@ -428,7 +484,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.pipe://localhost/CheckersAppServer</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ASh-PC\ASh</Upn>
+          <Upn>THEGIFT\SHURIK</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -437,7 +493,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:5528/CheckersAppServer</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ASh-PC\ASh</Upn>
+          <Upn>THEGIFT\SHURIK</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

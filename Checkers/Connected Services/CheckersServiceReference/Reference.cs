@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace Checkers.CheckersServiceReference {
     
     
@@ -58,6 +56,18 @@ namespace Checkers.CheckersServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/CreateGame", ReplyAction="http://tempuri.org/ICheckersService/CreateGameResponse")]
         System.Threading.Tasks.Task<System.Guid> CreateGameAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
+        bool StartNewGame(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
+        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/EndGame", ReplyAction="http://tempuri.org/ICheckersService/EndGameResponse")]
+        bool EndGame(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/EndGame", ReplyAction="http://tempuri.org/ICheckersService/EndGameResponse")]
+        System.Threading.Tasks.Task<bool> EndGameAsync(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDrawBoardScript", ReplyAction="http://tempuri.org/ICheckersService/GetDrawBoardScriptResponse")]
         string GetDrawBoardScript(System.Guid gameId);
@@ -173,6 +183,22 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.CreateGameAsync();
         }
         
+        public bool StartNewGame(System.Guid gameId) {
+            return base.Channel.StartNewGame(gameId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId) {
+            return base.Channel.StartNewGameAsync(gameId);
+        }
+        
+        public bool EndGame(System.Guid gameId) {
+            return base.Channel.EndGame(gameId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> EndGameAsync(System.Guid gameId) {
+            return base.Channel.EndGameAsync(gameId);
+        }
+        
         public string GetDrawBoardScript(System.Guid gameId) {
             return base.Channel.GetDrawBoardScript(gameId);
         }
@@ -211,11 +237,6 @@ namespace Checkers.CheckersServiceReference {
         
         public System.Threading.Tasks.Task<System.DateTime> GetDateAsync() {
             return base.Channel.GetDateAsync();
-        }
-
-        internal Guid CreateBoard()
-        {
-            throw new NotImplementedException();
         }
     }
 }

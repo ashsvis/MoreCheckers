@@ -66,5 +66,29 @@ namespace Checkers
             return task;
         }
 
+        public static bool StartNewGame(Guid gameId)
+        {
+            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId), false);
+        }
+
+        public static Task<bool> StartNewGameAsync(Guid gameId)
+        {
+            var task = new Task<bool>(() => StartNewGame(gameId));
+            task.Start();
+            return task;
+        }
+
+        public static bool EndGame(Guid gameId)
+        {
+            return GetMethod("EndGame", () => _proxy.EndGame(gameId), false);
+        }
+
+        public static Task<bool> EndGameAsync(Guid gameId)
+        {
+            var task = new Task<bool>(() => EndGame(gameId));
+            task.Start();
+            return task;
+        }
+
     }
 }

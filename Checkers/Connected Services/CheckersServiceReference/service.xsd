@@ -104,10 +104,38 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetDrawBoardScript">
+  <xs:element name="StartNewGame">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q4:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartNewGameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="StartNewGameResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EndGame">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q5:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EndGameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="EndGameResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDrawBoardScript">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q6:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -121,8 +149,8 @@
   <xs:element name="OnBoardMouseDown">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q5:guid" />
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q6:Point" />
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q7:guid" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q8:Point" />
         <xs:element minOccurs="0" name="modifierKeys" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -137,8 +165,8 @@
   <xs:element name="OnBoardMouseMove">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q7:guid" />
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q8:Point" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q9:guid" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q10:Point" />
         <xs:element minOccurs="0" name="modifierKeys" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -153,8 +181,8 @@
   <xs:element name="OnBoardMouseUp">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q9:guid" />
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q10:Point" />
+        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q11:guid" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q12:Point" />
         <xs:element minOccurs="0" name="modifierKeys" type="xs:int" />
       </xs:sequence>
     </xs:complexType>

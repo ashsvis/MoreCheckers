@@ -13,6 +13,7 @@ namespace Checkers
         private string _host = "localhost";
         private int _dataPort = 5528;
         private bool _connected;
+        private bool _started;
         private Point _offsetBoard;
         private Engine _engineBoard;
 
@@ -270,18 +271,35 @@ namespace Checkers
 
         private void tsmiGame_DropDownOpening(object sender, EventArgs e)
         {
-            //tsmiOpenGame.Enabled = _connected;
+            tsmiNewGame.Enabled = _connected;
+            tsmiEndGame.Enabled = _connected && _started;
         }
 
         private void tsmiNewGame_Click(object sender, EventArgs e)
         {
-            CreateNewGame();
+            if (_started)
+            {
+                if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            }
+            StartNewGame();
+        }
+
+        private async void StartNewGame()
+        {
+            if (await Client.StartNewGameAsync(_gameGuid))
+            {
+                _started = true;
+                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+                Invalidate();
+            }
         }
 
         private Guid _gameGuid;
 
         private async void CreateNewGame()
         {
+            _started = false;
             _gameGuid = await Client.CreateGameAsync();
             _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
             var method = new MethodInvoker(() =>
@@ -324,6 +342,44 @@ namespace Checkers
             else
                 size.Width -= panelGame.Width;
             ClientSize = size;
+        }
+
+        private void tsmiExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void tsmiEndGame_Click(object sender, EventArgs e)
+        {
+            if (_started)
+            {
+                if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            }
+            EndGame();
+        }
+
+        private async void EndGame()
+        {
+            if (await Client.EndGameAsync(_gameGuid))
+            {
+                _started = false;
+                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+                Invalidate();
+            }
+        }
+
+        private void CheckersForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_started)
+            {
+                if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
         }
     }
 
