@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Checkers.CheckersServiceReference {
     
     
@@ -209,6 +211,11 @@ namespace Checkers.CheckersServiceReference {
         
         public System.Threading.Tasks.Task<System.DateTime> GetDateAsync() {
             return base.Channel.GetDateAsync();
+        }
+
+        internal Guid CreateBoard()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -62,10 +62,10 @@ namespace Checkers
         /// <summary>
         /// Построение доски вначале
         /// </summary>
-        public void ResetMap()
+        public void ResetMap(bool empty = true)
         {
-            var whiteCheckers = "a1,c1,e1,g1,b2,d2,f2,h2,a3,c3,e3,g3";
-            var blackCheckers = "b6,d6,f6,h6,a7,c7,e7,g7,b8,d8,f8,h8";
+            var whiteCheckers = empty ? "" : "a1,c1,e1,g1,b2,d2,f2,h2,a3,c3,e3,g3";
+            var blackCheckers = empty ? "" : "b6,d6,f6,h6,a7,c7,e7,g7,b8,d8,f8,h8";
             _cells.Clear();
             _fields.Clear();
             _game.Direction = false;

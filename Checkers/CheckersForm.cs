@@ -25,7 +25,7 @@ namespace Checkers
             _host = Settings.Default.ServerHost;
             _dataPort = Settings.Default.ServerPort;
 
-            _offsetBoard = new Point(0, mainMenu.Height + mainTools.Height);
+            _offsetBoard = new Point(0, mainMenu.Height);
             _engineBoard = new Engine();
         }
 
@@ -82,7 +82,8 @@ namespace Checkers
                 case ConnectionState.Opened:
                     _connected = true;
                     ShowStatus("Соединение установлено");
-
+                    CreateNewGame();
+                    CenterBoardToScreen();
                     break;
                 case ConnectionState.Closing:
                     _connected = false;
@@ -97,6 +98,18 @@ namespace Checkers
                     ShowStatus("Соединение не установлено");
                     break;
             }
+        }
+
+        private void CenterBoardToScreen()
+        {
+            var method = new MethodInvoker(() =>
+            {
+                CenterToScreen();
+            });
+            if (InvokeRequired)
+                BeginInvoke(method);
+            else
+                method();
         }
 
         private void ShowStatus(string errormessage)
@@ -257,7 +270,7 @@ namespace Checkers
 
         private void tsmiGame_DropDownOpening(object sender, EventArgs e)
         {
-            tsbNewGame.Enabled = tsmiOpenGame.Enabled = _connected;
+            //tsmiOpenGame.Enabled = _connected;
         }
 
         private void tsmiNewGame_Click(object sender, EventArgs e)
@@ -271,15 +284,22 @@ namespace Checkers
         {
             _gameGuid = await Client.CreateGameAsync();
             _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
-            if (_engineBoard.Rects.ContainsKey("BoardRect"))
+            var method = new MethodInvoker(() =>
             {
-                var size = Size.Ceiling(_engineBoard.Rects["BoardRect"].Size);
-                size.Width += panelLog.Width;
-                size.Height += mainMenu.Height + mainTools.Height + mainStatus.Height;
-                ClientSize = size;
-            }
-            CenterToScreen();
-            Invalidate();
+                if (_engineBoard.Rects.ContainsKey("BoardRect"))
+                {
+                    var size = Size.Ceiling(_engineBoard.Rects["BoardRect"].Size);
+                    if (tsmiShowGamePanel.Checked)
+                        size.Width += panelGame.Width;
+                    size.Height += mainMenu.Height + mainStatus.Height;
+                    ClientSize = size;
+                }
+                Invalidate();
+            });
+            if (InvokeRequired)
+                BeginInvoke(method);
+            else
+                method();
         }
 
         private void tsmiServerIpAddress_Click(object sender, EventArgs e)
@@ -293,6 +313,17 @@ namespace Checkers
                 Settings.Default.Save();
                 Client.Reconnect(_host, _dataPort);
             }
+        }
+
+        private void tsmiShowGamePanel_Click(object sender, EventArgs e)
+        {
+            panelGame.Visible = tsmiShowGamePanel.Checked;
+            var size = ClientSize;
+            if (tsmiShowGamePanel.Checked)
+                size.Width += panelGame.Width;
+            else
+                size.Width -= panelGame.Width;
+            ClientSize = size;
         }
     }
 

@@ -34,25 +34,21 @@
             this.saveGameDialog = new System.Windows.Forms.SaveFileDialog();
             this.mainStatus = new System.Windows.Forms.StatusStrip();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslIpAddress = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslDateTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mainTools = new System.Windows.Forms.ToolStrip();
-            this.tsbNewGame = new System.Windows.Forms.ToolStripButton();
-            this.tsbSaveGame = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.openGameDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.tsmiGame = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNewGame = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiOpenGame = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiSaveGame = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTuning = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiServerIpAddress = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRules = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelLog = new System.Windows.Forms.Panel();
+            this.panelGame = new System.Windows.Forms.Panel();
             this.lvLog = new System.Windows.Forms.ListView();
             this.chStep = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chWhite = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -61,13 +57,12 @@
             this.lbBlackScore = new System.Windows.Forms.Label();
             this.lbWhiteScore = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tsmiTuning = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiServerIpAddress = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsslIpAddress = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsmiEndGame = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowGamePanel = new System.Windows.Forms.ToolStripMenuItem();
             this.mainStatus.SuspendLayout();
-            this.mainTools.SuspendLayout();
             this.mainMenu.SuspendLayout();
-            this.panelLog.SuspendLayout();
+            this.panelGame.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerClock
@@ -84,6 +79,7 @@
             // 
             // mainStatus
             // 
+            this.mainStatus.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.mainStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.status,
             this.tsslIpAddress,
@@ -91,7 +87,7 @@
             this.mainStatus.Location = new System.Drawing.Point(0, 396);
             this.mainStatus.Name = "mainStatus";
             this.mainStatus.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-            this.mainStatus.Size = new System.Drawing.Size(506, 24);
+            this.mainStatus.Size = new System.Drawing.Size(448, 24);
             this.mainStatus.SizingGrip = false;
             this.mainStatus.TabIndex = 7;
             this.mainStatus.Text = "statusStrip1";
@@ -104,6 +100,14 @@
             this.status.Text = "Инициализация...";
             this.status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // tsslIpAddress
+            // 
+            this.tsslIpAddress.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.tsslIpAddress.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
+            this.tsslIpAddress.Name = "tsslIpAddress";
+            this.tsslIpAddress.Size = new System.Drawing.Size(59, 19);
+            this.tsslIpAddress.Text = "localhost";
+            // 
             // tsslDateTime
             // 
             this.tsslDateTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
@@ -112,49 +116,11 @@
             this.tsslDateTime.Size = new System.Drawing.Size(130, 19);
             this.tsslDateTime.Text = "Нет связи с сервером";
             // 
-            // mainTools
-            // 
-            this.mainTools.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.mainTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbNewGame,
-            this.tsbSaveGame,
-            this.toolStripSeparator1});
-            this.mainTools.Location = new System.Drawing.Point(0, 24);
-            this.mainTools.Name = "mainTools";
-            this.mainTools.Size = new System.Drawing.Size(506, 25);
-            this.mainTools.TabIndex = 8;
-            this.mainTools.Text = "toolStrip1";
-            // 
-            // tsbNewGame
-            // 
-            this.tsbNewGame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbNewGame.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewGame.Image")));
-            this.tsbNewGame.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbNewGame.Name = "tsbNewGame";
-            this.tsbNewGame.Size = new System.Drawing.Size(23, 22);
-            this.tsbNewGame.Text = "&Новая игра";
-            this.tsbNewGame.Click += new System.EventHandler(this.tsmiNewGame_Click);
-            // 
-            // tsbSaveGame
-            // 
-            this.tsbSaveGame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbSaveGame.Enabled = false;
-            this.tsbSaveGame.Image = ((System.Drawing.Image)(resources.GetObject("tsbSaveGame.Image")));
-            this.tsbSaveGame.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbSaveGame.Name = "tsbSaveGame";
-            this.tsbSaveGame.Size = new System.Drawing.Size(23, 22);
-            this.tsbSaveGame.Text = "&Сохранить";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // tsmiAbout
             // 
             this.tsmiAbout.Enabled = false;
             this.tsmiAbout.Name = "tsmiAbout";
-            this.tsmiAbout.Size = new System.Drawing.Size(162, 22);
+            this.tsmiAbout.Size = new System.Drawing.Size(180, 22);
             this.tsmiAbout.Text = "&О программе...";
             // 
             // openGameDialog
@@ -166,7 +132,7 @@
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(159, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // mainMenu
             // 
@@ -177,7 +143,7 @@
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.mainMenu.Size = new System.Drawing.Size(506, 24);
+            this.mainMenu.Size = new System.Drawing.Size(448, 24);
             this.mainMenu.TabIndex = 6;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -185,9 +151,7 @@
             // 
             this.tsmiGame.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiNewGame,
-            this.tsmiOpenGame,
-            this.toolStripSeparator,
-            this.tsmiSaveGame,
+            this.tsmiEndGame,
             this.toolStripSeparator2,
             this.tsmiExit});
             this.tsmiGame.Name = "tsmiGame";
@@ -200,45 +164,38 @@
             this.tsmiNewGame.Image = ((System.Drawing.Image)(resources.GetObject("tsmiNewGame.Image")));
             this.tsmiNewGame.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsmiNewGame.Name = "tsmiNewGame";
-            this.tsmiNewGame.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.tsmiNewGame.Size = new System.Drawing.Size(172, 22);
-            this.tsmiNewGame.Text = "&Новая";
+            this.tsmiNewGame.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.tsmiNewGame.Size = new System.Drawing.Size(180, 22);
+            this.tsmiNewGame.Text = "&Новая...";
             this.tsmiNewGame.Click += new System.EventHandler(this.tsmiNewGame_Click);
-            // 
-            // tsmiOpenGame
-            // 
-            this.tsmiOpenGame.Image = ((System.Drawing.Image)(resources.GetObject("tsmiOpenGame.Image")));
-            this.tsmiOpenGame.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsmiOpenGame.Name = "tsmiOpenGame";
-            this.tsmiOpenGame.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.tsmiOpenGame.Size = new System.Drawing.Size(172, 22);
-            this.tsmiOpenGame.Text = "&Открыть";
-            // 
-            // toolStripSeparator
-            // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(169, 6);
-            // 
-            // tsmiSaveGame
-            // 
-            this.tsmiSaveGame.Enabled = false;
-            this.tsmiSaveGame.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveGame.Image")));
-            this.tsmiSaveGame.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsmiSaveGame.Name = "tsmiSaveGame";
-            this.tsmiSaveGame.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.tsmiSaveGame.Size = new System.Drawing.Size(172, 22);
-            this.tsmiSaveGame.Text = "&Сохранить";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(169, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // tsmiExit
             // 
             this.tsmiExit.Name = "tsmiExit";
-            this.tsmiExit.Size = new System.Drawing.Size(172, 22);
+            this.tsmiExit.Size = new System.Drawing.Size(180, 22);
             this.tsmiExit.Text = "Вы&ход";
+            // 
+            // tsmiTuning
+            // 
+            this.tsmiTuning.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowGamePanel,
+            this.toolStripMenuItem1,
+            this.tsmiServerIpAddress});
+            this.tsmiTuning.Name = "tsmiTuning";
+            this.tsmiTuning.Size = new System.Drawing.Size(78, 20);
+            this.tsmiTuning.Text = "Настройка";
+            // 
+            // tsmiServerIpAddress
+            // 
+            this.tsmiServerIpAddress.Name = "tsmiServerIpAddress";
+            this.tsmiServerIpAddress.Size = new System.Drawing.Size(180, 22);
+            this.tsmiServerIpAddress.Text = "Адрес cервера...";
+            this.tsmiServerIpAddress.Click += new System.EventHandler(this.tsmiServerIpAddress_Click);
             // 
             // tsmiHelp
             // 
@@ -254,22 +211,23 @@
             // 
             this.tsmiRules.Enabled = false;
             this.tsmiRules.Name = "tsmiRules";
-            this.tsmiRules.Size = new System.Drawing.Size(162, 22);
+            this.tsmiRules.Size = new System.Drawing.Size(180, 22);
             this.tsmiRules.Text = "&Правила игры...";
             // 
-            // panelLog
+            // panelGame
             // 
-            this.panelLog.BackColor = System.Drawing.Color.DarkGray;
-            this.panelLog.Controls.Add(this.lvLog);
-            this.panelLog.Controls.Add(this.label2);
-            this.panelLog.Controls.Add(this.lbBlackScore);
-            this.panelLog.Controls.Add(this.lbWhiteScore);
-            this.panelLog.Controls.Add(this.label1);
-            this.panelLog.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelLog.Location = new System.Drawing.Point(269, 49);
-            this.panelLog.Name = "panelLog";
-            this.panelLog.Size = new System.Drawing.Size(237, 347);
-            this.panelLog.TabIndex = 10;
+            this.panelGame.BackColor = System.Drawing.Color.DarkGray;
+            this.panelGame.Controls.Add(this.lvLog);
+            this.panelGame.Controls.Add(this.label2);
+            this.panelGame.Controls.Add(this.lbBlackScore);
+            this.panelGame.Controls.Add(this.lbWhiteScore);
+            this.panelGame.Controls.Add(this.label1);
+            this.panelGame.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelGame.Location = new System.Drawing.Point(211, 24);
+            this.panelGame.Name = "panelGame";
+            this.panelGame.Size = new System.Drawing.Size(237, 372);
+            this.panelGame.TabIndex = 10;
+            this.panelGame.Visible = false;
             // 
             // lvLog
             // 
@@ -290,7 +248,7 @@
             this.lvLog.Name = "lvLog";
             this.lvLog.ShowGroups = false;
             this.lvLog.ShowItemToolTips = true;
-            this.lvLog.Size = new System.Drawing.Size(221, 265);
+            this.lvLog.Size = new System.Drawing.Size(221, 290);
             this.lvLog.TabIndex = 1;
             this.lvLog.UseCompatibleStateImageBehavior = false;
             this.lvLog.View = System.Windows.Forms.View.Details;
@@ -354,37 +312,35 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Партия:";
             // 
-            // tsmiTuning
+            // tsmiEndGame
             // 
-            this.tsmiTuning.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiServerIpAddress});
-            this.tsmiTuning.Name = "tsmiTuning";
-            this.tsmiTuning.Size = new System.Drawing.Size(78, 20);
-            this.tsmiTuning.Text = "Настройка";
+            this.tsmiEndGame.Enabled = false;
+            this.tsmiEndGame.Name = "tsmiEndGame";
+            this.tsmiEndGame.Size = new System.Drawing.Size(180, 22);
+            this.tsmiEndGame.Text = "Завершить";
             // 
-            // tsmiServerIpAddress
+            // toolStripMenuItem1
             // 
-            this.tsmiServerIpAddress.Name = "tsmiServerIpAddress";
-            this.tsmiServerIpAddress.Size = new System.Drawing.Size(180, 22);
-            this.tsmiServerIpAddress.Text = "Адрес cервера...";
-            this.tsmiServerIpAddress.Click += new System.EventHandler(this.tsmiServerIpAddress_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
-            // tsslIpAddress
+            // tsmiShowGamePanel
             // 
-            this.tsslIpAddress.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.tsslIpAddress.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
-            this.tsslIpAddress.Name = "tsslIpAddress";
-            this.tsslIpAddress.Size = new System.Drawing.Size(59, 19);
-            this.tsslIpAddress.Text = "localhost";
+            this.tsmiShowGamePanel.CheckOnClick = true;
+            this.tsmiShowGamePanel.Name = "tsmiShowGamePanel";
+            this.tsmiShowGamePanel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.tsmiShowGamePanel.Size = new System.Drawing.Size(188, 22);
+            this.tsmiShowGamePanel.Text = "Панель игры";
+            this.tsmiShowGamePanel.Click += new System.EventHandler(this.tsmiShowGamePanel_Click);
             // 
             // CheckersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 420);
-            this.Controls.Add(this.panelLog);
+            this.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.ClientSize = new System.Drawing.Size(448, 420);
+            this.Controls.Add(this.panelGame);
             this.Controls.Add(this.mainStatus);
-            this.Controls.Add(this.mainTools);
             this.Controls.Add(this.mainMenu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -398,12 +354,10 @@
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CheckersForm_MouseUp);
             this.mainStatus.ResumeLayout(false);
             this.mainStatus.PerformLayout();
-            this.mainTools.ResumeLayout(false);
-            this.mainTools.PerformLayout();
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
-            this.panelLog.ResumeLayout(false);
-            this.panelLog.PerformLayout();
+            this.panelGame.ResumeLayout(false);
+            this.panelGame.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,24 +369,17 @@
         private System.Windows.Forms.SaveFileDialog saveGameDialog;
         private System.Windows.Forms.StatusStrip mainStatus;
         private System.Windows.Forms.ToolStripStatusLabel status;
-        private System.Windows.Forms.ToolStrip mainTools;
-        private System.Windows.Forms.ToolStripButton tsbNewGame;
-        private System.Windows.Forms.ToolStripButton tsbSaveGame;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
         private System.Windows.Forms.OpenFileDialog openGameDialog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem tsmiGame;
         private System.Windows.Forms.ToolStripMenuItem tsmiNewGame;
-        private System.Windows.Forms.ToolStripMenuItem tsmiOpenGame;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
-        private System.Windows.Forms.ToolStripMenuItem tsmiSaveGame;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmiExit;
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
         private System.Windows.Forms.ToolStripMenuItem tsmiRules;
-        private System.Windows.Forms.Panel panelLog;
+        private System.Windows.Forms.Panel panelGame;
         private System.Windows.Forms.ListView lvLog;
         private System.Windows.Forms.ColumnHeader chStep;
         private System.Windows.Forms.ColumnHeader chWhite;
@@ -445,6 +392,9 @@
         private System.Windows.Forms.ToolStripStatusLabel tsslIpAddress;
         private System.Windows.Forms.ToolStripMenuItem tsmiTuning;
         private System.Windows.Forms.ToolStripMenuItem tsmiServerIpAddress;
+        private System.Windows.Forms.ToolStripMenuItem tsmiEndGame;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowGamePanel;
     }
 }
 

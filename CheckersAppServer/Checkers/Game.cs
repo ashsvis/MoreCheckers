@@ -48,8 +48,8 @@ namespace Checkers
 
         public Game()
         {
-            Mode = PlayMode.SelfGame;
-            WinPlayer = WinPlayer.Game;
+            //Mode = PlayMode.SelfGame;
+            //WinPlayer = WinPlayer.Game;
             Log = new List<LogItem>();
             Board = new Board(this);
             Board.CheckerMoved += Board_CheckerMoved;
