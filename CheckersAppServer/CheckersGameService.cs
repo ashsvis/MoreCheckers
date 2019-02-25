@@ -44,13 +44,13 @@ namespace CheckersAppServer
             return game.ToString();
         }
 
-        public bool StartNewGame(Guid gameId, PlayMode gameType, Player player)
+        public bool StartNewGame(Guid gameId, PlayMode gameType)
         {
             if (!_games.ContainsKey(gameId)) return false;
             var game = _games[gameId];
             game.Board.ResetMap(false);
             game.Mode = gameType;
-            game.Player = player;
+            game.Player = Player.White;
             game.WinPlayer = WinPlayer.Game;
             return true;
         }
@@ -64,32 +64,41 @@ namespace CheckersAppServer
             return true;
         }
 
-        public string GetDrawBoardScript(Guid gameId)
+        public string GetDrawBoardScript(Guid gameId, Player player)
         {
-            return _games.ContainsKey(gameId) ? _games[gameId].Io.DrawBoardScript() : "";
+            if (!_games.ContainsKey(gameId)) return "";
+            var game = _games[gameId];
+            game.Player = player;
+            return game.Io.DrawBoardScript();
         }
 
-        public bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys)
+        public bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys, Player player)
         {
             if (!_games.ContainsKey(gameId)) return false;
             var keys = (System.Windows.Forms.Keys)modifierKeys;
-            _games[gameId].Io.MouseDown(location);
+            var game = _games[gameId];
+            game.Player = player;
+            game.Io.MouseDown(location);
             return true;
         }
 
-        public bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys)
+        public bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys, Player player)
         {
             if (!_games.ContainsKey(gameId)) return false;
             var keys = (System.Windows.Forms.Keys)modifierKeys;
-            _games[gameId].Io.MouseMove(location);
+            var game = _games[gameId];
+            game.Player = player;
+            game.Io.MouseMove(location);
             return true;
         }
 
-        public bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys)
+        public bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys, Player player)
         {
             if (!_games.ContainsKey(gameId)) return false;
             var keys = (System.Windows.Forms.Keys)modifierKeys;
-            _games[gameId].Io.MouseUp(location);
+            var game = _games[gameId];
+            game.Player = player;
+            game.Io.MouseUp(location);
             return true;
         }
     }

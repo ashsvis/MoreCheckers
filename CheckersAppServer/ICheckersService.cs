@@ -44,22 +44,22 @@ namespace CheckersAppServer
         string GetGameStatus(Guid gameId);
 
         [OperationContract]
-        bool StartNewGame(Guid gameId, PlayMode gameType, Player player);
+        bool StartNewGame(Guid gameId, PlayMode gameType);
 
         [OperationContract]
         bool EndGame(Guid gameId);
 
         [OperationContract]
-        string GetDrawBoardScript(Guid gameId);
+        string GetDrawBoardScript(Guid gameId, Player player);
 
         [OperationContract]
-        bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys);
+        bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys, Player player);
 
         [OperationContract]
-        bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys);
+        bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys, Player player);
 
         [OperationContract]
-        bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys);
+        bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys, Player player);
 
         #endregion
 

@@ -105,10 +105,10 @@ namespace Checkers.CheckersServiceReference {
         System.Threading.Tasks.Task<string> GetGameStatusAsync(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
-        bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player);
+        bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
-        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player);
+        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/EndGame", ReplyAction="http://tempuri.org/ICheckersService/EndGameResponse")]
         bool EndGame(System.Guid gameId);
@@ -117,28 +117,28 @@ namespace Checkers.CheckersServiceReference {
         System.Threading.Tasks.Task<bool> EndGameAsync(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDrawBoardScript", ReplyAction="http://tempuri.org/ICheckersService/GetDrawBoardScriptResponse")]
-        string GetDrawBoardScript(System.Guid gameId);
+        string GetDrawBoardScript(System.Guid gameId, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDrawBoardScript", ReplyAction="http://tempuri.org/ICheckersService/GetDrawBoardScriptResponse")]
-        System.Threading.Tasks.Task<string> GetDrawBoardScriptAsync(System.Guid gameId);
+        System.Threading.Tasks.Task<string> GetDrawBoardScriptAsync(System.Guid gameId, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseDown", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseDownResponse")]
-        bool OnBoardMouseDown(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        bool OnBoardMouseDown(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseDown", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseDownResponse")]
-        System.Threading.Tasks.Task<bool> OnBoardMouseDownAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        System.Threading.Tasks.Task<bool> OnBoardMouseDownAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseMove", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseMoveResponse")]
-        bool OnBoardMouseMove(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        bool OnBoardMouseMove(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseMove", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseMoveResponse")]
-        System.Threading.Tasks.Task<bool> OnBoardMouseMoveAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        System.Threading.Tasks.Task<bool> OnBoardMouseMoveAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseUp", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse")]
-        bool OnBoardMouseUp(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        bool OnBoardMouseUp(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseUp", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse")]
-        System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys);
+        System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDate", ReplyAction="http://tempuri.org/ICheckersService/GetDateResponse")]
         System.DateTime GetDate();
@@ -254,12 +254,12 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.GetGameStatusAsync(gameId);
         }
         
-        public bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player) {
-            return base.Channel.StartNewGame(gameId, gameType, player);
+        public bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType) {
+            return base.Channel.StartNewGame(gameId, gameType);
         }
         
-        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player) {
-            return base.Channel.StartNewGameAsync(gameId, gameType, player);
+        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType) {
+            return base.Channel.StartNewGameAsync(gameId, gameType);
         }
         
         public bool EndGame(System.Guid gameId) {
@@ -270,36 +270,36 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.EndGameAsync(gameId);
         }
         
-        public string GetDrawBoardScript(System.Guid gameId) {
-            return base.Channel.GetDrawBoardScript(gameId);
+        public string GetDrawBoardScript(System.Guid gameId, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.GetDrawBoardScript(gameId, player);
         }
         
-        public System.Threading.Tasks.Task<string> GetDrawBoardScriptAsync(System.Guid gameId) {
-            return base.Channel.GetDrawBoardScriptAsync(gameId);
+        public System.Threading.Tasks.Task<string> GetDrawBoardScriptAsync(System.Guid gameId, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.GetDrawBoardScriptAsync(gameId, player);
         }
         
-        public bool OnBoardMouseDown(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
-            return base.Channel.OnBoardMouseDown(gameId, location, modifierKeys);
+        public bool OnBoardMouseDown(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.OnBoardMouseDown(gameId, location, modifierKeys, player);
         }
         
-        public System.Threading.Tasks.Task<bool> OnBoardMouseDownAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
-            return base.Channel.OnBoardMouseDownAsync(gameId, location, modifierKeys);
+        public System.Threading.Tasks.Task<bool> OnBoardMouseDownAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.OnBoardMouseDownAsync(gameId, location, modifierKeys, player);
         }
         
-        public bool OnBoardMouseMove(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
-            return base.Channel.OnBoardMouseMove(gameId, location, modifierKeys);
+        public bool OnBoardMouseMove(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.OnBoardMouseMove(gameId, location, modifierKeys, player);
         }
         
-        public System.Threading.Tasks.Task<bool> OnBoardMouseMoveAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
-            return base.Channel.OnBoardMouseMoveAsync(gameId, location, modifierKeys);
+        public System.Threading.Tasks.Task<bool> OnBoardMouseMoveAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.OnBoardMouseMoveAsync(gameId, location, modifierKeys, player);
         }
         
-        public bool OnBoardMouseUp(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
-            return base.Channel.OnBoardMouseUp(gameId, location, modifierKeys);
+        public bool OnBoardMouseUp(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.OnBoardMouseUp(gameId, location, modifierKeys, player);
         }
         
-        public System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys) {
-            return base.Channel.OnBoardMouseUpAsync(gameId, location, modifierKeys);
+        public System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.OnBoardMouseUpAsync(gameId, location, modifierKeys, player);
         }
         
         public System.DateTime GetDate() {

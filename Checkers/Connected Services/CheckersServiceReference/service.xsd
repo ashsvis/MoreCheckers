@@ -150,7 +150,6 @@
       <xs:sequence>
         <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q7:guid" />
         <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/CheckersAppServer" minOccurs="0" name="gameType" type="q8:PlayMode" />
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/CheckersAppServer" minOccurs="0" name="player" type="q9:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -164,7 +163,7 @@
   <xs:element name="EndGame">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q10:guid" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q9:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -178,7 +177,8 @@
   <xs:element name="GetDrawBoardScript">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q11:guid" />
+        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q10:guid" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/CheckersAppServer" minOccurs="0" name="player" type="q11:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -195,6 +195,7 @@
         <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q12:guid" />
         <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q13:Point" />
         <xs:element minOccurs="0" name="modifierKeys" type="xs:int" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/CheckersAppServer" minOccurs="0" name="player" type="q14:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -208,9 +209,10 @@
   <xs:element name="OnBoardMouseMove">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q14:guid" />
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q15:Point" />
+        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q15:guid" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q16:Point" />
         <xs:element minOccurs="0" name="modifierKeys" type="xs:int" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/CheckersAppServer" minOccurs="0" name="player" type="q17:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -224,9 +226,10 @@
   <xs:element name="OnBoardMouseUp">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q16:guid" />
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q17:Point" />
+        <xs:element xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="gameId" type="q18:guid" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/System.Drawing" minOccurs="0" name="location" type="q19:Point" />
         <xs:element minOccurs="0" name="modifierKeys" type="xs:int" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/CheckersAppServer" minOccurs="0" name="player" type="q20:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

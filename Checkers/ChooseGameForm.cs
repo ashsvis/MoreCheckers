@@ -52,9 +52,9 @@ namespace Checkers
             btnJoinGame.Enabled = lview.SelectedItems.Count > 0;
         }
 
-        private async void StartNewGame(Player player)
+        private async void StartNewGame()
         {
-            await Client.StartNewGameAsync(gameGuid, PlayMode.NetGame, player);
+            await Client.StartNewGameAsync(gameGuid, PlayMode.NetGame);
         }
 
         private void btnCreateGame_Click(object sender, EventArgs e)

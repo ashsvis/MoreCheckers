@@ -48,62 +48,62 @@ namespace Checkers
             return task;
         }
 
-        public static string GetDrawBoardScript(Guid gameId)
+        public static string GetDrawBoardScript(Guid gameId, Player player)
         {
-            return GetMethod("GetDrawBoardScript", () => _proxy.GetDrawBoardScript(gameId), String.Empty);
+            return GetMethod("GetDrawBoardScript", () => _proxy.GetDrawBoardScript(gameId, player), String.Empty);
         }
 
-        public static Task<string> GetDrawBoardScriptAsync(Guid gameId)
+        public static Task<string> GetDrawBoardScriptAsync(Guid gameId, Player player)
         {
-            var task = new Task<string>(() => GetDrawBoardScript(gameId));
+            var task = new Task<string>(() => GetDrawBoardScript(gameId, player));
             task.Start();
             return task;
         }
 
-        public static bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys)
+        public static bool OnBoardMouseDown(Guid gameId, Point location, int modifierKeys, Player player)
         {
-            return GetMethod("OnBoardMouseDown", () => _proxy.OnBoardMouseDown(gameId, location, modifierKeys), false);
+            return GetMethod("OnBoardMouseDown", () => _proxy.OnBoardMouseDown(gameId, location, modifierKeys, player), false);
         }
 
-        public static Task<bool> OnBoardMouseDownAsync(Guid gameId, Point location, int modifierKeys)
+        public static Task<bool> OnBoardMouseDownAsync(Guid gameId, Point location, int modifierKeys, Player player)
         {
-            var task = new Task<bool>(() => OnBoardMouseDown(gameId, location, modifierKeys));
+            var task = new Task<bool>(() => OnBoardMouseDown(gameId, location, modifierKeys, player));
             task.Start();
             return task;
         }
 
-        public static bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys)
+        public static bool OnBoardMouseMove(Guid gameId, Point location, int modifierKeys, Player player)
         {
-            return GetMethod("OnBoardMouseMove", () => _proxy.OnBoardMouseMove(gameId, location, modifierKeys), false);
+            return GetMethod("OnBoardMouseMove", () => _proxy.OnBoardMouseMove(gameId, location, modifierKeys, player), false);
         }
 
-        public static Task<bool> OnBoardMouseMoveAsync(Guid gameId, Point location, int modifierKeys)
+        public static Task<bool> OnBoardMouseMoveAsync(Guid gameId, Point location, int modifierKeys, Player player)
         {
-            var task = new Task<bool>(() => OnBoardMouseMove(gameId, location, modifierKeys));
+            var task = new Task<bool>(() => OnBoardMouseMove(gameId, location, modifierKeys, player));
             task.Start();
             return task;
         }
 
-        public static bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys)
+        public static bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys, Player player)
         {
-            return GetMethod("OnBoardMouseUp", () => _proxy.OnBoardMouseUp(gameId, location, modifierKeys), false);
+            return GetMethod("OnBoardMouseUp", () => _proxy.OnBoardMouseUp(gameId, location, modifierKeys, player), false);
         }
 
-        public static Task<bool> OnBoardMouseUpAsync(Guid gameId, Point location, int modifierKeys)
+        public static Task<bool> OnBoardMouseUpAsync(Guid gameId, Point location, int modifierKeys, Player player)
         {
-            var task = new Task<bool>(() => OnBoardMouseUp(gameId, location, modifierKeys));
+            var task = new Task<bool>(() => OnBoardMouseUp(gameId, location, modifierKeys, player));
             task.Start();
             return task;
         }
 
-        public static bool StartNewGame(Guid gameId, PlayMode playMode, Player player)
+        public static bool StartNewGame(Guid gameId, PlayMode playMode)
         {
-            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId, playMode, player), false);
+            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId, playMode), false);
         }
 
-        public static Task<bool> StartNewGameAsync(Guid gameId, PlayMode playMode, Player player)
+        public static Task<bool> StartNewGameAsync(Guid gameId, PlayMode playMode)
         {
-            var task = new Task<bool>(() => StartNewGame(gameId, playMode, player));
+            var task = new Task<bool>(() => StartNewGame(gameId, playMode));
             task.Start();
             return task;
         }

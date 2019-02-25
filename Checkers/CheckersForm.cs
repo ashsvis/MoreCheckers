@@ -17,6 +17,7 @@ namespace Checkers
         private bool _started;
         private Point _offsetBoard;
         private Engine _engineBoard;
+        private Player _player = Player.White;
 
         public CheckersForm()
         {
@@ -177,7 +178,7 @@ namespace Checkers
         {
             if (e.Button == MouseButtons.Left)
             {
-                OnBoardMouseDown(e.Location, (int)ModifierKeys);
+                OnBoardMouseDown(e.Location, (int)ModifierKeys, _player);
 
                 //var n = lvLog.SelectedIndices.Count > 0 ? lvLog.SelectedIndices[0] : -1;
                 //if (n < 0 || n == _game.Log.Count - 1)
@@ -196,53 +197,47 @@ namespace Checkers
 
         }
 
-        private async void OnBoardMouseDown(Point location, int modifierKeys)
+        private async void OnBoardMouseDown(Point location, int modifierKeys, Player player)
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
-            if (await Client.OnBoardMouseDownAsync(_gameGuid, p, modifierKeys))
+            if (await Client.OnBoardMouseDownAsync(_gameGuid, p, modifierKeys, player))
             {
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, player));
                 Invalidate();
             }
-            if (_opponentGuid != Guid.Empty)
-                await Client.OnBoardMouseDownAsync(_opponentGuid, p, modifierKeys);
         }
 
         private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
         {
-            OnBoardMouseMove(e.Location, (int)ModifierKeys);
+            OnBoardMouseMove(e.Location, (int)ModifierKeys, _player);
         }
 
-        private async void OnBoardMouseMove(Point location, int modifierKeys)
+        private async void OnBoardMouseMove(Point location, int modifierKeys, Player player)
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
-            if (await Client.OnBoardMouseMoveAsync(_gameGuid, p, modifierKeys))
+            if (await Client.OnBoardMouseMoveAsync(_gameGuid, p, modifierKeys, player))
             {
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, player));
                 Invalidate();
             }
-            if (_opponentGuid != Guid.Empty)
-                await Client.OnBoardMouseMoveAsync(_opponentGuid, p, modifierKeys);
         }
 
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                OnBoardMouseUp(e.Location, (int)ModifierKeys);
+                OnBoardMouseUp(e.Location, (int)ModifierKeys, _player);
             }
         }
 
-        private async void OnBoardMouseUp(Point location, int modifierKeys)
+        private async void OnBoardMouseUp(Point location, int modifierKeys, Player player)
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
-            if (await Client.OnBoardMouseUpAsync(_gameGuid, p, modifierKeys))
+            if (await Client.OnBoardMouseUpAsync(_gameGuid, p, modifierKeys, player))
             {
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, player));
                 Invalidate();
             }
-            if (_opponentGuid != Guid.Empty)
-                await Client.OnBoardMouseUpAsync(_opponentGuid, p, modifierKeys);
         }
 
         private void lvLog_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -295,36 +290,31 @@ namespace Checkers
             var result = frm.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                if (frm.PlayMode == PlayMode.NetGame &&
-                    _gameGuid != frm.OpponentGameGuid)
+                if (frm.PlayMode == PlayMode.NetGame && _gameGuid != frm.OpponentGameGuid)
                 {
-                    _gameGuid = 
-                    _opponentGuid = frm.OpponentGameGuid;
-                    StartNewGame(frm.PlayMode, Player.White);
+                    _gameGuid = frm.OpponentGameGuid;
+                    _player = Player.Black;
                 }
                 else
-                {
-                    _opponentGuid = Guid.Empty;
-                    StartNewGame(frm.PlayMode, Player.White);
-                }
+                    _player = Player.White;
+                StartNewGame(frm.PlayMode);
                 _started = true;
                 Invalidate();
             }
         }
 
-        private async void StartNewGame(PlayMode playMode, Player player)
+        private async void StartNewGame(PlayMode playMode)
         {
-            await Client.StartNewGameAsync(_gameGuid, playMode, player);
+            await Client.StartNewGameAsync(_gameGuid, playMode);
         }
 
         private Guid _gameGuid;
-        private Guid _opponentGuid;
 
         private async void CreateNewGame()
         {
             _started = false;
             _gameGuid = await Client.CreateGameAsync();
-            _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+            _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, _player));
             var method = new MethodInvoker(() =>
             {
                 if (_engineBoard.Rects.ContainsKey("BoardRect"))
@@ -387,7 +377,7 @@ namespace Checkers
             if (await Client.EndGameAsync(_gameGuid))
             {
                 _started = false;
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
+                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, _player));
                 Invalidate();
             }
         }
