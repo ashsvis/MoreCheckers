@@ -1,4 +1,5 @@
-﻿using Checkers.Properties;
+﻿using Checkers.CheckersServiceReference;
+using Checkers.Properties;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -140,18 +141,19 @@ namespace Checkers
         //    //_net.SendNetGameStatus();
         //}
 
-        //private void UpdateStatusText(string text)
-        //{
-        //    var method = new MethodInvoker(() =>
-        //    {
-        //        status.Text = text;
-        //        mainStatus.Refresh();
-        //    });
-        //    if (InvokeRequired)
-        //        BeginInvoke(method);
-        //    else
-        //        method();
-        //}
+        private async void UpdateStatusText()
+        {
+            var text = await Client.GetGameStatusAsync(_gameGuid);
+            var method = new MethodInvoker(() =>
+            {
+                status.Text = text;
+                mainStatus.Refresh();
+            });
+            if (InvokeRequired)
+                BeginInvoke(method);
+            else
+                method();
+        }
 
         /// <summary>
         /// Метод проверки соединения с сервером приложения
@@ -168,6 +170,7 @@ namespace Checkers
             // получаем текущую дату и время с сервера
             // заодно (и это важно) периодический вызов диагностирует состояние связи
             UpdateClock();
+            UpdateStatusText();
         }
 
         private void CheckersForm_MouseDown(object sender, MouseEventArgs e)
@@ -201,6 +204,8 @@ namespace Checkers
                 _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
                 Invalidate();
             }
+            if (_opponentGuid != Guid.Empty)
+                await Client.OnBoardMouseDownAsync(_opponentGuid, p, modifierKeys);
         }
 
         private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
@@ -216,6 +221,8 @@ namespace Checkers
                 _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
                 Invalidate();
             }
+            if (_opponentGuid != Guid.Empty)
+                await Client.OnBoardMouseMoveAsync(_opponentGuid, p, modifierKeys);
         }
 
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
@@ -234,6 +241,8 @@ namespace Checkers
                 _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
                 Invalidate();
             }
+            if (_opponentGuid != Guid.Empty)
+                await Client.OnBoardMouseUpAsync(_opponentGuid, p, modifierKeys);
         }
 
         private void lvLog_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -282,20 +291,34 @@ namespace Checkers
                 if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             }
-            StartNewGame();
-        }
-
-        private async void StartNewGame()
-        {
-            if (await Client.StartNewGameAsync(_gameGuid))
+            var frm = new ChooseGameForm(_gameGuid);
+            var result = frm.ShowDialog(this);
+            if (result == DialogResult.OK)
             {
+                if (frm.PlayMode == PlayMode.NetGame &&
+                    _gameGuid != frm.OpponentGameGuid)
+                {
+                    _gameGuid = 
+                    _opponentGuid = frm.OpponentGameGuid;
+                    StartNewGame(frm.PlayMode, Player.White);
+                }
+                else
+                {
+                    _opponentGuid = Guid.Empty;
+                    StartNewGame(frm.PlayMode, Player.White);
+                }
                 _started = true;
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid));
                 Invalidate();
             }
         }
 
+        private async void StartNewGame(PlayMode playMode, Player player)
+        {
+            await Client.StartNewGameAsync(_gameGuid, playMode, player);
+        }
+
         private Guid _gameGuid;
+        private Guid _opponentGuid;
 
         private async void CreateNewGame()
         {
@@ -380,6 +403,7 @@ namespace Checkers
                     return;
                 }
             }
+            Client.DestroyGame(_gameGuid);
         }
     }
 

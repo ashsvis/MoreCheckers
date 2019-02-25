@@ -54,6 +54,7 @@
     <Compile Include="CheckersService.cs" />
     <Compile Include="CheckersUsersService.cs" />
     <Compile Include="Checkers\Game.cs" />
+    <Compile Include="PlayMode.cs" />
     <Compile Include="ICheckersService.cs" />
     <Compile Include="Checkers\Io.cs" />
     <Compile Include="Checkers\LogItem.cs" />

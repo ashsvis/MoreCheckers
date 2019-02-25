@@ -7,6 +7,8 @@ namespace CheckersAppServer
     [ServiceContract]
     public interface ICheckersService
     {
+        #region Работа с пользователем
+
         [OperationContract]
         string GetUserPasswordHash(string id);
 
@@ -25,12 +27,24 @@ namespace CheckersAppServer
         [OperationContract]
         bool DeleteUser(string id);
 
+        #endregion
+
+        #region Работа с игрой
 
         [OperationContract]
         Guid CreateGame();
 
         [OperationContract]
-        bool StartNewGame(Guid gameId);
+        bool DestroyGame(Guid gameId);
+
+        [OperationContract]
+        Guid[] GetActiveGames();
+
+        [OperationContract]
+        string GetGameStatus(Guid gameId);
+
+        [OperationContract]
+        bool StartNewGame(Guid gameId, PlayMode gameType, Player player);
 
         [OperationContract]
         bool EndGame(Guid gameId);
@@ -47,6 +61,7 @@ namespace CheckersAppServer
         [OperationContract]
         bool OnBoardMouseUp(Guid gameId, Point location, int modifierKeys);
 
+        #endregion
 
         [OperationContract]
         DateTime GetDate();

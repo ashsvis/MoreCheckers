@@ -7,7 +7,7 @@ namespace CheckersAppServer
 {
     public partial class CheckersService : ICheckersService
     {
-        private Dictionary<Guid, Game> _games = new Dictionary<Guid, Game>();
+        private static Dictionary<Guid, Game> _games = new Dictionary<Guid, Game>();
 
         public Guid CreateGame()
         {
@@ -17,12 +17,40 @@ namespace CheckersAppServer
             return guid;
         }
 
-        public bool StartNewGame(Guid gameId)
+        public bool DestroyGame(Guid gameId)
+        {
+            if (!_games.ContainsKey(gameId)) return false;
+            _games.Remove(gameId);
+            return true;
+        }
+
+        public Guid[] GetActiveGames()
+        {
+            var list = new List<Guid>();
+            foreach (var gameId in _games.Keys)
+            {
+                if (!_games.ContainsKey(gameId)) continue;
+                var game = _games[gameId];
+                if (game.WinPlayer == WinPlayer.Game)
+                    list.AddRange(_games.Keys);
+            }
+            return list.ToArray();
+        }
+
+        public string GetGameStatus(Guid gameId)
+        {
+            if (!_games.ContainsKey(gameId)) return "Not found";
+            var game = _games[gameId];
+            return game.ToString();
+        }
+
+        public bool StartNewGame(Guid gameId, PlayMode gameType, Player player)
         {
             if (!_games.ContainsKey(gameId)) return false;
             var game = _games[gameId];
             game.Board.ResetMap(false);
-            game.Mode = PlayMode.SelfGame;
+            game.Mode = gameType;
+            game.Player = player;
             game.WinPlayer = WinPlayer.Game;
             return true;
         }

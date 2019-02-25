@@ -25,7 +25,7 @@ namespace Checkers
             Graphics = gr;
             Path.Reset();
             foreach (var act in compiled)
-                act();
+                try { act(); } catch { };
         }
 
         public void Parse(string text)

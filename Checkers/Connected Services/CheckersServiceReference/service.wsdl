@@ -71,6 +71,7 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Drawing" />
     </xsd:schema>
   </wsdl:types>
@@ -115,6 +116,24 @@
   </wsdl:message>
   <wsdl:message name="ICheckersService_CreateGame_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_DestroyGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:DestroyGame" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_DestroyGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DestroyGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_GetActiveGames_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetActiveGames" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_GetActiveGames_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetActiveGamesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_GetGameStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGameStatus" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_GetGameStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGameStatusResponse" />
   </wsdl:message>
   <wsdl:message name="ICheckersService_StartNewGame_InputMessage">
     <wsdl:part name="parameters" element="tns:StartNewGame" />
@@ -186,6 +205,18 @@
     <wsdl:operation name="CreateGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/CreateGame" message="tns:ICheckersService_CreateGame_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/CreateGameResponse" message="tns:ICheckersService_CreateGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DestroyGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/DestroyGame" message="tns:ICheckersService_DestroyGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/DestroyGameResponse" message="tns:ICheckersService_DestroyGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveGames">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/GetActiveGames" message="tns:ICheckersService_GetActiveGames_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/GetActiveGamesResponse" message="tns:ICheckersService_GetActiveGames_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGameStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/GetGameStatus" message="tns:ICheckersService_GetGameStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/GetGameStatusResponse" message="tns:ICheckersService_GetGameStatus_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="StartNewGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/StartNewGame" message="tns:ICheckersService_StartNewGame_InputMessage" />
@@ -276,6 +307,33 @@
     </wsdl:operation>
     <wsdl:operation name="CreateGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/CreateGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DestroyGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/DestroyGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveGames">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetActiveGames" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGameStatus">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetGameStatus" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -414,6 +472,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="DestroyGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/DestroyGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveGames">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetActiveGames" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGameStatus">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/GetGameStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="StartNewGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/StartNewGame" style="document" />
       <wsdl:input>
@@ -484,7 +569,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.pipe://localhost/CheckersAppServer</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>THEGIFT\SHURIK</Upn>
+          <Upn>ASh-PC\ASh</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -493,7 +578,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:5528/CheckersAppServer</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>THEGIFT\SHURIK</Upn>
+          <Upn>ASh-PC\ASh</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

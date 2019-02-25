@@ -54,6 +54,12 @@
     <Compile Include="CheckersForm.Designer.cs">
       <DependentUpon>CheckersForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChooseGameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseGameForm.Designer.cs">
+      <DependentUpon>ChooseGameForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Client.cs" />
     <Compile Include="ClientGames.cs" />
     <Compile Include="ClientUsers.cs" />
@@ -74,6 +80,9 @@
     <EmbeddedResource Include="CheckersForm.resx">
       <DependentUpon>CheckersForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ChooseGameForm.resx">
+      <DependentUpon>ChooseGameForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -88,6 +97,9 @@
       <DependentUpon>ServerIpAddressForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Connected Services\CheckersServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\CheckersServiceReference\CheckersAppServer.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\CheckersServiceReference\service.wsdl" />

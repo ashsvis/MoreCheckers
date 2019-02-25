@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Checkers.CheckersServiceReference;
+using System;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -14,6 +15,35 @@ namespace Checkers
         public static Task<Guid> CreateGameAsync()
         {
             var task = new Task<Guid>(() => CreateGame());
+            task.Start();
+            return task;
+        }
+
+        public static void DestroyGame(Guid gameId)
+        {
+            GetMethod("DestroyGame", () => _proxy.DestroyGame(gameId), false);
+        }
+
+        public static Guid[] GetActiveGames()
+        {
+            return GetArrayMethod("GetActiveGames", () => _proxy.GetActiveGames(), new Guid[] { });
+        }
+
+        public static Task<Guid[]> GetActiveGamesAsync()
+        {
+            var task = new Task<Guid[]>(() => GetActiveGames());
+            task.Start();
+            return task;
+        }
+
+        public static string GetGameStatus(Guid gameId)
+        {
+            return GetMethod("GetGameStatus", () => _proxy.GetGameStatus(gameId), String.Empty);
+        }
+
+        public static Task<string> GetGameStatusAsync(Guid gameId)
+        {
+            var task = new Task<string>(() => GetGameStatus(gameId));
             task.Start();
             return task;
         }
@@ -66,14 +96,14 @@ namespace Checkers
             return task;
         }
 
-        public static bool StartNewGame(Guid gameId)
+        public static bool StartNewGame(Guid gameId, PlayMode playMode, Player player)
         {
-            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId), false);
+            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId, playMode, player), false);
         }
 
-        public static Task<bool> StartNewGameAsync(Guid gameId)
+        public static Task<bool> StartNewGameAsync(Guid gameId, PlayMode playMode, Player player)
         {
-            var task = new Task<bool>(() => StartNewGame(gameId));
+            var task = new Task<bool>(() => StartNewGame(gameId, playMode, player));
             task.Start();
             return task;
         }

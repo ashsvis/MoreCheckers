@@ -1,14 +1,9 @@
-﻿using System;
+﻿using CheckersAppServer;
+using System;
 using System.Collections.Generic;
 
 namespace Checkers
 {
-    public enum Player
-    {
-        White,
-        Black
-    }
-
     public enum WinPlayer
     {
         None,   // игра не начата
@@ -16,14 +11,6 @@ namespace Checkers
         White,  // белые выиграли
         Black,  // чёрные выиграли
         Draw    // ничья
-    }
-
-    public enum PlayMode
-    {
-        Game,       // игра с компьютером
-        NetGame,    // игра по сети
-        SelfGame,   // игра с самим собой
-        Collocation // расстановка фишек
     }
 
     [Serializable]

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/CheckersAppServer" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/CheckersAppServer" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="PlayMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Game" />
+      <xs:enumeration value="NetGame" />
+      <xs:enumeration value="SelfGame" />
+      <xs:enumeration value="Collocation" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PlayMode" nillable="true" type="tns:PlayMode" />
+  <xs:simpleType name="Player">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="White" />
+      <xs:enumeration value="Black" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Player" nillable="true" type="tns:Player" />
+</xs:schema>

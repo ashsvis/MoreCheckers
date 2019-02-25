@@ -9,7 +9,36 @@
 //------------------------------------------------------------------------------
 
 namespace Checkers.CheckersServiceReference {
+    using System.Runtime.Serialization;
     
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayMode", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
+    public enum PlayMode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Game = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NetGame = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SelfGame = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Collocation = 3,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Player", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
+    public enum Player : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        White = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Black = 1,
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CheckersServiceReference.ICheckersService")]
@@ -57,11 +86,29 @@ namespace Checkers.CheckersServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/CreateGame", ReplyAction="http://tempuri.org/ICheckersService/CreateGameResponse")]
         System.Threading.Tasks.Task<System.Guid> CreateGameAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
-        bool StartNewGame(System.Guid gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/DestroyGame", ReplyAction="http://tempuri.org/ICheckersService/DestroyGameResponse")]
+        bool DestroyGame(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/DestroyGame", ReplyAction="http://tempuri.org/ICheckersService/DestroyGameResponse")]
+        System.Threading.Tasks.Task<bool> DestroyGameAsync(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetActiveGames", ReplyAction="http://tempuri.org/ICheckersService/GetActiveGamesResponse")]
+        System.Guid[] GetActiveGames();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetActiveGames", ReplyAction="http://tempuri.org/ICheckersService/GetActiveGamesResponse")]
+        System.Threading.Tasks.Task<System.Guid[]> GetActiveGamesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetGameStatus", ReplyAction="http://tempuri.org/ICheckersService/GetGameStatusResponse")]
+        string GetGameStatus(System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetGameStatus", ReplyAction="http://tempuri.org/ICheckersService/GetGameStatusResponse")]
+        System.Threading.Tasks.Task<string> GetGameStatusAsync(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
-        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId);
+        bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
+        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/EndGame", ReplyAction="http://tempuri.org/ICheckersService/EndGameResponse")]
         bool EndGame(System.Guid gameId);
@@ -183,12 +230,36 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.CreateGameAsync();
         }
         
-        public bool StartNewGame(System.Guid gameId) {
-            return base.Channel.StartNewGame(gameId);
+        public bool DestroyGame(System.Guid gameId) {
+            return base.Channel.DestroyGame(gameId);
         }
         
-        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId) {
-            return base.Channel.StartNewGameAsync(gameId);
+        public System.Threading.Tasks.Task<bool> DestroyGameAsync(System.Guid gameId) {
+            return base.Channel.DestroyGameAsync(gameId);
+        }
+        
+        public System.Guid[] GetActiveGames() {
+            return base.Channel.GetActiveGames();
+        }
+        
+        public System.Threading.Tasks.Task<System.Guid[]> GetActiveGamesAsync() {
+            return base.Channel.GetActiveGamesAsync();
+        }
+        
+        public string GetGameStatus(System.Guid gameId) {
+            return base.Channel.GetGameStatus(gameId);
+        }
+        
+        public System.Threading.Tasks.Task<string> GetGameStatusAsync(System.Guid gameId) {
+            return base.Channel.GetGameStatusAsync(gameId);
+        }
+        
+        public bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.StartNewGame(gameId, gameType, player);
+        }
+        
+        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.StartNewGameAsync(gameId, gameType, player);
         }
         
         public bool EndGame(System.Guid gameId) {

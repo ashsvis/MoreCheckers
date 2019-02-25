@@ -26,6 +26,7 @@
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="1e1a4131-c510-4909-89ec-2d78cad79302" SourceId="1" SourceUrl="net.tcp://localhost:5528/CheckersAppServer/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="2f430d59-5a11-4278-ad00-1501a87a285f" SourceId="1" SourceUrl="net.tcp://localhost:5528/CheckersAppServer/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="66ad97e5-1009-4139-b173-f46f1d0a4e9f" SourceId="1" SourceUrl="net.tcp://localhost:5528/CheckersAppServer/mex" />
+    <MetadataFile FileName="CheckersAppServer.xsd" MetadataType="Schema" ID="be5a7546-7d4c-4a5e-9d22-28cd8a3e92b3" SourceId="1" SourceUrl="net.tcp://localhost:5528/CheckersAppServer/mex" />
     <MetadataFile FileName="System.Drawing.xsd" MetadataType="Schema" ID="69cc849e-087f-434c-8b3b-f960b6d809bf" SourceId="1" SourceUrl="net.tcp://localhost:5528/CheckersAppServer/mex" />
   </Metadata>
   <Extensions>
