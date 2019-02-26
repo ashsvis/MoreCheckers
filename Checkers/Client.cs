@@ -11,6 +11,10 @@ namespace Checkers
 {
     public static partial class Client
     {
+        public static void UpdateOpponentGame()
+        {
+            Task.Run(() => _proxy.UpdateGame(_clientId));
+        }
 
         public static Task<DateTime> GetDateAsync()
         {
@@ -89,6 +93,7 @@ namespace Checkers
 
         #region Служебные процедуры
 
+        private static readonly Guid _clientId = Guid.NewGuid();
         private static ClientErrorWrapper _showError;
         private static System.Timers.Timer _faultTimer;
         private static CheckersServiceReference.CheckersServiceClient _proxy;
@@ -97,18 +102,22 @@ namespace Checkers
         private const int Repeat = 10;
 
         private static ConnectionUpdate _connectionUpdate;
+        private static Action _update;
 
         public static void Connect(string host, int port,
-            ClientErrorWrapper showError, ConnectionUpdate connectionUpdate)
+            ClientErrorWrapper showError, ConnectionUpdate connectionUpdate, Action update)
         {
             _host = host;
             _port = port;
             _showError = showError;
             _connectionUpdate = connectionUpdate;
+            _update = update;
             new Thread(() =>
             {
-                _proxy = (new DataExchange(host, port, ConnectionUpdated)).GetProxy();
-                Thread.Sleep(100);
+                _proxy = new DataExchange(host, port, ConnectionUpdated, update).GetProxy();
+                Thread.Sleep(500);
+                if (_proxy.State == CommunicationState.Opened)
+                    _proxy.RegisterForUpdates(_clientId);
             }).Start();
             _faultTimer = new System.Timers.Timer(5 * 1000) { AutoReset = false };
             _faultTimer.Elapsed += Reconnecting;
@@ -118,8 +127,8 @@ namespace Checkers
         {
             switch (state)
             {
-                case ConnectionState.Opening:
                 case ConnectionState.Opened:
+                case ConnectionState.Opening:
                 case ConnectionState.Closing:
                 case ConnectionState.Closed:
                     _connectionUpdate(state);
@@ -154,7 +163,7 @@ namespace Checkers
             {
                 Disconnect();
                 Thread.Sleep(500);
-                Connect(_host, _port, _showError, _connectionUpdate);
+                Connect(_host, _port, _showError, _connectionUpdate, _update);
             }).Start();
         }
 
@@ -174,21 +183,25 @@ namespace Checkers
 
     public delegate void ConnectionUpdate(ConnectionState state);
 
-    public class DataExchange
+    public class DataExchange : CheckersServiceReference.ICheckersServiceCallback
     {
         private readonly TimeSpan _timeout = new TimeSpan(0, 1, 30);
+        private readonly InstanceContext _site;
         private readonly Binding _binding;
         private readonly CheckersServiceReference.CheckersServiceClient _proxy;
         private readonly ConnectionUpdate _connectionUpdate;
+        private readonly Action _update;
 
-        public DataExchange(string host, int port, ConnectionUpdate connectionUpdate)
+        public DataExchange(string host, int port, ConnectionUpdate connectionUpdate, Action update)
         {
+            _update = update;
             _connectionUpdate = connectionUpdate;
             var uri = (host == null || host.Trim().Length == 0 ||
                 host.ToLower().Equals("localhost") ||
                        host.Equals("127.0.0.1"))
                           ? String.Format("net.tcp://localhost:{0}/CheckersAppServer", port)
                           : String.Format("net.tcp://{0}:{1}/CheckersAppServer", host.Trim(), port);
+            _site = new InstanceContext(this);
             _binding = new NetTcpBinding
             {
                 OpenTimeout = _timeout,
@@ -196,27 +209,28 @@ namespace Checkers
                 ReceiveTimeout = _timeout,
                 CloseTimeout = _timeout
             };
-            _proxy = new CheckersServiceReference.CheckersServiceClient(_binding, new EndpointAddress(uri));
-            _proxy.InnerChannel.Opening += (sender, args) =>
-            {
-                _connectionUpdate?.Invoke(ConnectionState.Opening);
-            };
-            _proxy.InnerChannel.Opened += (sender, args) =>
+            _proxy = new CheckersServiceReference.CheckersServiceClient(_site, _binding, new EndpointAddress(uri));
+            _proxy.InnerDuplexChannel.Opened += (sender, args) =>
             {
                 _connectionUpdate?.Invoke(ConnectionState.Opened);
             };
-            _proxy.InnerChannel.Faulted += (sender, args) =>
+            _proxy.InnerDuplexChannel.Opening += (sender, args) =>
             {
-                _connectionUpdate?.Invoke(ConnectionState.Faulted);
+                _connectionUpdate?.Invoke(ConnectionState.Opening);
             };
-            _proxy.InnerChannel.Closing += (sender, args) =>
-            {
-                _connectionUpdate?.Invoke(ConnectionState.Closing);
-            };
-            _proxy.InnerChannel.Closed += (sender, args) =>
+            _proxy.InnerDuplexChannel.Closed += (sender, args) =>
             {
                 _connectionUpdate?.Invoke(ConnectionState.Closed);
             };
+            _proxy.InnerDuplexChannel.Faulted += (sender, args) =>
+            {
+                _connectionUpdate?.Invoke(ConnectionState.Faulted);
+            };
+        }
+
+        public void GameUpdated(Guid gameId)
+        {
+            _update?.Invoke();
         }
 
         public CheckersServiceReference.CheckersServiceClient GetProxy()

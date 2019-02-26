@@ -101,5 +101,6 @@ namespace CheckersAppServer
             game.Io.MouseUp(location);
             return true;
         }
+
     }
 }

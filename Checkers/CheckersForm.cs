@@ -54,7 +54,10 @@ namespace Checkers
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             // рисуем доску с шашками
             graphics.TranslateTransform(_offsetBoard.X, _offsetBoard.Y);
-            _engineBoard.Draw(graphics);
+            lock (_engineBoard)
+            {
+                _engineBoard.Draw(graphics);
+            }
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace Checkers
         /// </summary>
         private void Connect()
         {
-            Client.Connect(_host, _dataPort, ShowStatus, ConnectionUpdated);
+            Client.Connect(_host, _dataPort, ShowStatus, ConnectionUpdated, UpdateBoard);
             var n = 10;
             while (true)
             {
@@ -73,6 +76,16 @@ namespace Checkers
                 n--;
                 if (n < 0) break;
             }
+        }
+
+        private async void UpdateBoard()
+        {
+            var script = await Client.GetDrawBoardScriptAsync(_gameGuid, _player);
+            lock (_engineBoard)
+            {
+                _engineBoard.Parse(script);
+            }
+            Invalidate();
         }
 
         private void ConnectionUpdated(ConnectionState state)
@@ -179,6 +192,7 @@ namespace Checkers
             if (e.Button == MouseButtons.Left)
             {
                 OnBoardMouseDown(e.Location, (int)ModifierKeys, _player);
+                UpdateBoard();
 
                 //var n = lvLog.SelectedIndices.Count > 0 ? lvLog.SelectedIndices[0] : -1;
                 //if (n < 0 || n == _game.Log.Count - 1)
@@ -202,24 +216,14 @@ namespace Checkers
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseDownAsync(_gameGuid, p, modifierKeys, player))
             {
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, player));
-                Invalidate();
+                UpdateBoard();
             }
+            Client.UpdateOpponentGame();
         }
 
         private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
         {
-            OnBoardMouseMove(e.Location, (int)ModifierKeys, _player);
-        }
-
-        private async void OnBoardMouseMove(Point location, int modifierKeys, Player player)
-        {
-            var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
-            if (await Client.OnBoardMouseMoveAsync(_gameGuid, p, modifierKeys, player))
-            {
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, player));
-                Invalidate();
-            }
+            UpdateBoard();
         }
 
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
@@ -227,6 +231,7 @@ namespace Checkers
             if (e.Button == MouseButtons.Left)
             {
                 OnBoardMouseUp(e.Location, (int)ModifierKeys, _player);
+                UpdateBoard();
             }
         }
 
@@ -235,9 +240,9 @@ namespace Checkers
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseUpAsync(_gameGuid, p, modifierKeys, player))
             {
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, player));
-                Invalidate();
+                UpdateBoard();
             }
+            Client.UpdateOpponentGame();
         }
 
         private void lvLog_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -299,7 +304,7 @@ namespace Checkers
                     _player = Player.White;
                 StartNewGame(frm.PlayMode);
                 _started = true;
-                Invalidate();
+                Client.UpdateOpponentGame();
             }
         }
 
@@ -314,16 +319,23 @@ namespace Checkers
         {
             _started = false;
             _gameGuid = await Client.CreateGameAsync();
-            _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, _player));
+            var script = await Client.GetDrawBoardScriptAsync(_gameGuid, _player);
+            lock (_engineBoard)
+            {
+                _engineBoard.Parse(script);
+            }
             var method = new MethodInvoker(() =>
             {
-                if (_engineBoard.Rects.ContainsKey("BoardRect"))
+                lock (_engineBoard)
                 {
-                    var size = Size.Ceiling(_engineBoard.Rects["BoardRect"].Size);
-                    if (tsmiShowGamePanel.Checked)
-                        size.Width += panelGame.Width;
-                    size.Height += mainMenu.Height + mainStatus.Height;
-                    ClientSize = size;
+                    if (_engineBoard.Rects.ContainsKey("BoardRect"))
+                    {
+                        var size = Size.Ceiling(_engineBoard.Rects["BoardRect"].Size);
+                        if (tsmiShowGamePanel.Checked)
+                            size.Width += panelGame.Width;
+                        size.Height += mainMenu.Height + mainStatus.Height;
+                        ClientSize = size;
+                    }
                 }
                 Invalidate();
             });
@@ -377,7 +389,11 @@ namespace Checkers
             if (await Client.EndGameAsync(_gameGuid))
             {
                 _started = false;
-                _engineBoard.Parse(await Client.GetDrawBoardScriptAsync(_gameGuid, _player));
+                var script = await Client.GetDrawBoardScriptAsync(_gameGuid, _player);
+                lock (_engineBoard)
+                {
+                    _engineBoard.Parse(script);
+                }
                 Invalidate();
             }
         }

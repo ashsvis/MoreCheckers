@@ -41,7 +41,7 @@ namespace Checkers.CheckersServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CheckersServiceReference.ICheckersService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CheckersServiceReference.ICheckersService", CallbackContract=typeof(Checkers.CheckersServiceReference.ICheckersServiceCallback))]
     public interface ICheckersService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetUserPasswordHash", ReplyAction="http://tempuri.org/ICheckersService/GetUserPasswordHashResponse")]
@@ -140,6 +140,24 @@ namespace Checkers.CheckersServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseUp", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse")]
         System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/RegisterForUpdates")]
+        void RegisterForUpdates(System.Guid clientId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/RegisterForUpdates")]
+        System.Threading.Tasks.Task RegisterForUpdatesAsync(System.Guid clientId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/UpdateGame")]
+        void UpdateGame(System.Guid clientId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/UpdateGame")]
+        System.Threading.Tasks.Task UpdateGameAsync(System.Guid clientId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/Disconnect")]
+        void Disconnect(System.Guid clientId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/Disconnect")]
+        System.Threading.Tasks.Task DisconnectAsync(System.Guid clientId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetDate", ReplyAction="http://tempuri.org/ICheckersService/GetDateResponse")]
         System.DateTime GetDate();
         
@@ -148,30 +166,38 @@ namespace Checkers.CheckersServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ICheckersServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/GameUpdated")]
+        void GameUpdated(System.Guid gameId);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface ICheckersServiceChannel : Checkers.CheckersServiceReference.ICheckersService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class CheckersServiceClient : System.ServiceModel.ClientBase<Checkers.CheckersServiceReference.ICheckersService>, Checkers.CheckersServiceReference.ICheckersService {
+    public partial class CheckersServiceClient : System.ServiceModel.DuplexClientBase<Checkers.CheckersServiceReference.ICheckersService>, Checkers.CheckersServiceReference.ICheckersService {
         
-        public CheckersServiceClient() {
+        public CheckersServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public CheckersServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public CheckersServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public CheckersServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public CheckersServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public CheckersServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public CheckersServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public CheckersServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public CheckersServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public string GetUserPasswordHash(string id) {
@@ -300,6 +326,30 @@ namespace Checkers.CheckersServiceReference {
         
         public System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player) {
             return base.Channel.OnBoardMouseUpAsync(gameId, location, modifierKeys, player);
+        }
+        
+        public void RegisterForUpdates(System.Guid clientId) {
+            base.Channel.RegisterForUpdates(clientId);
+        }
+        
+        public System.Threading.Tasks.Task RegisterForUpdatesAsync(System.Guid clientId) {
+            return base.Channel.RegisterForUpdatesAsync(clientId);
+        }
+        
+        public void UpdateGame(System.Guid clientId) {
+            base.Channel.UpdateGame(clientId);
+        }
+        
+        public System.Threading.Tasks.Task UpdateGameAsync(System.Guid clientId) {
+            return base.Channel.UpdateGameAsync(clientId);
+        }
+        
+        public void Disconnect(System.Guid clientId) {
+            base.Channel.Disconnect(clientId);
+        }
+        
+        public System.Threading.Tasks.Task DisconnectAsync(System.Guid clientId) {
+            return base.Channel.DisconnectAsync(clientId);
         }
         
         public System.DateTime GetDate() {

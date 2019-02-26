@@ -142,13 +142,13 @@ namespace Checkers
 
                     sb.AppendLine("rect r2");
                     sb.AppendLine("fill");
-                    if (mapCell != _board.Selected || !_down)
-                        sb.Append(DrawCheckerScript(rect, mapCell));
+                    //if (mapCell != _board.Selected)
+                    sb.Append(DrawCheckerScript(rect, mapCell));
                 }
             }
 
-            if (_down)
-                sb.Append(DrawCheckerScript(_moveRect, _board.Selected, true));
+            //if (_down)
+            //    sb.Append(DrawCheckerScript(_moveRect, _board.Selected, true));
 
             return sb.ToString();
         }
@@ -306,11 +306,12 @@ namespace Checkers
             // если под курсором найдена разрешённая ячейка
             if (GetCell(location, out Cell cell) && cell.State != State.Prohibited)
             {
-                if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
-                {
-                    if (_game.Player == Player.Black && !_game.Direction ||
-                        _game.Player == Player.White && _game.Direction) return;
-                }
+                //if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
+                //{
+                //    if (_game.Player == Player.Black && !_game.Direction ||
+                //        _game.Player == Player.White && _game.Direction) return;
+                //}
+                if (_game.DisableNotOrderedMove()) return;
                 // и эта ячейка другая 
                 if (cell != _lastCell)
                 {

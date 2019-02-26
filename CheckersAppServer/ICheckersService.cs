@@ -4,7 +4,7 @@ using System.ServiceModel;
 
 namespace CheckersAppServer
 {
-    [ServiceContract]
+    [ServiceContract(CallbackContract = typeof(IClientCallback))]
     public interface ICheckersService
     {
         #region Работа с пользователем
@@ -63,7 +63,17 @@ namespace CheckersAppServer
 
         #endregion
 
+        [OperationContract(IsOneWay = true)]
+        void RegisterForUpdates(Guid clientId);
+
+        [OperationContract(IsOneWay = true)]
+        void UpdateGame(Guid clientId);
+
+        [OperationContract(IsOneWay = true)]
+        void Disconnect(Guid clientId);
+
         [OperationContract]
         DateTime GetDate();
     }
+
 }

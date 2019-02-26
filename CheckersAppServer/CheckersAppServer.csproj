@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckersGameCallback.cs" />
     <Compile Include="CheckersGameService.cs" />
     <Compile Include="Checkers\Address.cs" />
     <Compile Include="AppData.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="CheckersService.cs" />
     <Compile Include="CheckersUsersService.cs" />
     <Compile Include="Checkers\Game.cs" />
+    <Compile Include="IClientCallback.cs" />
     <Compile Include="PlayMode.cs" />
     <Compile Include="ICheckersService.cs" />
     <Compile Include="Checkers\Io.cs" />

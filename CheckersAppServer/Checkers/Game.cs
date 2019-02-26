@@ -88,6 +88,16 @@ namespace Checkers
                      : WinPlayer.Game;
         }
 
+        public bool DisableNotOrderedMove()
+        {
+            if (Mode == PlayMode.Game || Mode == PlayMode.NetGame)
+            {
+                if (Player == Player.Black && !Direction ||
+                    Player == Player.White && Direction) return true;
+            }
+            return false;
+        }
+
         public override string ToString()
         {
             switch (WinPlayer)

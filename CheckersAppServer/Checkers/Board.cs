@@ -428,11 +428,12 @@ namespace Checkers
             Cell cell;
             if (GetCell(location, out cell) && cell.State != State.Prohibited)
             {
-                if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
-                {
-                    if (_game.Player == Player.Black && !_game.Direction ||
-                        _game.Player == Player.White && _game.Direction) return;
-                }
+                //if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
+                //{
+                //    if (_game.Player == Player.Black && !_game.Direction ||
+                //        _game.Player == Player.White && _game.Direction) return;
+                //}
+                if (_game.DisableNotOrderedMove()) return;
                 // если ячейка не пустая, но не может быть выбрана
                 if (cell.State != State.Empty && !CanCellEnter(cell))
                     return;
@@ -453,11 +454,12 @@ namespace Checkers
             Cell cell;
             if (GetCell(location, out cell) && cell.State != State.Prohibited)
             {
-                if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
-                {
-                    if (_game.Player == Player.Black && !_game.Direction ||
-                   _game.Player == Player.White && _game.Direction) return;
-                }
+                //if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
+                //{
+                //    if (_game.Player == Player.Black && !_game.Direction ||
+                //   _game.Player == Player.White && _game.Direction) return;
+                //}
+                if (_game.DisableNotOrderedMove()) return;
                 if (Selected != null && cell.State == State.Empty) // ранее была выбрана фишка и выбрана пустая клетка
                 // пробуем делать ход
                 {
