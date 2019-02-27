@@ -78,7 +78,7 @@ namespace Checkers
             }
         }
 
-        private async void UpdateBoard()
+        private async void UpdateBoard(GameStatus gameStatus)
         {
             var script = await Client.GetDrawBoardScriptAsync(_gameGuid, _player);
             lock (_engineBoard)
@@ -86,6 +86,7 @@ namespace Checkers
                 _engineBoard.Parse(script);
             }
             Invalidate();
+            ShowStatus(gameStatus.Text);
         }
 
         private void ConnectionUpdated(ConnectionState state)
@@ -99,7 +100,6 @@ namespace Checkers
                     _connected = true;
                     ShowStatus("Соединение установлено");
                     CreateNewGame();
-                    CenterBoardToScreen();
                     break;
                 case ConnectionState.Closing:
                     _connected = false;
@@ -107,7 +107,7 @@ namespace Checkers
                     break;
                 case ConnectionState.Closed:
                     _connected = false;
-                    ShowStatus("Соединение закрыто");
+                    ShowStatus("Соединение закрыто");                  
                     break;
                 case ConnectionState.Faulted:
                     _connected = false;
@@ -157,10 +157,11 @@ namespace Checkers
 
         private async void UpdateStatusText()
         {
-            var text = await Client.GetGameStatusAsync(_gameGuid);
+            var status = await Client.GetGameStatusAsync(_gameGuid);
+            if (!status.Exists || string.IsNullOrWhiteSpace(status.Text)) return;
             var method = new MethodInvoker(() =>
             {
-                status.Text = text;
+                status.Text = status.Text;
                 mainStatus.Refresh();
             });
             if (InvokeRequired)
@@ -184,7 +185,6 @@ namespace Checkers
             // получаем текущую дату и время с сервера
             // заодно (и это важно) периодический вызов диагностирует состояние связи
             UpdateClock();
-            UpdateStatusText();
         }
 
         private void CheckersForm_MouseDown(object sender, MouseEventArgs e)
@@ -192,7 +192,6 @@ namespace Checkers
             if (e.Button == MouseButtons.Left)
             {
                 OnBoardMouseDown(e.Location, (int)ModifierKeys, _player);
-                UpdateBoard();
 
                 //var n = lvLog.SelectedIndices.Count > 0 ? lvLog.SelectedIndices[0] : -1;
                 //if (n < 0 || n == _game.Log.Count - 1)
@@ -216,14 +215,14 @@ namespace Checkers
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseDownAsync(_gameGuid, p, modifierKeys, player))
             {
-                UpdateBoard();
+                Client.UpdateOpponentGame(_gameGuid);
             }
-            Client.UpdateOpponentGame();
+            
         }
 
         private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
         {
-            UpdateBoard();
+
         }
 
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
@@ -231,7 +230,6 @@ namespace Checkers
             if (e.Button == MouseButtons.Left)
             {
                 OnBoardMouseUp(e.Location, (int)ModifierKeys, _player);
-                UpdateBoard();
             }
         }
 
@@ -240,9 +238,9 @@ namespace Checkers
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseUpAsync(_gameGuid, p, modifierKeys, player))
             {
-                UpdateBoard();
+                Client.UpdateOpponentGame(_gameGuid);
             }
-            Client.UpdateOpponentGame();
+            
         }
 
         private void lvLog_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -290,6 +288,8 @@ namespace Checkers
             {
                 if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                EndGame();
+                Client.UpdateOpponentGame(_gameGuid);
             }
             var frm = new ChooseGameForm(_gameGuid);
             var result = frm.ShowDialog(this);
@@ -304,7 +304,7 @@ namespace Checkers
                     _player = Player.White;
                 StartNewGame(frm.PlayMode);
                 _started = true;
-                Client.UpdateOpponentGame();
+                Client.UpdateOpponentGame(_gameGuid);
             }
         }
 
@@ -317,6 +317,7 @@ namespace Checkers
 
         private async void CreateNewGame()
         {
+            await Client.RegisterForUpdatesAsync(_player);
             _started = false;
             _gameGuid = await Client.CreateGameAsync();
             var script = await Client.GetDrawBoardScriptAsync(_gameGuid, _player);
@@ -381,6 +382,7 @@ namespace Checkers
                 if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             }
+            Client.UpdateOpponentGame(_gameGuid);
             EndGame();
         }
 

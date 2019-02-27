@@ -18,13 +18,13 @@ namespace CheckersAppServer
         private class Worker
         {
             public readonly List<CallbackInfo> Callbacks = new List<CallbackInfo>();
-            public Guid GameId { get; set; }
+            public Player Player { get; set; }
         }
 
         private static readonly Hashtable Workers = new Hashtable();
 
 
-        public void RegisterForUpdates(Guid clientId)
+        public bool RegisterForUpdates(Guid clientId, Player player)
         {
             new Thread(current =>
             {
@@ -32,7 +32,7 @@ namespace CheckersAppServer
                 {
                     // при необходимости создаем новый рабочий объект, добавляем его
                     // добавляем его в хэш-таблицу и запускаем в отдельном потоке
-                    Worker worker = new Worker { GameId = clientId };
+                    Worker worker = new Worker { Player = player };
                     Workers[clientId] = worker;
                     // Получить рабочий объект для данной category и добавить
                     // прокси клиента в список обратных вызовов
@@ -47,6 +47,7 @@ namespace CheckersAppServer
                     }
                 }
             }).Start(OperationContext.Current);
+            return true;
         }
 
         public void Disconnect(Guid clientId)
@@ -69,19 +70,27 @@ namespace CheckersAppServer
             });
         }
 
-        public void UpdateGame(Guid clientId)
+        public void UpdateGame(Guid clientId, Guid gameId)
         {
-            CustomUpdateGame(clientId, false);
+            var status = new GameStatus();
+            if (_games.ContainsKey(gameId))
+            {
+                status.Exists = true;
+                var game = _games[gameId];
+                status.WinPlayer = game.WinPlayer;
+                status.Text = game.ToString();
+            }
+            CustomUpdateGame(clientId, status, false);
         }
 
-        private static void CustomUpdateGame(Guid clientId, bool self)
+        private static void CustomUpdateGame(Guid clientId, GameStatus gameStatus, bool self)
         {
             ThreadPool.QueueUserWorkItem(param =>
             {
                 lock (Workers.SyncRoot)
                 {
                     foreach (var callbacks in from DictionaryEntry worker in Workers
-                                              where !((Worker)worker.Value).GameId.Equals(clientId)
+                                              where !((Worker)worker.Value).Player.Equals(clientId)
                                               select ((Worker)worker.Value).Callbacks)
                     {
                         lock (callbacks)
@@ -91,7 +100,7 @@ namespace CheckersAppServer
                             {
                                 try
                                 {
-                                    callbackInfo.ClientCallback.GameUpdated(clientId);
+                                    callbackInfo.ClientCallback.GameUpdated(gameStatus);
                                 }
                                 catch (CommunicationObjectAbortedException)
                                 {

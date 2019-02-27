@@ -4,15 +4,6 @@ using System.Collections.Generic;
 
 namespace Checkers
 {
-    public enum WinPlayer
-    {
-        None,   // игра не начата
-        Game,   // игра идёт
-        White,  // белые выиграли
-        Black,  // чёрные выиграли
-        Draw    // ничья
-    }
-
     [Serializable]
     public class Game
     {

@@ -30,7 +30,11 @@ namespace Checkers
             btnJoinGame.Enabled = false;
             lvRecentGames.Items.Clear();
             foreach (var game in games.Where(item => item != gameGuid))
-                lvRecentGames.Items.Add(new ListViewItem(await Client.GetGameStatusAsync(game)) { Tag = game });
+            {
+                var status = await Client.GetGameStatusAsync(game);
+                if (!status.Exists || status.WinPlayer != WinPlayer.Game) continue;
+                lvRecentGames.Items.Add(new ListViewItem(status.Text) { Tag = game });
+            }
         }
 
         private void tcSelectGame_Selected(object sender, TabControlEventArgs e)

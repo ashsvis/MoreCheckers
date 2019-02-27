@@ -36,14 +36,15 @@ namespace Checkers
             return task;
         }
 
-        public static string GetGameStatus(Guid gameId)
+        public static GameStatus GetGameStatus(Guid gameId)
         {
-            return GetMethod("GetGameStatus", () => _proxy.GetGameStatus(gameId), String.Empty);
+            var status = new GameStatus() { Exists = false, Text = "Ошибка вызова метода GetGameStatus" };
+            return GetMethod("GetGameStatus", () => _proxy.GetGameStatus(gameId), status);
         }
 
-        public static Task<string> GetGameStatusAsync(Guid gameId)
+        public static Task<GameStatus> GetGameStatusAsync(Guid gameId)
         {
-            var task = new Task<string>(() => GetGameStatus(gameId));
+            var task = new Task<GameStatus>(() => GetGameStatus(gameId));
             task.Start();
             return task;
         }

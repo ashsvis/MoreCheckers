@@ -10,7 +10,104 @@
 
 namespace Checkers.CheckersServiceReference {
     using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameStatus", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
+    [System.SerializableAttribute()]
+    public partial struct GameStatus : System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ExistsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TextField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Checkers.CheckersServiceReference.WinPlayer WinPlayerField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Exists {
+            get {
+                return this.ExistsField;
+            }
+            set {
+                if ((this.ExistsField.Equals(value) != true)) {
+                    this.ExistsField = value;
+                    this.RaisePropertyChanged("Exists");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Text {
+            get {
+                return this.TextField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TextField, value) != true)) {
+                    this.TextField = value;
+                    this.RaisePropertyChanged("Text");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Checkers.CheckersServiceReference.WinPlayer WinPlayer {
+            get {
+                return this.WinPlayerField;
+            }
+            set {
+                if ((this.WinPlayerField.Equals(value) != true)) {
+                    this.WinPlayerField = value;
+                    this.RaisePropertyChanged("WinPlayer");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WinPlayer", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
+    public enum WinPlayer : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        None = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Game = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        White = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Black = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Draw = 4,
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PlayMode", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
@@ -99,10 +196,10 @@ namespace Checkers.CheckersServiceReference {
         System.Threading.Tasks.Task<System.Guid[]> GetActiveGamesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetGameStatus", ReplyAction="http://tempuri.org/ICheckersService/GetGameStatusResponse")]
-        string GetGameStatus(System.Guid gameId);
+        Checkers.CheckersServiceReference.GameStatus GetGameStatus(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/GetGameStatus", ReplyAction="http://tempuri.org/ICheckersService/GetGameStatusResponse")]
-        System.Threading.Tasks.Task<string> GetGameStatusAsync(System.Guid gameId);
+        System.Threading.Tasks.Task<Checkers.CheckersServiceReference.GameStatus> GetGameStatusAsync(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
         bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType);
@@ -140,17 +237,17 @@ namespace Checkers.CheckersServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/OnBoardMouseUp", ReplyAction="http://tempuri.org/ICheckersService/OnBoardMouseUpResponse")]
         System.Threading.Tasks.Task<bool> OnBoardMouseUpAsync(System.Guid gameId, System.Drawing.Point location, int modifierKeys, Checkers.CheckersServiceReference.Player player);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/RegisterForUpdates")]
-        void RegisterForUpdates(System.Guid clientId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/RegisterForUpdates", ReplyAction="http://tempuri.org/ICheckersService/RegisterForUpdatesResponse")]
+        bool RegisterForUpdates(System.Guid clientId, Checkers.CheckersServiceReference.Player player);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/RegisterForUpdates")]
-        System.Threading.Tasks.Task RegisterForUpdatesAsync(System.Guid clientId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/UpdateGame")]
-        void UpdateGame(System.Guid clientId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/RegisterForUpdates", ReplyAction="http://tempuri.org/ICheckersService/RegisterForUpdatesResponse")]
+        System.Threading.Tasks.Task<bool> RegisterForUpdatesAsync(System.Guid clientId, Checkers.CheckersServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/UpdateGame")]
-        System.Threading.Tasks.Task UpdateGameAsync(System.Guid clientId);
+        void UpdateGame(System.Guid clientId, System.Guid gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/UpdateGame")]
+        System.Threading.Tasks.Task UpdateGameAsync(System.Guid clientId, System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/Disconnect")]
         void Disconnect(System.Guid clientId);
@@ -169,7 +266,7 @@ namespace Checkers.CheckersServiceReference {
     public interface ICheckersServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICheckersService/GameUpdated")]
-        void GameUpdated(System.Guid gameId);
+        void GameUpdated(Checkers.CheckersServiceReference.GameStatus gameStatus);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -272,11 +369,11 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.GetActiveGamesAsync();
         }
         
-        public string GetGameStatus(System.Guid gameId) {
+        public Checkers.CheckersServiceReference.GameStatus GetGameStatus(System.Guid gameId) {
             return base.Channel.GetGameStatus(gameId);
         }
         
-        public System.Threading.Tasks.Task<string> GetGameStatusAsync(System.Guid gameId) {
+        public System.Threading.Tasks.Task<Checkers.CheckersServiceReference.GameStatus> GetGameStatusAsync(System.Guid gameId) {
             return base.Channel.GetGameStatusAsync(gameId);
         }
         
@@ -328,20 +425,20 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.OnBoardMouseUpAsync(gameId, location, modifierKeys, player);
         }
         
-        public void RegisterForUpdates(System.Guid clientId) {
-            base.Channel.RegisterForUpdates(clientId);
+        public bool RegisterForUpdates(System.Guid clientId, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.RegisterForUpdates(clientId, player);
         }
         
-        public System.Threading.Tasks.Task RegisterForUpdatesAsync(System.Guid clientId) {
-            return base.Channel.RegisterForUpdatesAsync(clientId);
+        public System.Threading.Tasks.Task<bool> RegisterForUpdatesAsync(System.Guid clientId, Checkers.CheckersServiceReference.Player player) {
+            return base.Channel.RegisterForUpdatesAsync(clientId, player);
         }
         
-        public void UpdateGame(System.Guid clientId) {
-            base.Channel.UpdateGame(clientId);
+        public void UpdateGame(System.Guid clientId, System.Guid gameId) {
+            base.Channel.UpdateGame(clientId, gameId);
         }
         
-        public System.Threading.Tasks.Task UpdateGameAsync(System.Guid clientId) {
-            return base.Channel.UpdateGameAsync(clientId);
+        public System.Threading.Tasks.Task UpdateGameAsync(System.Guid clientId, System.Guid gameId) {
+            return base.Channel.UpdateGameAsync(clientId, gameId);
         }
         
         public void Disconnect(System.Guid clientId) {

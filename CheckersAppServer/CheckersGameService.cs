@@ -37,11 +37,21 @@ namespace CheckersAppServer
             return list.ToArray();
         }
 
-        public string GetGameStatus(Guid gameId)
+        public GameStatus GetGameStatus(Guid gameId)
         {
-            if (!_games.ContainsKey(gameId)) return "Not found";
+            var status = new GameStatus();
+            if (!_games.ContainsKey(gameId))
+            {
+                status.Exists = false;
+                status.Text = "Сессия потеряна...";
+                status.WinPlayer = WinPlayer.None;
+                return status;
+            }
             var game = _games[gameId];
-            return game.ToString();
+            status.Exists = true;
+            status.Text = game.ToString();
+            status.WinPlayer = game.WinPlayer;
+            return status;
         }
 
         public bool StartNewGame(Guid gameId, PlayMode gameType)

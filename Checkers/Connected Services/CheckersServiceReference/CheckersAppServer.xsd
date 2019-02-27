@@ -1,5 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/CheckersAppServer" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/CheckersAppServer" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="GameStatus">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Exists" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WinPlayer" type="tns:WinPlayer" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameStatus" nillable="true" type="tns:GameStatus" />
+  <xs:simpleType name="WinPlayer">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Game" />
+      <xs:enumeration value="White" />
+      <xs:enumeration value="Black" />
+      <xs:enumeration value="Draw" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="WinPlayer" nillable="true" type="tns:WinPlayer" />
   <xs:simpleType name="PlayMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Game" />

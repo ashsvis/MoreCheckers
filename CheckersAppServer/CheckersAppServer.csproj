@@ -35,6 +35,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
@@ -55,6 +56,7 @@
     <Compile Include="CheckersService.cs" />
     <Compile Include="CheckersUsersService.cs" />
     <Compile Include="Checkers\Game.cs" />
+    <Compile Include="GameStatus.cs" />
     <Compile Include="IClientCallback.cs" />
     <Compile Include="PlayMode.cs" />
     <Compile Include="ICheckersService.cs" />

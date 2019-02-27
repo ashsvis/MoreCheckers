@@ -14,4 +14,14 @@
         Black
     }
 
+    public enum WinPlayer
+    {
+        None,   // игра не начата
+        Game,   // игра идёт
+        White,  // белые выиграли
+        Black,  // чёрные выиграли
+        Draw    // ничья
+    }
+
+
 }

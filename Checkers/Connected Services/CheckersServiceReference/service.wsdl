@@ -174,6 +174,9 @@
   <wsdl:message name="ICheckersService_RegisterForUpdates_InputMessage">
     <wsdl:part name="parameters" element="tns:RegisterForUpdates" />
   </wsdl:message>
+  <wsdl:message name="ICheckersService_RegisterForUpdates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterForUpdatesResponse" />
+  </wsdl:message>
   <wsdl:message name="ICheckersService_UpdateGame_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateGame" />
   </wsdl:message>
@@ -256,6 +259,7 @@
     </wsdl:operation>
     <wsdl:operation name="RegisterForUpdates">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/RegisterForUpdates" message="tns:ICheckersService_RegisterForUpdates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/RegisterForUpdatesResponse" message="tns:ICheckersService_RegisterForUpdates_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/UpdateGame" message="tns:ICheckersService_UpdateGame_InputMessage" />
@@ -424,6 +428,9 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UpdateGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/UpdateGame" style="document" />
@@ -606,6 +613,9 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UpdateGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/UpdateGame" style="document" />

@@ -6,6 +6,6 @@ namespace CheckersAppServer
     public interface IClientCallback
     {
         [OperationContract(IsOneWay = true)]
-        void GameUpdated(Guid gameId);
+        void GameUpdated(GameStatus gameStatus);
     }
 }

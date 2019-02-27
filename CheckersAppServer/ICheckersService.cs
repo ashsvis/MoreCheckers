@@ -41,7 +41,7 @@ namespace CheckersAppServer
         Guid[] GetActiveGames();
 
         [OperationContract]
-        string GetGameStatus(Guid gameId);
+        GameStatus GetGameStatus(Guid gameId);
 
         [OperationContract]
         bool StartNewGame(Guid gameId, PlayMode gameType);
@@ -63,11 +63,11 @@ namespace CheckersAppServer
 
         #endregion
 
-        [OperationContract(IsOneWay = true)]
-        void RegisterForUpdates(Guid clientId);
+        [OperationContract]
+        bool RegisterForUpdates(Guid clientId, Player player);
 
         [OperationContract(IsOneWay = true)]
-        void UpdateGame(Guid clientId);
+        void UpdateGame(Guid clientId, Guid gameId);
 
         [OperationContract(IsOneWay = true)]
         void Disconnect(Guid clientId);
