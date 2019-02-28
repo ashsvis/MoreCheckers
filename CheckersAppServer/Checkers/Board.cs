@@ -40,10 +40,7 @@ namespace Checkers
         List<Cell> _battles = new List<Cell>();
         Game _game;
 
-        public Board(Game game)
-        {
-            _game = game;
-        }
+        public Board(Game game) => _game = game;
 
         /// <summary>
         /// Привязка объекта game к доске
@@ -156,28 +153,19 @@ namespace Checkers
             }
         }
 
-        public Hashtable GetMap()
-        {
-            return _cells;
-        }
+        public Hashtable GetMap() => _cells;
 
         /// <summary>
         /// Установка фишек на доску из хеш-таблицы
         /// </summary>
         /// <param name="value"></param>
-        public void SetMap(object value)
-        {
-            _cells = (Hashtable)value;
-        }
+        public void SetMap(object value) => _cells = (Hashtable)value;
 
         /// <summary>
         /// Получить таблицу полей доски
         /// </summary>
         /// <returns></returns>
-        public Hashtable GetFields()
-        {
-            return _fields;
-        }
+        public Hashtable GetFields() => _fields;
 
         /// <summary>
         /// Текущая ячейка
@@ -321,24 +309,15 @@ namespace Checkers
 
         public event Action UpdateStatus = delegate { };
 
-        private void OnUpdateStatus()
-        {
-            UpdateStatus();
-        }
+        private void OnUpdateStatus() => UpdateStatus();
 
         public event Action<string, string> ShowError = delegate { };
 
-        private void OnShowError(string message, string caption)
-        {
-            ShowError(message, caption);
-        }
+        private void OnShowError(string message, string caption) => ShowError(message, caption);
 
         public event Func<string, string, bool> AskQuestion = delegate { return false; };
 
-        private bool OnAskQuestion(string message, string caption)
-        {
-            return AskQuestion(message, caption);
-        }
+        private bool OnAskQuestion(string message, string caption) => AskQuestion(message, caption);
 
         /// <summary>
         /// Переносим фишку на доске (вспомогательный метод)
@@ -383,19 +362,13 @@ namespace Checkers
         /// Список ячеек, куда можно сделать ход
         /// </summary>
         /// <returns></returns>
-        public List<Cell> GetSteps()
-        {
-            return _steps;
-        }
+        public List<Cell> GetSteps() => _steps;
 
         /// <summary>
         /// Список ячеек, куда можно сделать удар
         /// </summary>
         /// <returns></returns>
-        public List<Cell> GetBattles()
-        {
-            return _battles;
-        }
+        public List<Cell> GetBattles() => _battles;
 
         public event Action<bool, Address, Address, MoveResult, int> CheckerMoved = delegate { };
 
@@ -406,17 +379,12 @@ namespace Checkers
         /// <param name="startPos">Начальное положение</param>
         /// <param name="endPos">Конечное положение</param>
         /// <param name="moveResult">Результат хода</param>
-        private void OnCheckerMoved(bool direction, Address startPos, Address endPos, MoveResult moveResult, int stepCount)
-        {
-            CheckerMoved(direction, startPos, endPos, moveResult, stepCount);
-        }
+        private void OnCheckerMoved(bool direction, Address startPos, Address endPos, 
+            MoveResult moveResult, int stepCount) => CheckerMoved(direction, startPos, endPos, moveResult, stepCount);
 
         public event Action ActivePlayerChanged = delegate { };
 
-        private void OnActivePlayerChanged()
-        {
-            ActivePlayerChanged();
-        }
+        private void OnActivePlayerChanged() => ActivePlayerChanged();
 
         /// <summary>
         /// Выбираем фишку для начала хода
@@ -425,14 +393,8 @@ namespace Checkers
         public void SelectSourceCell(Address location)
         {
             if (_game.WinPlayer != WinPlayer.Game) return;
-            Cell cell;
-            if (GetCell(location, out cell) && cell.State != State.Prohibited)
+            if (GetCell(location, out Cell cell) && cell.State != State.Prohibited)
             {
-                //if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
-                //{
-                //    if (_game.Player == Player.Black && !_game.Direction ||
-                //        _game.Player == Player.White && _game.Direction) return;
-                //}
                 if (_game.DisableNotOrderedMove()) return;
                 // если ячейка не пустая, но не может быть выбрана
                 if (cell.State != State.Empty && !CanCellEnter(cell))
@@ -451,14 +413,8 @@ namespace Checkers
         public void SelectTargetCell(Address location)
         {
             if (_game.WinPlayer != WinPlayer.Game) return;
-            Cell cell;
-            if (GetCell(location, out cell) && cell.State != State.Prohibited)
+            if (GetCell(location, out Cell cell) && cell.State != State.Prohibited)
             {
-                //if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
-                //{
-                //    if (_game.Player == Player.Black && !_game.Direction ||
-                //   _game.Player == Player.White && _game.Direction) return;
-                //}
                 if (_game.DisableNotOrderedMove()) return;
                 if (Selected != null && cell.State == State.Empty) // ранее была выбрана фишка и выбрана пустая клетка
                 // пробуем делать ход

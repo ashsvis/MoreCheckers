@@ -33,10 +33,8 @@ namespace Checkers
             Io = new Io(this, Board);
         }
 
-        private void Board_CheckerMoved(bool direction, Address startPos, Address endPos, MoveResult moveResult, int stepCount)
-        {
-            UpdateLog(direction, startPos, endPos, moveResult, stepCount);
-        }
+        private void Board_CheckerMoved(bool direction, Address startPos, Address endPos, 
+            MoveResult moveResult, int stepCount) => UpdateLog(direction, startPos, endPos, moveResult, stepCount);
 
         private void UpdateLog(bool direction, Address startPos, Address endPos, MoveResult moveResult, int stepCount)
         {

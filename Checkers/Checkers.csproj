@@ -68,6 +68,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="DialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DialogForm.Designer.cs">
+      <DependentUpon>DialogForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Engine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChooseGameForm.resx">
       <DependentUpon>ChooseGameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DialogForm.resx">
+      <DependentUpon>DialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -101,6 +110,9 @@
     </None>
     <None Include="Connected Services\CheckersServiceReference\Checkers.CheckersServiceReference.GameStatus.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CheckersServiceReference\Checkers.xsd">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\CheckersServiceReference\CheckersAppServer.xsd">
       <SubType>Designer</SubType>

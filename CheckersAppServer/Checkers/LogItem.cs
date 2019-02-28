@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Checkers
 {
     [Serializable]
+    [DataContract]
     public class LogItem
     {
         private List<object> _semiSteps;
@@ -11,16 +13,19 @@ namespace Checkers
         /// <summary>
         /// Номер по порядку
         /// </summary>
+        [DataMember]
         public int Number { get; set; }
 
         /// <summary>
         /// Ход белых
         /// </summary>
+        [DataMember]
         public string White { get; set; }
 
         /// <summary>
         /// Ход чёрных
         /// </summary>
+        [DataMember]
         public string Black { get; set; }
 
         /// <summary>

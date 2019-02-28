@@ -72,14 +72,7 @@ namespace CheckersAppServer
 
         public void UpdateGame(Guid clientId, Guid gameId)
         {
-            var status = new GameStatus();
-            if (_games.ContainsKey(gameId))
-            {
-                status.Exists = true;
-                var game = _games[gameId];
-                status.WinPlayer = game.WinPlayer;
-                status.Text = game.ToString();
-            }
+            var status = CreateGameStatus(gameId);
             CustomUpdateGame(clientId, status, false);
         }
 

@@ -20,10 +20,7 @@ namespace Checkers
             _hoverCells = new List<Cell>();
         }
 
-        public void SetGame(Game game)
-        {
-            _game = game;
-        }
+        public void SetGame(Game game) => _game = game;
 
         /// <summary>
         /// Получение расчётного размера доски
@@ -42,7 +39,7 @@ namespace Checkers
         /// <returns>Возвращается адрес клетки</returns>
         private Address GetCellAddress(Point mouse)
         {
-            var side = _game.Player == Player.Black; // переворот доски
+            var side = false; //_game.Player == Player.Black; // переворот доски
             var boardSize = _board.SideSize;
             for (var i = 0; i < boardSize; i++)
             {
@@ -66,7 +63,7 @@ namespace Checkers
         /// <returns></returns>
         private Rectangle GetCellRect(Point mouse)
         {
-            var side = _game.Player == Player.Black; // переворот доски
+            var side = false; //_game.Player == Player.Black; // переворот доски
             var boardSize = _board.SideSize;
             for (var i = 0; i < boardSize; i++)
             {
@@ -95,11 +92,14 @@ namespace Checkers
             return _board.GetCell(GetCellAddress(mouse), out cell);
         }
 
+        /// <summary>
+        /// Генерация скрипта рисования доски и фишек
+        /// </summary>
+        /// <returns>Возвращается текст скрипта</returns>
         public string DrawBoardScript()
         {
             var sb = new StringBuilder();
             // закраска фона доски
-            var side = _game.Player == Player.Black; // переворот доски
             var fields = _board.GetFields();
             var map = _board.GetMap();
             var cellsCount = _board.SideSize;
@@ -111,17 +111,15 @@ namespace Checkers
             sb.AppendLine("rect BoardRect");
 
             sb.AppendLine("fill");
-            DrawCharBorder(sb, boardRect, cellsCount, side);
-            DrawNumberBorder(sb, boardRect, cellsCount, side);
+            DrawCharBorder(sb, boardRect, cellsCount);
+            DrawNumberBorder(sb, boardRect, cellsCount);
             // рисуем поля доски
             for (var i = 0; i < cellsCount; i++)
             {
-                var ix = side ? cellsCount - i - 1 : i;
                 for (var j = 0; j < cellsCount; j++)
                 {
-                    var jx = side ? cellsCount - j - 1 : j;
-                    var rect = new Rectangle(BorderWidth + jx * CellSize,
-                                             BorderWidth + ix * CellSize, CellSize, CellSize);
+                    var rect = new Rectangle(BorderWidth + j * CellSize,
+                                             BorderWidth + i * CellSize, CellSize, CellSize);
                     sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
 
                     var address = new Address(j, i);
@@ -132,7 +130,6 @@ namespace Checkers
                         sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 129, 112, 94));
                     else
                         sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 233, 217, 200));
-
                     if (_hoverCells.Contains(mapCell) && !_down)
                         sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
                     else if (_board.GetSteps().Contains(mapCell))
@@ -142,13 +139,16 @@ namespace Checkers
 
                     sb.AppendLine("rect r2");
                     sb.AppendLine("fill");
-                    //if (mapCell != _board.Selected)
-                    sb.Append(DrawCheckerScript(rect, mapCell));
+                    if (mapCell != _board.Selected)
+                        sb.Append(DrawCheckerScript(rect, mapCell));
                 }
             }
 
-            //if (_down)
-            //    sb.Append(DrawCheckerScript(_moveRect, _board.Selected, true));
+            if (_down)
+            {
+                var rect = _moveRect;
+                sb.Append(DrawCheckerScript(rect, _board.Selected, true));
+            }
 
             return sb.ToString();
         }
@@ -209,9 +209,9 @@ namespace Checkers
         /// <param name="boardRect">Размер доски вместе с рамкой</param>
         /// <param name="cellsCount">Количество клеток по стороне</param>
         /// <param name="side">Сторона игрока (нижняя): false - белые, true - чёрные</param>
-        private void DrawCharBorder(StringBuilder sb, Rectangle boardRect, int cellsCount, bool side)
+        private void DrawCharBorder(StringBuilder sb, Rectangle boardRect, int cellsCount)
         {
-            var chars = side ? "HGFEDCBA" : "ABCDEFGH";
+            var chars = "ABCDEFGH";
             sb.AppendLine("FontName = Courier New");
             sb.AppendLine("FontSize = 12");
             sb.AppendLine("TextAlign = MiddleCenter");
@@ -243,9 +243,9 @@ namespace Checkers
         /// <param name="boardRect">Размер доски вместе с рамкой</param>
         /// <param name="cellsCount">Количество клеток по стороне</param>
         /// <param name="side">Сторона игрока (нижняя): false - белые, true - чёрные</param>
-        private void DrawNumberBorder(StringBuilder sb, Rectangle boardRect, int cellsCount, bool side)
+        private void DrawNumberBorder(StringBuilder sb, Rectangle boardRect, int cellsCount)
         {
-            var chars = side ? "12345678" : "87654321";
+            var chars = "87654321";
             sb.AppendLine("FontName = Courier New");
             sb.AppendLine("FontSize = 12");
             sb.AppendLine("TextAlign = MiddleCenter");
@@ -306,11 +306,6 @@ namespace Checkers
             // если под курсором найдена разрешённая ячейка
             if (GetCell(location, out Cell cell) && cell.State != State.Prohibited)
             {
-                //if (_game.Mode == PlayMode.Game || _game.Mode == PlayMode.NetGame)
-                //{
-                //    if (_game.Player == Player.Black && !_game.Direction ||
-                //        _game.Player == Player.White && _game.Direction) return;
-                //}
                 if (_game.DisableNotOrderedMove()) return;
                 // и эта ячейка другая 
                 if (cell != _lastCell)
@@ -330,9 +325,7 @@ namespace Checkers
             }
 
             if (_down)
-            {
                 _moveRect.Location = new Point(location.X - _downOffset.X, location.Y - _downOffset.Y);
-            }
         }
 
         public void MouseUp(Point location)
@@ -342,9 +335,7 @@ namespace Checkers
                 var targetAddress = GetCellAddress(location);
                 // если под курсором найдена разрешённая ячейка
                 if (GetCell(location, out Cell cell) && cell != _board.Selected && cell.State != State.Prohibited)
-                {
                     _board.SelectTargetCell(targetAddress);
-                }
                 else
                     _board.Selected = null;
                 _down = false;

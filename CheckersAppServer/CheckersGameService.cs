@@ -39,6 +39,11 @@ namespace CheckersAppServer
 
         public GameStatus GetGameStatus(Guid gameId)
         {
+            return CreateGameStatus(gameId);
+        }
+
+        private static GameStatus CreateGameStatus(Guid gameId)
+        {
             var status = new GameStatus();
             if (!_games.ContainsKey(gameId))
             {
@@ -51,6 +56,9 @@ namespace CheckersAppServer
             status.Exists = true;
             status.Text = game.ToString();
             status.WinPlayer = game.WinPlayer;
+            status.BlackScore = game.BlackScore;
+            status.WhiteScore = game.WhiteScore;
+            status.Log = new List<LogItem>(game.Log);
             return status;
         }
 
@@ -71,6 +79,8 @@ namespace CheckersAppServer
             var game = _games[gameId];
             game.Board.ResetMap(true);
             game.WinPlayer = WinPlayer.None;
+            game.Log.Clear();
+            game.BlackScore = game.WhiteScore = 0;
             return true;
         }
 

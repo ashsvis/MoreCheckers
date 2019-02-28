@@ -53,7 +53,16 @@ namespace Checkers
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             // рисуем доску с шашками
-            graphics.TranslateTransform(_offsetBoard.X, _offsetBoard.Y);
+            if (_player == Player.White)
+                graphics.TranslateTransform(_offsetBoard.X, _offsetBoard.Y);
+            else
+            {
+                var c = new Point((int)(_boardRect.X + _boardRect.Width / 2 - _offsetBoard.X * 1.5),
+                                  (int)(_boardRect.Y + _boardRect.Height / 2 - _offsetBoard.Y * 1.5));
+                graphics.TranslateTransform(c.X, c.Y);
+                graphics.RotateTransform(180);
+                graphics.TranslateTransform(-c.X, -c.Y);
+            }
             lock (_engineBoard)
             {
                 _engineBoard.Draw(graphics);
@@ -86,7 +95,7 @@ namespace Checkers
                 _engineBoard.Parse(script);
             }
             Invalidate();
-            ShowStatus(gameStatus.Text);
+            UpdateStatusText();
         }
 
         private void ConnectionUpdated(ConnectionState state)
@@ -132,7 +141,7 @@ namespace Checkers
         {
             var method = new MethodInvoker(() => 
             {
-                status.Text = errormessage;
+                lbStatus.Text = errormessage;
                 mainStatus.Refresh();
             });
             if (InvokeRequired)
@@ -141,28 +150,25 @@ namespace Checkers
                 method();
         }
 
-        //private bool _board_AskQuestion(string text, string caption)
-        //{
-        //    return MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo,
-        //        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
-        //}
-
-        //private void _board_ActivePlayerChanged()
-        //{
-        //    //_engineBoard.Parse(_io.DrawBoardScript());
-        //    Invalidate();
-        //    UpdateStatus();
-        //    //_net.SendNetGameStatus();
-        //}
-
         private async void UpdateStatusText()
         {
             var status = await Client.GetGameStatusAsync(_gameGuid);
             if (!status.Exists || string.IsNullOrWhiteSpace(status.Text)) return;
             var method = new MethodInvoker(() =>
             {
-                status.Text = status.Text;
+                lbStatus.Text = status.Text;
                 mainStatus.Refresh();
+                lbWhiteScore.Text = $"Белые: {status.WhiteScore}";
+                lbBlackScore.Text = $"Чёрные: {status.BlackScore}";
+                lvLog.Items.Clear();
+                foreach (var item in status.Log)
+                {
+                    var lvi = new ListViewItem(item.Number.ToString());
+                    lvi.SubItems.Add(item.White);
+                    lvi.SubItems.Add(item.Black);
+                    lvLog.Items.Add(lvi);
+                    lvi.EnsureVisible();
+                }
             });
             if (InvokeRequired)
                 BeginInvoke(method);
@@ -187,26 +193,18 @@ namespace Checkers
             UpdateClock();
         }
 
+        private Point Mirror(Point point)
+        {
+            return _player == Player.White 
+                ? point 
+                : new Point(_boardRect.Width - point.X, _boardRect.Height - point.Y);
+        }
+
+
         private void CheckersForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
-                OnBoardMouseDown(e.Location, (int)ModifierKeys, _player);
-
-                //var n = lvLog.SelectedIndices.Count > 0 ? lvLog.SelectedIndices[0] : -1;
-                //if (n < 0 || n == _game.Log.Count - 1)
-                //{
-                //    _io.MouseDown(e.Location);
-                //    _engineBoard.Parse(_io.DrawBoardScript());
-                //    Invalidate();
-                //}
-                //else
-                //    if (_board_AskQuestion("Продолжить игру?", "Шашки"))
-                //{
-                //    var item = lvLog.Items[_game.Log.Count - 1];
-                //    item.Selected = true;
-                //}
-            }
+                OnBoardMouseDown(Mirror(e.Location), (int)ModifierKeys, _player);
 
         }
 
@@ -214,66 +212,32 @@ namespace Checkers
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseDownAsync(_gameGuid, p, modifierKeys, player))
-            {
                 Client.UpdateOpponentGame(_gameGuid);
-            }
-            
         }
 
         private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
         {
+            OnBoardMouseMove(Mirror(e.Location), (int)ModifierKeys, _player);
+        }
 
+        private async void OnBoardMouseMove(Point location, int modifierKeys, Player player)
+        {
+            var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
+            if (await Client.OnBoardMouseMoveAsync(_gameGuid, p, modifierKeys, player))
+                Client.UpdateOpponentGame(_gameGuid);
         }
 
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
-                OnBoardMouseUp(e.Location, (int)ModifierKeys, _player);
-            }
+                OnBoardMouseUp(Mirror(e.Location), (int)ModifierKeys, _player);
         }
 
         private async void OnBoardMouseUp(Point location, int modifierKeys, Player player)
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseUpAsync(_gameGuid, p, modifierKeys, player))
-            {
                 Client.UpdateOpponentGame(_gameGuid);
-            }
-            
-        }
-
-        private void lvLog_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-        {
-            //e.Item = new ListViewItem();
-            //var item = _game.Log[e.ItemIndex];
-            //e.Item.Text = item.Number.ToString();
-            //e.Item.SubItems.Add(item.White);
-            //e.Item.SubItems.Add(item.Black);
-        }
-
-        private void lvLog_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lvLog.SelectedIndices.Count == 0) return;
-            var n = lvLog.SelectedIndices[0];
-            //_board.Selected = null;
-
-            //var semiSteps = _game.Log[n].GetMapSemiSteps();
-            //foreach (var item in semiSteps)
-            //{
-            //    var map = item.DeepClone();
-            //    _board.SetMap(map);
-            //    Refresh();
-            //    Thread.Sleep(200);
-            //}
-
-            //if (n == _game.Log.Count - 1)
-            //{
-            //    lvLog.SelectedIndices.Clear();
-            //    UpdateStatus();
-            //}
-            //else
-            //    UpdateStatusText(string.Format("Положение фигур после {0}-го хода.", n + 1));
         }
 
         private void tsmiGame_DropDownOpening(object sender, EventArgs e)
@@ -286,9 +250,9 @@ namespace Checkers
         {
             if (_started)
             {
-                if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-                EndGame();
+                if (DialogForm.Show(this, "Завершить текущую игру?", "Шашки") != DialogResult.Yes) return;
+                Client.DestroyGame(_gameGuid);
+                CreateNewGame();
                 Client.UpdateOpponentGame(_gameGuid);
             }
             var frm = new ChooseGameForm(_gameGuid);
@@ -315,6 +279,8 @@ namespace Checkers
 
         private Guid _gameGuid;
 
+        private Rectangle _boardRect;
+
         private async void CreateNewGame()
         {
             await Client.RegisterForUpdatesAsync(_player);
@@ -336,6 +302,7 @@ namespace Checkers
                             size.Width += panelGame.Width;
                         size.Height += mainMenu.Height + mainStatus.Height;
                         ClientSize = size;
+                        _boardRect = new Rectangle(_offsetBoard, size);
                     }
                 }
                 Invalidate();
@@ -377,11 +344,7 @@ namespace Checkers
 
         private void tsmiEndGame_Click(object sender, EventArgs e)
         {
-            if (_started)
-            {
-                if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-            }
+            if (_started && DialogForm.Show(this, "Завершить текущую игру?", "Шашки") != DialogResult.Yes) return;
             Client.UpdateOpponentGame(_gameGuid);
             EndGame();
         }
@@ -404,8 +367,7 @@ namespace Checkers
         {
             if (_started)
             {
-                if (MessageBox.Show(this, "Завершить текущую игру?", "Шашки",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                if (DialogForm.Show(this, "Завершить текущую игру?", "Шашки") != DialogResult.Yes)
                 {
                     e.Cancel = true;
                     return;

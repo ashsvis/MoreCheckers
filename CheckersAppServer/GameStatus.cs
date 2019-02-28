@@ -1,4 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using Checkers;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace CheckersAppServer
 {
@@ -10,6 +13,14 @@ namespace CheckersAppServer
         [DataMember]
         public string Text { get; set; }
         [DataMember]
+        public string PlayerName { get; set; }
+        [DataMember]
         public WinPlayer WinPlayer { get; set; }
+        [DataMember]
+        public int BlackScore { get; set; }
+        [DataMember]
+        public int WhiteScore { get; set; }
+        [DataMember]
+        public List<LogItem> Log { get; set; }
     }
 }

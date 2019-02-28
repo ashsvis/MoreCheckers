@@ -23,10 +23,22 @@ namespace Checkers.CheckersServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BlackScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool ExistsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Checkers.CheckersServiceReference.LogItem[] LogField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PlayerNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TextField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WhiteScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Checkers.CheckersServiceReference.WinPlayer WinPlayerField;
@@ -37,6 +49,19 @@ namespace Checkers.CheckersServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BlackScore {
+            get {
+                return this.BlackScoreField;
+            }
+            set {
+                if ((this.BlackScoreField.Equals(value) != true)) {
+                    this.BlackScoreField = value;
+                    this.RaisePropertyChanged("BlackScore");
+                }
             }
         }
         
@@ -54,6 +79,32 @@ namespace Checkers.CheckersServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public Checkers.CheckersServiceReference.LogItem[] Log {
+            get {
+                return this.LogField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LogField, value) != true)) {
+                    this.LogField = value;
+                    this.RaisePropertyChanged("Log");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PlayerName {
+            get {
+                return this.PlayerNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerNameField, value) != true)) {
+                    this.PlayerNameField = value;
+                    this.RaisePropertyChanged("PlayerName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Text {
             get {
                 return this.TextField;
@@ -62,6 +113,19 @@ namespace Checkers.CheckersServiceReference {
                 if ((object.ReferenceEquals(this.TextField, value) != true)) {
                     this.TextField = value;
                     this.RaisePropertyChanged("Text");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int WhiteScore {
+            get {
+                return this.WhiteScoreField;
+            }
+            set {
+                if ((this.WhiteScoreField.Equals(value) != true)) {
+                    this.WhiteScoreField = value;
+                    this.RaisePropertyChanged("WhiteScore");
                 }
             }
         }
@@ -82,6 +146,83 @@ namespace Checkers.CheckersServiceReference {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LogItem", Namespace="http://schemas.datacontract.org/2004/07/Checkers")]
+    [System.SerializableAttribute()]
+    public partial class LogItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BlackField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string WhiteField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Black {
+            get {
+                return this.BlackField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BlackField, value) != true)) {
+                    this.BlackField = value;
+                    this.RaisePropertyChanged("Black");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Number {
+            get {
+                return this.NumberField;
+            }
+            set {
+                if ((this.NumberField.Equals(value) != true)) {
+                    this.NumberField = value;
+                    this.RaisePropertyChanged("Number");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string White {
+            get {
+                return this.WhiteField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.WhiteField, value) != true)) {
+                    this.WhiteField = value;
+                    this.RaisePropertyChanged("White");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
