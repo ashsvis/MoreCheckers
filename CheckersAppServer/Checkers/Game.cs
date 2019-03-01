@@ -24,8 +24,11 @@ namespace Checkers
 
         public Io Io { get; set; }
 
+        public Guid Id { get; set; }
+
         public Game()
         {
+            Id = Guid.NewGuid();
             Log = new List<LogItem>();
             Board = new Board(this);
             Board.CheckerMoved += Board_CheckerMoved;
@@ -68,13 +71,22 @@ namespace Checkers
             }
         }
 
-        public void CheckWin()
+        /// <summary>
+        /// Проверка выигрыша стороны
+        /// </summary>
+        /// <param name="availableMoves">Количество доступных ходов</param>
+        /// <param name="direction">true - ход чёрных, false - ход белых</param>
+        public void CheckWin(int availableMoves, bool direction)
         {
             WinPlayer = WhiteScore == 12
                 ? WinPlayer.White
                 : BlackScore == 12
                      ? WinPlayer.Black
-                     : WinPlayer.Game;
+                     : availableMoves == 0 
+                         ? WhiteScore == BlackScore 
+                                ? WinPlayer.Draw 
+                                : direction ? WinPlayer.Black : WinPlayer.White 
+                                            :  WinPlayer.Game;
         }
 
         public bool DisableNotOrderedMove()

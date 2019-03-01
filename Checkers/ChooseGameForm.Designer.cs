@@ -31,17 +31,17 @@
             this.tcSelectGame = new System.Windows.Forms.TabControl();
             this.tabSelfGame = new System.Windows.Forms.TabPage();
             this.tabComputerGame = new System.Windows.Forms.TabPage();
-            this.btnOk = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.tabNetGame = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnCreateGame = new System.Windows.Forms.Button();
-            this.btnJoinGame = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbGamerName = new System.Windows.Forms.TextBox();
-            this.btnRecentGames = new System.Windows.Forms.Button();
             this.lvRecentGames = new System.Windows.Forms.ListView();
             this.chUser = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbGamerName = new System.Windows.Forms.TextBox();
+            this.btnJoinGame = new System.Windows.Forms.Button();
+            this.btnRecentGames = new System.Windows.Forms.Button();
+            this.btnCreateGame = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnOk = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.tcSelectGame.SuspendLayout();
             this.tabNetGame.SuspendLayout();
             this.SuspendLayout();
@@ -51,9 +51,9 @@
             this.tcSelectGame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tcSelectGame.Controls.Add(this.tabSelfGame);
-            this.tcSelectGame.Controls.Add(this.tabComputerGame);
             this.tcSelectGame.Controls.Add(this.tabNetGame);
+            this.tcSelectGame.Controls.Add(this.tabComputerGame);
+            this.tcSelectGame.Controls.Add(this.tabSelfGame);
             this.tcSelectGame.Location = new System.Drawing.Point(12, 12);
             this.tcSelectGame.Name = "tcSelectGame";
             this.tcSelectGame.SelectedIndex = 0;
@@ -66,9 +66,9 @@
             this.tabSelfGame.Location = new System.Drawing.Point(4, 24);
             this.tabSelfGame.Name = "tabSelfGame";
             this.tabSelfGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSelfGame.Size = new System.Drawing.Size(299, 167);
+            this.tabSelfGame.Size = new System.Drawing.Size(306, 184);
             this.tabSelfGame.TabIndex = 0;
-            this.tabSelfGame.Text = "Сам с собой";
+            this.tabSelfGame.Text = "Тестовый режим";
             this.tabSelfGame.UseVisualStyleBackColor = true;
             // 
             // tabComputerGame
@@ -76,10 +76,107 @@
             this.tabComputerGame.Location = new System.Drawing.Point(4, 24);
             this.tabComputerGame.Name = "tabComputerGame";
             this.tabComputerGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabComputerGame.Size = new System.Drawing.Size(299, 167);
+            this.tabComputerGame.Size = new System.Drawing.Size(306, 184);
             this.tabComputerGame.TabIndex = 1;
             this.tabComputerGame.Text = "С компьютером";
             this.tabComputerGame.UseVisualStyleBackColor = true;
+            // 
+            // tabNetGame
+            // 
+            this.tabNetGame.Controls.Add(this.lvRecentGames);
+            this.tabNetGame.Controls.Add(this.tbGamerName);
+            this.tabNetGame.Controls.Add(this.btnJoinGame);
+            this.tabNetGame.Controls.Add(this.btnRecentGames);
+            this.tabNetGame.Controls.Add(this.btnCreateGame);
+            this.tabNetGame.Controls.Add(this.label2);
+            this.tabNetGame.Controls.Add(this.label1);
+            this.tabNetGame.Location = new System.Drawing.Point(4, 24);
+            this.tabNetGame.Name = "tabNetGame";
+            this.tabNetGame.Padding = new System.Windows.Forms.Padding(3);
+            this.tabNetGame.Size = new System.Drawing.Size(306, 184);
+            this.tabNetGame.TabIndex = 2;
+            this.tabNetGame.Text = "По сети";
+            this.tabNetGame.UseVisualStyleBackColor = true;
+            // 
+            // lvRecentGames
+            // 
+            this.lvRecentGames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chUser});
+            this.lvRecentGames.Location = new System.Drawing.Point(9, 22);
+            this.lvRecentGames.MultiSelect = false;
+            this.lvRecentGames.Name = "lvRecentGames";
+            this.lvRecentGames.Size = new System.Drawing.Size(170, 112);
+            this.lvRecentGames.TabIndex = 5;
+            this.lvRecentGames.UseCompatibleStateImageBehavior = false;
+            this.lvRecentGames.View = System.Windows.Forms.View.Details;
+            this.lvRecentGames.SelectedIndexChanged += new System.EventHandler(this.lvRecentGames_SelectedIndexChanged);
+            // 
+            // chUser
+            // 
+            this.chUser.Text = "Пользователь";
+            this.chUser.Width = 150;
+            // 
+            // tbGamerName
+            // 
+            this.tbGamerName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbGamerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbGamerName.Location = new System.Drawing.Point(6, 155);
+            this.tbGamerName.Name = "tbGamerName";
+            this.tbGamerName.Size = new System.Drawing.Size(173, 23);
+            this.tbGamerName.TabIndex = 2;
+            // 
+            // btnJoinGame
+            // 
+            this.btnJoinGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnJoinGame.Enabled = false;
+            this.btnJoinGame.Location = new System.Drawing.Point(195, 150);
+            this.btnJoinGame.Name = "btnJoinGame";
+            this.btnJoinGame.Size = new System.Drawing.Size(99, 25);
+            this.btnJoinGame.TabIndex = 4;
+            this.btnJoinGame.Text = "Подключиться";
+            this.btnJoinGame.UseVisualStyleBackColor = true;
+            this.btnJoinGame.Click += new System.EventHandler(this.btnJoinGame_Click);
+            // 
+            // btnRecentGames
+            // 
+            this.btnRecentGames.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRecentGames.Location = new System.Drawing.Point(194, 22);
+            this.btnRecentGames.Name = "btnRecentGames";
+            this.btnRecentGames.Size = new System.Drawing.Size(99, 25);
+            this.btnRecentGames.TabIndex = 1;
+            this.btnRecentGames.Text = "Обновить";
+            this.btnRecentGames.UseVisualStyleBackColor = true;
+            this.btnRecentGames.Click += new System.EventHandler(this.btnRecentGames_Click);
+            // 
+            // btnCreateGame
+            // 
+            this.btnCreateGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCreateGame.Location = new System.Drawing.Point(195, 119);
+            this.btnCreateGame.Name = "btnCreateGame";
+            this.btnCreateGame.Size = new System.Drawing.Size(99, 25);
+            this.btnCreateGame.TabIndex = 3;
+            this.btnCreateGame.Text = "Создать";
+            this.btnCreateGame.UseVisualStyleBackColor = true;
+            this.btnCreateGame.Click += new System.EventHandler(this.btnCreateGame_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 137);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(75, 15);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Имя игрока:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(141, 15);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Игры для подключения:";
             // 
             // btnOk
             // 
@@ -102,103 +199,6 @@
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // tabNetGame
-            // 
-            this.tabNetGame.Controls.Add(this.lvRecentGames);
-            this.tabNetGame.Controls.Add(this.tbGamerName);
-            this.tabNetGame.Controls.Add(this.btnJoinGame);
-            this.tabNetGame.Controls.Add(this.btnRecentGames);
-            this.tabNetGame.Controls.Add(this.btnCreateGame);
-            this.tabNetGame.Controls.Add(this.label2);
-            this.tabNetGame.Controls.Add(this.label1);
-            this.tabNetGame.Location = new System.Drawing.Point(4, 24);
-            this.tabNetGame.Name = "tabNetGame";
-            this.tabNetGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabNetGame.Size = new System.Drawing.Size(306, 184);
-            this.tabNetGame.TabIndex = 2;
-            this.tabNetGame.Text = "По сети";
-            this.tabNetGame.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(141, 15);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Игры для подключения:";
-            // 
-            // btnCreateGame
-            // 
-            this.btnCreateGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreateGame.Location = new System.Drawing.Point(195, 119);
-            this.btnCreateGame.Name = "btnCreateGame";
-            this.btnCreateGame.Size = new System.Drawing.Size(99, 25);
-            this.btnCreateGame.TabIndex = 3;
-            this.btnCreateGame.Text = "Создать";
-            this.btnCreateGame.UseVisualStyleBackColor = true;
-            this.btnCreateGame.Click += new System.EventHandler(this.btnCreateGame_Click);
-            // 
-            // btnJoinGame
-            // 
-            this.btnJoinGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnJoinGame.Enabled = false;
-            this.btnJoinGame.Location = new System.Drawing.Point(195, 150);
-            this.btnJoinGame.Name = "btnJoinGame";
-            this.btnJoinGame.Size = new System.Drawing.Size(99, 25);
-            this.btnJoinGame.TabIndex = 4;
-            this.btnJoinGame.Text = "Подключиться";
-            this.btnJoinGame.UseVisualStyleBackColor = true;
-            this.btnJoinGame.Click += new System.EventHandler(this.btnJoinGame_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 137);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 15);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Имя игрока:";
-            // 
-            // tbGamerName
-            // 
-            this.tbGamerName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbGamerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tbGamerName.Location = new System.Drawing.Point(6, 155);
-            this.tbGamerName.Name = "tbGamerName";
-            this.tbGamerName.Size = new System.Drawing.Size(173, 23);
-            this.tbGamerName.TabIndex = 2;
-            // 
-            // btnRecentGames
-            // 
-            this.btnRecentGames.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRecentGames.Location = new System.Drawing.Point(194, 22);
-            this.btnRecentGames.Name = "btnRecentGames";
-            this.btnRecentGames.Size = new System.Drawing.Size(99, 25);
-            this.btnRecentGames.TabIndex = 1;
-            this.btnRecentGames.Text = "Обновить";
-            this.btnRecentGames.UseVisualStyleBackColor = true;
-            this.btnRecentGames.Click += new System.EventHandler(this.btnRecentGames_Click);
-            // 
-            // lvRecentGames
-            // 
-            this.lvRecentGames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chUser});
-            this.lvRecentGames.Location = new System.Drawing.Point(9, 22);
-            this.lvRecentGames.MultiSelect = false;
-            this.lvRecentGames.Name = "lvRecentGames";
-            this.lvRecentGames.Size = new System.Drawing.Size(170, 112);
-            this.lvRecentGames.TabIndex = 5;
-            this.lvRecentGames.UseCompatibleStateImageBehavior = false;
-            this.lvRecentGames.View = System.Windows.Forms.View.Details;
-            this.lvRecentGames.SelectedIndexChanged += new System.EventHandler(this.lvRecentGames_SelectedIndexChanged);
-            // 
-            // chUser
-            // 
-            this.chUser.Text = "Пользователь";
-            this.chUser.Width = 150;
             // 
             // ChooseGameForm
             // 

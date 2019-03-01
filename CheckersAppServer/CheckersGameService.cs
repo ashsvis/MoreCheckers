@@ -12,15 +12,18 @@ namespace CheckersAppServer
         public Guid CreateGame()
         {
             var game = new Game();
-            var guid = Guid.NewGuid();
+            var guid = game.Id;
             _games.Add(guid, game);
+            Console.WriteLine($"Создание игры {guid}, тип игры: {game.Mode}");
             return guid;
         }
 
         public bool DestroyGame(Guid gameId)
         {
             if (!_games.ContainsKey(gameId)) return false;
+            var gameMode = _games[gameId].Mode;
             _games.Remove(gameId);
+            Console.WriteLine($"Удаление игры {gameId}, тип игры: {gameMode}");
             return true;
         }
 
@@ -70,6 +73,7 @@ namespace CheckersAppServer
             game.Mode = gameType;
             game.Player = Player.White;
             game.WinPlayer = WinPlayer.Game;
+            Console.WriteLine($"Начало игры {gameId}, тип игры: {gameType}");
             return true;
         }
 
@@ -78,9 +82,7 @@ namespace CheckersAppServer
             if (!_games.ContainsKey(gameId)) return false;
             var game = _games[gameId];
             game.Board.ResetMap(true);
-            game.WinPlayer = WinPlayer.None;
-            game.Log.Clear();
-            game.BlackScore = game.WhiteScore = 0;
+            Console.WriteLine($"Конец игры {gameId}, тип игры: {game.Mode}");
             return true;
         }
 

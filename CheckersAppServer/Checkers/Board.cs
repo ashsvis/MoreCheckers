@@ -55,7 +55,7 @@ namespace Checkers
             SetMap(map);
         }
 
-        public int SideSize { get { return _boardSize; } }
+        public int SideSize => _boardSize;
 
         /// <summary>
         /// Построение доски вначале
@@ -67,14 +67,17 @@ namespace Checkers
             _cells.Clear();
             _fields.Clear();
             _game.Direction = false;
+            _game.Log.Clear();
+            _game.WinPlayer = WinPlayer.None;
+            _game.WhiteScore = _game.BlackScore = 0;
             Selected = null;
             var black = false;  // признак чередования цветов полей
             for (var i = 0; i < _boardSize; i++)
             {
-                State state;
                 for (var j = 0; j < _boardSize; j++)
                 {
                     var address = new Address(j, i);
+                    State state;
                     if (whiteCheckers.Contains(address.ToString()))
                         state = State.White;
                     else if (blackCheckers.Contains(address.ToString()))
@@ -281,10 +284,7 @@ namespace Checkers
                 if (!HasCombat(startPos))
                     Move(startPos, endPos);
                 else
-                {
-                    OnShowError("Обязан рубить фишку противника", "Правило");
                     return MoveResult.Prohibited; // обязан брать шашку противника
-                }
             }
             else
             {
@@ -306,18 +306,6 @@ namespace Checkers
             }
             return moveResult;
         }
-
-        public event Action UpdateStatus = delegate { };
-
-        private void OnUpdateStatus() => UpdateStatus();
-
-        public event Action<string, string> ShowError = delegate { };
-
-        private void OnShowError(string message, string caption) => ShowError(message, caption);
-
-        public event Func<string, string, bool> AskQuestion = delegate { return false; };
-
-        private bool OnAskQuestion(string message, string caption) => AskQuestion(message, caption);
 
         /// <summary>
         /// Переносим фишку на доске (вспомогательный метод)
@@ -382,10 +370,6 @@ namespace Checkers
         private void OnCheckerMoved(bool direction, Address startPos, Address endPos, 
             MoveResult moveResult, int stepCount) => CheckerMoved(direction, startPos, endPos, moveResult, stepCount);
 
-        public event Action ActivePlayerChanged = delegate { };
-
-        private void OnActivePlayerChanged() => ActivePlayerChanged();
-
         /// <summary>
         /// Выбираем фишку для начала хода
         /// </summary>
@@ -433,7 +417,8 @@ namespace Checkers
                             else
                                 _game.WhiteScore++;
                         }
-                        _game.CheckWin();
+                        var count = GetAvalilableMoveCells().Count;
+                        _game.CheckWin(count, _game.Direction);
                         // считаем количество непрерывных ходов одной стороной
                         _movedCount++;
                         // определение дамки
@@ -453,8 +438,8 @@ namespace Checkers
                             _movedCount = 0;
                             // передача очерёдности хода
                             _game.Direction = !_game.Direction;
-                            OnActivePlayerChanged();
-                            _game.CheckWin();
+                            count = GetAvalilableMoveCells().Count;
+                            _game.CheckWin(count, lastDirection);
                             if (_game.WinPlayer == WinPlayer.None)
                                 CheckAvailableGoals();
                             return;
@@ -498,6 +483,18 @@ namespace Checkers
             }
         }
 
+        private List<Cell> GetAvalilableMoveCells()
+        {
+            var list = new List<Cell>();
+            foreach (var item in _cells.Values)
+            {
+                var cell = (Cell)item;
+                if (CanCellEnter(cell))
+                    list.Add(cell);
+            }
+            return list;
+        }
+
         /// <summary>
         /// Проверка возможности выбрать указанную ячейку для начала "хода"
         /// </summary>
@@ -515,7 +512,6 @@ namespace Checkers
             if (!HasGoals(cell)) return false;
             // если по очереди некоторые фишки могут "ударить", но эта фишка "ударить" не может
             if (HasAnyCombat() && !HasCombat(cell.Address)) return false;
-            OnUpdateStatus();
             return true;
         }
 

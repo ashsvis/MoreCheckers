@@ -255,16 +255,19 @@ namespace Checkers.CheckersServiceReference {
     public enum PlayMode : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Game = 0,
+        None = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        NetGame = 1,
+        Game = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        SelfGame = 2,
+        NetGame = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Collocation = 3,
+        TestGame = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Collocation = 4,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]

@@ -52,7 +52,7 @@
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRules = new System.Windows.Forms.ToolStripMenuItem();
             this.panelGame = new System.Windows.Forms.Panel();
-            this.lvLog = new System.Windows.Forms.ListView();
+            this.lvLog = new ListViewEx();
             this.chStep = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chWhite = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chBlack = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -380,7 +380,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
         private System.Windows.Forms.ToolStripMenuItem tsmiRules;
         private System.Windows.Forms.Panel panelGame;
-        private System.Windows.Forms.ListView lvLog;
+        private ListViewEx lvLog;
         private System.Windows.Forms.ColumnHeader chStep;
         private System.Windows.Forms.ColumnHeader chWhite;
         private System.Windows.Forms.ColumnHeader chBlack;

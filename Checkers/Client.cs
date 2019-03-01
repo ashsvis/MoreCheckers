@@ -12,7 +12,7 @@ namespace Checkers
 {
     public static partial class Client
     {
-        public static void UpdateOpponentGame(Guid gameId)
+        public static void UpdateOpponentGameAsync(Guid gameId)
         {
             Task.Run(() => _proxy.UpdateGame(_clientId, gameId));
         }
@@ -116,9 +116,6 @@ namespace Checkers
             new Thread(() =>
             {
                 _proxy = new DataExchange(host, port, ConnectionUpdated, update).GetProxy();
-                //Thread.Sleep(500);
-                //if (_proxy.State == CommunicationState.Opened)
-                //    _proxy.RegisterForUpdates(_clientId, Player.White);
             }).Start();
             _faultTimer = new System.Timers.Timer(5 * 1000) { AutoReset = false };
             _faultTimer.Elapsed += Reconnecting;

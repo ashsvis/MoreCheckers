@@ -2,9 +2,10 @@
 {
     public enum PlayMode
     {
+        None,       // нет статуса
         Game,       // игра с компьютером
         NetGame,    // игра по сети
-        SelfGame,   // игра с самим собой
+        TestGame,   // игра с самим собой
         Collocation // расстановка фишек
     }
 

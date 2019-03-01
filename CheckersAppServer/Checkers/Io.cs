@@ -1,4 +1,5 @@
 ﻿using CheckersAppServer;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -99,57 +100,64 @@ namespace Checkers
         public string DrawBoardScript()
         {
             var sb = new StringBuilder();
-            // закраска фона доски
-            var fields = _board.GetFields();
-            var map = _board.GetMap();
-            var cellsCount = _board.SideSize;
-            var boardSize = GetDrawBoardSize();
-            var boardRect = new Rectangle(Point.Empty, boardSize);
-            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 234, 206, 175));
-
-            sb.AppendLine(string.Format("BoardRect = {0};{1};{2};{3}", boardRect.X, boardRect.Y, boardRect.Width, boardRect.Height));
-            sb.AppendLine("rect BoardRect");
-
-            sb.AppendLine("fill");
-            DrawCharBorder(sb, boardRect, cellsCount);
-            DrawNumberBorder(sb, boardRect, cellsCount);
-            // рисуем поля доски
-            for (var i = 0; i < cellsCount; i++)
+            try
             {
-                for (var j = 0; j < cellsCount; j++)
+                // закраска фона доски
+                var fields = _board.GetFields();
+                var map = _board.GetMap();
+                var cellsCount = _board.SideSize;
+                var boardSize = GetDrawBoardSize();
+                var boardRect = new Rectangle(Point.Empty, boardSize);
+                sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 234, 206, 175));
+
+                sb.AppendLine(string.Format("BoardRect = {0};{1};{2};{3}", boardRect.X, boardRect.Y, boardRect.Width, boardRect.Height));
+                sb.AppendLine("rect BoardRect");
+
+                sb.AppendLine("fill");
+                DrawCharBorder(sb, boardRect, cellsCount);
+                DrawNumberBorder(sb, boardRect, cellsCount);
+                // рисуем поля доски
+                for (var i = 0; i < cellsCount; i++)
+                    for (var j = 0; j < cellsCount; j++)
+                    {
+                        var rect = new Rectangle(BorderWidth + j * CellSize,
+                                                 BorderWidth + i * CellSize, CellSize, CellSize);
+                        sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
+
+                        var address = new Address(j, i);
+                        var fieldState = (State)fields[address]; // цвет поля доски
+                        var mapCell = (Cell)map[address];        // наличие и цвет фигур
+
+                        if (fieldState == State.Black)
+                            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 129, 112, 94));
+                        else
+                            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 233, 217, 200));
+                        if (_hoverCells.Contains(mapCell) && !_down)
+                            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
+                        else if (_board.GetSteps().Contains(mapCell))
+                            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
+                        else if (_board.GetBattles().Contains(mapCell))
+                            sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
+
+                        sb.AppendLine("rect r2");
+                        sb.AppendLine("fill");
+                        //стоящая на поле фишка не рисуется только тогда, когда она перемещается игроком
+                        if (mapCell != _board.Selected || mapCell == _board.Selected && !_down)
+                            sb.Append(DrawCheckerScript(rect, mapCell));
+                    }
+                // вместо штатной фишки рисуем фишку по координатам курсора мыши (при нажатой левой кнопке)
+                if (_down)
                 {
-                    var rect = new Rectangle(BorderWidth + j * CellSize,
-                                             BorderWidth + i * CellSize, CellSize, CellSize);
-                    sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
-
-                    var address = new Address(j, i);
-                    var fieldState = (State)fields[address]; // цвет поля доски
-                    var mapCell = (Cell)map[address];        // наличие и цвет фигур
-
-                    if (fieldState == State.Black)
-                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 129, 112, 94));
-                    else
-                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 233, 217, 200));
-                    if (_hoverCells.Contains(mapCell) && !_down)
-                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
-                    else if (_board.GetSteps().Contains(mapCell))
-                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
-                    else if (_board.GetBattles().Contains(mapCell))
-                        sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
-
-                    sb.AppendLine("rect r2");
-                    sb.AppendLine("fill");
-                    if (mapCell != _board.Selected)
-                        sb.Append(DrawCheckerScript(rect, mapCell));
+                    var rect = _moveRect;
+                    sb.Append(DrawCheckerScript(rect, _board.Selected, true));
                 }
             }
-
-            if (_down)
+            catch (Exception ex)
             {
-                var rect = _moveRect;
-                sb.Append(DrawCheckerScript(rect, _board.Selected, true));
+                sb.AppendLine(ex.Message);
+                sb.AppendLine(ex.Source);
+                Console.WriteLine(sb.ToString());
             }
-
             return sb.ToString();
         }
 

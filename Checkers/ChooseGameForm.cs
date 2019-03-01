@@ -17,7 +17,7 @@ namespace Checkers
 
         public Guid OpponentGameGuid { get { return gameGuid; } }
 
-        public PlayMode PlayMode { get; set; } = PlayMode.SelfGame;
+        public PlayMode PlayMode { get; set; } = PlayMode.NetGame;
 
         private void btnRecentGames_Click(object sender, EventArgs e)
         {           
@@ -47,7 +47,7 @@ namespace Checkers
             else if (tcSelectGame.SelectedTab == tabComputerGame)
                 PlayMode = PlayMode.Game;
             else
-                PlayMode = PlayMode.SelfGame;
+                PlayMode = PlayMode.TestGame;
         }
 
         private void lvRecentGames_SelectedIndexChanged(object sender, EventArgs e)

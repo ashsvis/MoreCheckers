@@ -31,9 +31,10 @@
   <xs:element name="WinPlayer" nillable="true" type="tns:WinPlayer" />
   <xs:simpleType name="PlayMode">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
       <xs:enumeration value="Game" />
       <xs:enumeration value="NetGame" />
-      <xs:enumeration value="SelfGame" />
+      <xs:enumeration value="TestGame" />
       <xs:enumeration value="Collocation" />
     </xs:restriction>
   </xs:simpleType>

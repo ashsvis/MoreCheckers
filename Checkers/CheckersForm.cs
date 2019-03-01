@@ -25,6 +25,7 @@ namespace Checkers
 
             DoubleBuffered = true;
 
+
             _host = Settings.Default.ServerHost;
             _dataPort = Settings.Default.ServerPort;
 
@@ -57,6 +58,7 @@ namespace Checkers
                 graphics.TranslateTransform(_offsetBoard.X, _offsetBoard.Y);
             else
             {
+                // "переворачиваем" доску
                 var c = new Point((int)(_boardRect.X + _boardRect.Width / 2 - _offsetBoard.X * 1.5),
                                   (int)(_boardRect.Y + _boardRect.Height / 2 - _offsetBoard.Y * 1.5));
                 graphics.TranslateTransform(c.X, c.Y);
@@ -87,6 +89,12 @@ namespace Checkers
             }
         }
 
+        /// <summary>
+        /// Метод вызывается системой уведомления сервера, 
+        /// инициируемой вызовом на клиенте Client.UpdateOpponentGame(_gameGuid)
+        /// и запрашивает свежий скрипт у сервера, чтобы распарсить его и перерисовать содержимое доски
+        /// </summary>
+        /// <param name="gameStatus"></param>
         private async void UpdateBoard(GameStatus gameStatus)
         {
             var script = await Client.GetDrawBoardScriptAsync(_gameGuid, _player);
@@ -156,18 +164,23 @@ namespace Checkers
             if (!status.Exists || string.IsNullOrWhiteSpace(status.Text)) return;
             var method = new MethodInvoker(() =>
             {
-                lbStatus.Text = status.Text;
+                lbStatus.Text = status.WinPlayer + " : " + status.Text;
                 mainStatus.Refresh();
                 lbWhiteScore.Text = $"Белые: {status.WhiteScore}";
                 lbBlackScore.Text = $"Чёрные: {status.BlackScore}";
-                lvLog.Items.Clear();
-                foreach (var item in status.Log)
+                if (lvLog.Items.Count != status.Log.Length ||
+                    lvLog.Items.Count > 0 && lvLog.Items.Count == status.Log.Length &&
+                    lvLog.Items[lvLog.Items.Count - 1].SubItems[2].Text != (status.Log[status.Log.Length - 1].Black ?? ""))
                 {
-                    var lvi = new ListViewItem(item.Number.ToString());
-                    lvi.SubItems.Add(item.White);
-                    lvi.SubItems.Add(item.Black);
-                    lvLog.Items.Add(lvi);
-                    lvi.EnsureVisible();
+                    lvLog.Items.Clear();
+                    foreach (var item in status.Log)
+                    {
+                        var lvi = new ListViewItem(item.Number.ToString());
+                        lvi.SubItems.Add(item.White);
+                        lvi.SubItems.Add(item.Black);
+                        lvLog.Items.Add(lvi);
+                        lvi.EnsureVisible();
+                    }
                 }
             });
             if (InvokeRequired)
@@ -212,19 +225,25 @@ namespace Checkers
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseDownAsync(_gameGuid, p, modifierKeys, player))
-                Client.UpdateOpponentGame(_gameGuid);
+                Client.UpdateOpponentGameAsync(_gameGuid);
         }
+
+        private Point _lastLocation;
 
         private void CheckersForm_MouseMove(object sender, MouseEventArgs e)
         {
-            OnBoardMouseMove(Mirror(e.Location), (int)ModifierKeys, _player);
+            if (_lastLocation != e.Location)
+            {
+                _lastLocation = e.Location;
+                OnBoardMouseMove(Mirror(e.Location), (int)ModifierKeys, _player);
+            }
         }
 
         private async void OnBoardMouseMove(Point location, int modifierKeys, Player player)
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseMoveAsync(_gameGuid, p, modifierKeys, player))
-                Client.UpdateOpponentGame(_gameGuid);
+                Client.UpdateOpponentGameAsync(_gameGuid);
         }
 
         private void CheckersForm_MouseUp(object sender, MouseEventArgs e)
@@ -237,7 +256,7 @@ namespace Checkers
         {
             var p = new Point(location.X - _offsetBoard.X, location.Y - _offsetBoard.Y);
             if (await Client.OnBoardMouseUpAsync(_gameGuid, p, modifierKeys, player))
-                Client.UpdateOpponentGame(_gameGuid);
+                Client.UpdateOpponentGameAsync(_gameGuid);
         }
 
         private void tsmiGame_DropDownOpening(object sender, EventArgs e)
@@ -251,9 +270,11 @@ namespace Checkers
             if (_started)
             {
                 if (DialogForm.Show(this, "Завершить текущую игру?", "Шашки") != DialogResult.Yes) return;
+                EndGame(_gameGuid);
+                _started = false;
+                Client.UpdateOpponentGameAsync(_gameGuid);
                 Client.DestroyGame(_gameGuid);
-                CreateNewGame();
-                Client.UpdateOpponentGame(_gameGuid);
+                _gameGuid = Client.CreateGame();
             }
             var frm = new ChooseGameForm(_gameGuid);
             var result = frm.ShowDialog(this);
@@ -268,13 +289,18 @@ namespace Checkers
                     _player = Player.White;
                 StartNewGame(frm.PlayMode);
                 _started = true;
-                Client.UpdateOpponentGame(_gameGuid);
+                Client.UpdateOpponentGameAsync(_gameGuid);
             }
         }
 
         private async void StartNewGame(PlayMode playMode)
         {
             await Client.StartNewGameAsync(_gameGuid, playMode);
+        }
+
+        private async void EndGame(Guid guid)
+        {
+            await Client.EndGameAsync(guid);
         }
 
         private Guid _gameGuid;
@@ -345,8 +371,11 @@ namespace Checkers
         private void tsmiEndGame_Click(object sender, EventArgs e)
         {
             if (_started && DialogForm.Show(this, "Завершить текущую игру?", "Шашки") != DialogResult.Yes) return;
-            Client.UpdateOpponentGame(_gameGuid);
+            Client.UpdateOpponentGameAsync(_gameGuid);
             EndGame();
+            Client.DestroyGame(_gameGuid);
+            _gameGuid = Client.CreateGame();
+            _started = false;
         }
 
         private async void EndGame()
@@ -373,6 +402,8 @@ namespace Checkers
                     return;
                 }
             }
+            EndGame(_gameGuid);
+            Client.UpdateOpponentGameAsync(_gameGuid);
             Client.DestroyGame(_gameGuid);
         }
     }
