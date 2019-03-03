@@ -12,6 +12,7 @@
       <xs:element minOccurs="0" name="BlackScore" type="xs:int" />
       <xs:element minOccurs="0" name="Exists" type="xs:boolean" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Checkers" minOccurs="0" name="Log" nillable="true" type="q1:ArrayOfLogItem" />
+      <xs:element minOccurs="0" name="Player" type="tns:Player" />
       <xs:element minOccurs="0" name="PlayerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="WhiteScore" type="xs:int" />
@@ -19,6 +20,13 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GameStatus" nillable="true" type="tns:GameStatus" />
+  <xs:simpleType name="Player">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="White" />
+      <xs:enumeration value="Black" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Player" nillable="true" type="tns:Player" />
   <xs:simpleType name="WinPlayer">
     <xs:restriction base="xs:string">
       <xs:enumeration value="None" />
@@ -39,11 +47,4 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PlayMode" nillable="true" type="tns:PlayMode" />
-  <xs:simpleType name="Player">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="White" />
-      <xs:enumeration value="Black" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="Player" nillable="true" type="tns:Player" />
 </xs:schema>

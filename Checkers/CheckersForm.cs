@@ -124,25 +124,13 @@ namespace Checkers
                     break;
                 case ConnectionState.Closed:
                     _connected = false;
-                    ShowStatus("Соединение закрыто");                  
+                    ShowStatus("Соединение закрыто");
                     break;
                 case ConnectionState.Faulted:
                     _connected = false;
                     ShowStatus("Соединение не установлено");
                     break;
             }
-        }
-
-        private void CenterBoardToScreen()
-        {
-            var method = new MethodInvoker(() =>
-            {
-                CenterToScreen();
-            });
-            if (InvokeRequired)
-                BeginInvoke(method);
-            else
-                method();
         }
 
         private void ShowStatus(string errormessage)
@@ -277,9 +265,12 @@ namespace Checkers
                 _gameGuid = Client.CreateGame();
             }
             var frm = new ChooseGameForm(_gameGuid);
+            frm.PlayerName = Settings.Default.PlayerName;
             var result = frm.ShowDialog(this);
             if (result == DialogResult.OK)
             {
+                Settings.Default.PlayerName = frm.PlayerName;
+                Settings.Default.Save();
                 if (frm.PlayMode == PlayMode.NetGame && _gameGuid != frm.OpponentGameGuid)
                 {
                     _gameGuid = frm.OpponentGameGuid;
@@ -287,15 +278,15 @@ namespace Checkers
                 }
                 else
                     _player = Player.White;
-                StartNewGame(frm.PlayMode);
+                StartNewGame(frm.PlayMode, _player, frm.PlayerName);
                 _started = true;
                 Client.UpdateOpponentGameAsync(_gameGuid);
             }
         }
 
-        private async void StartNewGame(PlayMode playMode)
+        private async void StartNewGame(PlayMode playMode, Player player, string playerName)
         {
-            await Client.StartNewGameAsync(_gameGuid, playMode);
+            await Client.StartNewGameAsync(_gameGuid, playMode, player, playerName);
         }
 
         private async void EndGame(Guid guid)

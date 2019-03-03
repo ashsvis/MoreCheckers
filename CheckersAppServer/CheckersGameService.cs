@@ -59,19 +59,22 @@ namespace CheckersAppServer
             status.Exists = true;
             status.Text = game.ToString();
             status.WinPlayer = game.WinPlayer;
+            status.Player = game.Player;
+            status.PlayerName = game.PlayerName;
             status.BlackScore = game.BlackScore;
             status.WhiteScore = game.WhiteScore;
             status.Log = new List<LogItem>(game.Log);
             return status;
         }
 
-        public bool StartNewGame(Guid gameId, PlayMode gameType)
+        public bool StartNewGame(Guid gameId, PlayMode gameType, Player player, string playerName)
         {
             if (!_games.ContainsKey(gameId)) return false;
             var game = _games[gameId];
             game.Board.ResetMap(false);
             game.Mode = gameType;
-            game.Player = Player.White;
+            game.Player = player;
+            game.PlayerName = playerName;
             game.WinPlayer = WinPlayer.Game;
             Console.WriteLine($"Начало игры {gameId}, тип игры: {gameType}");
             return true;

@@ -32,6 +32,9 @@ namespace Checkers.CheckersServiceReference {
         private Checkers.CheckersServiceReference.LogItem[] LogField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Checkers.CheckersServiceReference.Player PlayerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PlayerNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -87,6 +90,19 @@ namespace Checkers.CheckersServiceReference {
                 if ((object.ReferenceEquals(this.LogField, value) != true)) {
                     this.LogField = value;
                     this.RaisePropertyChanged("Log");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Checkers.CheckersServiceReference.Player Player {
+            get {
+                return this.PlayerField;
+            }
+            set {
+                if ((this.PlayerField.Equals(value) != true)) {
+                    this.PlayerField = value;
+                    this.RaisePropertyChanged("Player");
                 }
             }
         }
@@ -231,6 +247,17 @@ namespace Checkers.CheckersServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Player", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
+    public enum Player : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        White = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Black = 1,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WinPlayer", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
     public enum WinPlayer : int {
         
@@ -268,17 +295,6 @@ namespace Checkers.CheckersServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Collocation = 4,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Player", Namespace="http://schemas.datacontract.org/2004/07/CheckersAppServer")]
-    public enum Player : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        White = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Black = 1,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -346,10 +362,10 @@ namespace Checkers.CheckersServiceReference {
         System.Threading.Tasks.Task<Checkers.CheckersServiceReference.GameStatus> GetGameStatusAsync(System.Guid gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
-        bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType);
+        bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player, string playerName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
-        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType);
+        System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player, string playerName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/EndGame", ReplyAction="http://tempuri.org/ICheckersService/EndGameResponse")]
         bool EndGame(System.Guid gameId);
@@ -521,12 +537,12 @@ namespace Checkers.CheckersServiceReference {
             return base.Channel.GetGameStatusAsync(gameId);
         }
         
-        public bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType) {
-            return base.Channel.StartNewGame(gameId, gameType);
+        public bool StartNewGame(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player, string playerName) {
+            return base.Channel.StartNewGame(gameId, gameType, player, playerName);
         }
         
-        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType) {
-            return base.Channel.StartNewGameAsync(gameId, gameType);
+        public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player, string playerName) {
+            return base.Channel.StartNewGameAsync(gameId, gameType, player, playerName);
         }
         
         public bool EndGame(System.Guid gameId) {

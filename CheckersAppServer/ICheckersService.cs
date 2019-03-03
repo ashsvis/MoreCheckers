@@ -44,7 +44,7 @@ namespace CheckersAppServer
         GameStatus GetGameStatus(Guid gameId);
 
         [OperationContract]
-        bool StartNewGame(Guid gameId, PlayMode gameType);
+        bool StartNewGame(Guid gameId, PlayMode gameType, Player player, string playerName);
 
         [OperationContract]
         bool EndGame(Guid gameId);

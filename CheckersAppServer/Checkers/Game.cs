@@ -16,6 +16,8 @@ namespace Checkers
 
         public Player Player { get; set; }
 
+        public string PlayerName { get; set; }
+
         public WinPlayer WinPlayer { get; set; }
 
         public PlayMode Mode { get; set; }

@@ -64,16 +64,13 @@ namespace Checkers
         /// <returns></returns>
         private Rectangle GetCellRect(Point mouse)
         {
-            var side = false; //_game.Player == Player.Black; // переворот доски
             var boardSize = _board.SideSize;
             for (var i = 0; i < boardSize; i++)
             {
-                var ix = side ? boardSize - i - 1 : i;
                 for (var j = 0; j < boardSize; j++)
                 {
-                    var jx = side ? boardSize - j - 1 : j;
-                    var rect = new Rectangle(BorderWidth + jx * CellSize,
-                                             BorderWidth + ix * CellSize, CellSize, CellSize);
+                    var rect = new Rectangle(BorderWidth + j * CellSize,
+                                             BorderWidth + i * CellSize, CellSize, CellSize);
                     if (rect.Contains(mouse))
                         return rect;
                 }

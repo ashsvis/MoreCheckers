@@ -97,14 +97,14 @@ namespace Checkers
             return task;
         }
 
-        public static bool StartNewGame(Guid gameId, PlayMode playMode)
+        public static bool StartNewGame(Guid gameId, PlayMode playMode, Player player, string playerName)
         {
-            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId, playMode), false);
+            return GetMethod("StartNewGame", () => _proxy.StartNewGame(gameId, playMode, player, playerName), false);
         }
 
-        public static Task<bool> StartNewGameAsync(Guid gameId, PlayMode playMode)
+        public static Task<bool> StartNewGameAsync(Guid gameId, PlayMode playMode, Player player, string playerName)
         {
-            var task = new Task<bool>(() => StartNewGame(gameId, playMode));
+            var task = new Task<bool>(() => StartNewGame(gameId, playMode, player, playerName));
             task.Start();
             return task;
         }

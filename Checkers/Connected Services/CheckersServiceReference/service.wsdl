@@ -652,7 +652,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.pipe://localhost/CheckersAppServer</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ASh-PC\ASh</Upn>
+          <Upn>THEGIFT\SHURIK</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -661,7 +661,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:5528/CheckersAppServer</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ASh-PC\ASh</Upn>
+          <Upn>THEGIFT\SHURIK</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
