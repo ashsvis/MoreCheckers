@@ -15,6 +15,11 @@ namespace Checkers
             this.gameGuid = gameGuid;
         }
 
+        private void ChooseGameForm_Load(object sender, EventArgs e)
+        {
+            GetActiveGames();
+        }
+
         public Guid OpponentGameGuid { get { return gameGuid; } }
 
         public PlayMode PlayMode { get; set; } = PlayMode.NetGame;

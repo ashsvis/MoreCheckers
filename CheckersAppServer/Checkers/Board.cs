@@ -1,6 +1,5 @@
 ﻿using CheckersAppServer;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Checkers
@@ -31,8 +30,8 @@ namespace Checkers
     public class Board
     {
         const int _boardSize = 8;
-        private readonly Hashtable _fields = new Hashtable();
-        private Hashtable _cells = new Hashtable();
+        private readonly Dictionary<Address, State> _fields = new Dictionary<Address, State>();
+        private Dictionary<Address, Cell> _cells = new Dictionary<Address, Cell>();
         private Cell _selected;
 
         private int _movedCount = 0;
@@ -156,19 +155,19 @@ namespace Checkers
             }
         }
 
-        public Hashtable GetMap() => _cells;
+        public Dictionary<Address, Cell> GetMap() => _cells;
 
         /// <summary>
         /// Установка фишек на доску из хеш-таблицы
         /// </summary>
         /// <param name="value"></param>
-        public void SetMap(object value) => _cells = (Hashtable)value;
+        public void SetMap(object value) => _cells = (Dictionary<Address, Cell>)value;
 
         /// <summary>
         /// Получить таблицу полей доски
         /// </summary>
         /// <returns></returns>
-        public Hashtable GetFields() => _fields;
+        public Dictionary<Address, State> GetFields() => _fields;
 
         /// <summary>
         /// Текущая ячейка
@@ -195,7 +194,7 @@ namespace Checkers
             var result = false;
             foreach (var item in _cells)
             {
-                var cell = (Cell)((DictionaryEntry)item).Value;
+                var cell = item.Value;
                 var cellState = cell.State;
                 var cellAddress = cell.Address;
                 if (cellState == State.Empty || cellState == State.Prohibited) continue;
@@ -215,7 +214,7 @@ namespace Checkers
         {
             var result = false;
             if (pos.IsEmpty()) return result;
-            var cell = (Cell)_cells[pos];
+            var cell = _cells[pos];
             // запрет хода для фишек не в свою очередь
             if (_game.Direction && cell.State != State.Black ||
                 !_game.Direction && cell.State != State.White) return result;
@@ -234,7 +233,7 @@ namespace Checkers
             var result = MoveResult.Prohibited;
             if (startPos.IsEmpty() || endPos.IsEmpty()) return result;
 
-            var startCellState = ((Cell)_cells[startPos]).State;
+            var startCellState = _cells[startPos].State;
             if (startCellState != State.Empty)
             {
                 // запрет хода для фишек не в свою очередь
@@ -244,8 +243,8 @@ namespace Checkers
             var dX = endPos.Coords.X - startPos.Coords.X;
             var dY = endPos.Coords.Y - startPos.Coords.Y;
 
-            var startCellIsKing = king != null ? (bool)king : ((Cell)_cells[startPos]).King;
-            var targetCellState = ((Cell)_cells[endPos]).State;
+            var startCellIsKing = king != null ? (bool)king : _cells[startPos].King;
+            var targetCellState = _cells[endPos].State;
             if (targetCellState == State.Empty)
             {
                 // проверка "боя"
@@ -254,7 +253,7 @@ namespace Checkers
                     // поиск "промежуточной" ячейки
                     var victimPos = new Address((startPos.Coords.X + endPos.Coords.X) / 2,
                                                 (startPos.Coords.Y + endPos.Coords.Y) / 2);
-                    var victimCellState = ((Cell)_cells[victimPos]).State;
+                    var victimCellState = _cells[victimPos].State;
                     // снимаем только фишку противника
                     result = targetCellState != victimCellState && startCellState != victimCellState
                                 ? MoveResult.SuccessfullCombat : result;
@@ -278,7 +277,7 @@ namespace Checkers
         /// <returns>результат хода</returns>
         public MoveResult MakeMove(Address startPos, Address endPos)
         {
-            var moveResult = _steps.Contains((Cell)_cells[endPos]) ? MoveResult.SuccessfullMove : MoveResult.Prohibited;
+            var moveResult = _steps.Contains(_cells[endPos]) ? MoveResult.SuccessfullMove : MoveResult.Prohibited;
             if (moveResult == MoveResult.SuccessfullMove)
             {
                 if (!HasCombat(startPos))
@@ -288,7 +287,7 @@ namespace Checkers
             }
             else
             {
-                moveResult = _battles.Contains((Cell)_cells[endPos]) ? MoveResult.SuccessfullCombat : MoveResult.Prohibited;
+                moveResult = _battles.Contains(_cells[endPos]) ? MoveResult.SuccessfullCombat : MoveResult.Prohibited;
                 if (moveResult == MoveResult.SuccessfullCombat)
                 {
                     Move(startPos, endPos);
@@ -314,8 +313,8 @@ namespace Checkers
         /// <param name="endPos">Конечная позиция</param>
         private void Move(Address startPos, Address endPos)
         {
-            var startCell = (Cell)_cells[startPos];
-            var endCell = (Cell)_cells[endPos];
+            var startCell = _cells[startPos];
+            var endCell = _cells[endPos];
             endCell.State = startCell.State;
             endCell.King = startCell.King;
             Remove(startPos);
@@ -327,7 +326,7 @@ namespace Checkers
         /// <param name="pos">Позиция фишки</param>
         private void Remove(Address pos)
         {
-            var cell = (Cell)_cells[pos];
+            var cell = _cells[pos];
             cell.State = State.Empty;
             cell.King = false;
         }
@@ -342,7 +341,7 @@ namespace Checkers
         {
             cell = null;
             if (address.IsEmpty()) return false;
-            cell = (Cell)_cells[address];
+            cell = _cells[address];
             return cell != null;
         }
 

@@ -14,7 +14,12 @@ namespace Checkers
     {
         public static void UpdateOpponentGameAsync(Guid gameId)
         {
-            Task.Run(() => _proxy.UpdateGame(_clientId, gameId));
+            Task.Run(() => 
+            {
+                if (_proxy != null &&
+                    (_proxy.State == CommunicationState.Opened || _proxy.State == CommunicationState.Created))
+                _proxy.UpdateGame(_clientId, gameId);
+            });
         }
 
         public static Task<DateTime> GetDateAsync()

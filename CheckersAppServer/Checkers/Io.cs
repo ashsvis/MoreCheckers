@@ -103,11 +103,8 @@ namespace Checkers
             try
             {
                 // закраска фона доски
-                var fields = _board.GetFields();
-                var map = _board.GetMap();
                 var cellsCount = _board.SideSize;
-                var boardSize = GetDrawBoardSize();
-                var boardRect = new Rectangle(Point.Empty, boardSize);
+                var boardRect = new Rectangle(Point.Empty, GetDrawBoardSize());
                 sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 234, 206, 175));
 
                 sb.AppendLine(string.Format("BoardRect = {0};{1};{2};{3}", boardRect.X, boardRect.Y, boardRect.Width, boardRect.Height));
@@ -116,6 +113,8 @@ namespace Checkers
                 sb.AppendLine("fill");
                 DrawCharBorder(sb, boardRect, cellsCount);
                 DrawNumberBorder(sb, boardRect, cellsCount);
+                var fields = _board.GetFields();
+                var cells = _board.GetMap();
                 // рисуем поля доски
                 for (var i = 0; i < cellsCount; i++)
                     for (var j = 0; j < cellsCount; j++)
@@ -125,13 +124,12 @@ namespace Checkers
                         sb.AppendLine(string.Format("r2 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
 
                         var address = new Address(j, i);
-                        var fieldState = (State)fields[address]; // цвет поля доски
-                        var mapCell = (Cell)map[address];        // наличие и цвет фигур
-
+                        var fieldState = fields[address]; // цвет поля доски
                         if (fieldState == State.Black)
                             sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 129, 112, 94));
                         else
                             sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 233, 217, 200));
+                        var mapCell = cells[address];        // наличие и цвет фигур
                         if (_hoverCells.Contains(mapCell) && !_down)
                             sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 169, 169, 169));
                         else if (_board.GetSteps().Contains(mapCell))
@@ -152,11 +150,14 @@ namespace Checkers
                     sb.Append(DrawCheckerScript(rect, _board.Selected, true));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                sb.AppendLine(ex.Message);
-                sb.AppendLine(ex.Source);
-                Console.WriteLine(sb.ToString());
+                sb.Clear();
+                //sb.AppendLine(ex.Message);
+                //sb.AppendLine(ex.Source);
+                //sb.AppendLine(ex.TargetSite.ToString());
+                //sb.AppendLine(ex.StackTrace);
+                //Console.WriteLine(sb.ToString());
             }
             return sb.ToString();
         }
@@ -187,12 +188,16 @@ namespace Checkers
                     sb.AppendLine("offset -6 -6");
                     sb.AppendLine("FillOpacity = 255");
                 }
+                sb.AppendLine(string.Format("r1 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
+                sb.AppendLine("circle r1");
                 if (mapCell.State == State.Black)
                     sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 10, 10, 10));
                 else
+                {
+                    sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 0, 0, 0));
+                    sb.AppendLine("draw");
                     sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 250, 250, 250));
-                sb.AppendLine(string.Format("r1 = {0};{1};{2};{3}", rect.X, rect.Y, rect.Width, rect.Height));
-                sb.AppendLine("circle r1");
+                }
                 sb.AppendLine("fill");
                 rect.Inflate(-sizeW, -sizeH);
                 sb.AppendLine(string.Format("FillColor = {0};{1};{2}", 192, 192, 192));
