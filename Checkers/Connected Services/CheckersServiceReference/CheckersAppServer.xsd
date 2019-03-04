@@ -10,6 +10,7 @@
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" name="BlackScore" type="xs:int" />
+      <xs:element minOccurs="0" name="Direction" type="xs:boolean" />
       <xs:element minOccurs="0" name="Exists" type="xs:boolean" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Checkers" minOccurs="0" name="Log" nillable="true" type="q1:ArrayOfLogItem" />
       <xs:element minOccurs="0" name="Player" type="tns:Player" />
@@ -30,6 +31,7 @@
   <xs:simpleType name="WinPlayer">
     <xs:restriction base="xs:string">
       <xs:enumeration value="None" />
+      <xs:enumeration value="Wait" />
       <xs:enumeration value="Game" />
       <xs:enumeration value="White" />
       <xs:enumeration value="Black" />

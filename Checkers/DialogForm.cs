@@ -4,16 +4,21 @@ namespace Checkers
 {
     public partial class DialogForm : Form
     {
-        public DialogForm(string message, string caption)
+        public DialogForm(string message, string caption, bool question)
         {
             InitializeComponent();
             Text = caption;
             lbMessage.Text = message;
+            if (!question)
+            {
+                btnYes.Visible = false;
+                btnNo.Text = "OK";
+            }
         }
 
-        public static DialogResult Show(Form owner, string message, string caption)
+        public static DialogResult Show(Form owner, string message, string caption, bool question = true)
         {
-            var frm = new DialogForm(message, caption);
+            var frm = new DialogForm(message, caption, question);
             return frm.ShowDialog(owner);
         }
     }

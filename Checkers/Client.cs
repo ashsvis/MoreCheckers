@@ -164,7 +164,7 @@ namespace Checkers
 
         public static void Disconnect()
         {
-            
+            //stub
         }
 
         public static void Reconnect(string host = null, int port = 0)

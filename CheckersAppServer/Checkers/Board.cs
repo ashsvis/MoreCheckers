@@ -1,6 +1,7 @@
 ﻿using CheckersAppServer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Checkers
 {
@@ -45,14 +46,53 @@ namespace Checkers
         /// Привязка объекта game к доске
         /// </summary>
         /// <param name="game"></param>
-        public void SetGame(Game game)
-        {
-            _game = game;
-            var n = _game.Log.Count - 1;
-            if (n < 0) return;
-            var map = _game.Log[n].GetLastMap().DeepClone();
-            SetMap(map);
-        }
+        //public void SetGame(Game game)
+        //{
+        //    _game = game;
+        //    var n = _game.Log.Count - 1;
+        //    if (n < 0) return;
+        //    var map = _game.Log[n].GetLastMap().DeepClone();
+        //    SetMap(map);
+        //}
+
+        /// <summary>
+        /// Установка фишек на доску из текстовой строки
+        /// </summary>
+        /// <param name="text"></param>
+        //public void SetMap(string text)
+        //{
+        //    // очистка доски
+        //    foreach (var cell in _cells.Values)
+        //    {
+        //        if (cell.State == State.Prohibited) continue;
+        //        cell.King = false;
+        //        cell.State = State.Empty;
+        //    }
+        //    // расстановка полученных фигур
+        //    foreach (var value in text.Split(new[] { ',' }))
+        //    {
+        //        if (value.Length != 3) continue;
+        //        var address = new Address(value.Substring(1));
+        //        var cell = _cells[address];
+        //        switch (value[0])
+        //        {
+        //            case 'b':
+        //                cell.State = State.Black;
+        //                break;
+        //            case 'B':
+        //                cell.State = State.Black;
+        //                cell.King = true;
+        //                break;
+        //            case 'w':
+        //                cell.State = State.White;
+        //                break;
+        //            case 'W':
+        //                cell.State = State.White;
+        //                cell.King = true;
+        //                break;
+        //        }
+        //    }
+        //}
 
         public int SideSize => _boardSize;
 
@@ -99,9 +139,8 @@ namespace Checkers
         public override string ToString()
         {
             var list = new List<string>();
-            foreach (var item in _cells.Values)
+            foreach (var cell in _cells.Values)
             {
-                var cell = (Cell)item;
                 switch (cell.State)
                 {
                     case State.Black:
@@ -113,46 +152,6 @@ namespace Checkers
                 }
             }
             return string.Join(",", list);
-        }
-
-        /// <summary>
-        /// Установка фишек на доску из текстовой строки
-        /// </summary>
-        /// <param name="text"></param>
-        public void SetMap(string text)
-        {
-            // очистка доски
-            foreach (var item in _cells.Values)
-            {
-                var cell = (Cell)item;
-                if (cell.State == State.Prohibited) continue;
-                cell.King = false;
-                cell.State = State.Empty;
-            }
-            // расстановка полученных фигур
-            foreach (var value in text.Split(new[] { ',' }))
-            {
-                if (value.Length != 3) continue;
-                var address = new Address(value.Substring(1));
-                var cell = (Cell)_cells[address];
-                switch (value[0])
-                {
-                    case 'b':
-                        cell.State = State.Black;
-                        break;
-                    case 'B':
-                        cell.State = State.Black;
-                        cell.King = true;
-                        break;
-                    case 'w':
-                        cell.State = State.White;
-                        break;
-                    case 'W':
-                        cell.State = State.White;
-                        cell.King = true;
-                        break;
-                }
-            }
         }
 
         public Dictionary<Address, Cell> GetMap() => _cells;
@@ -416,8 +415,10 @@ namespace Checkers
                             else
                                 _game.WhiteScore++;
                         }
-                        var count = GetAvalilableMoveCells().Count;
-                        _game.CheckWin(count, _game.Direction);
+                        //_game.AvalilableMoveCells = GetAvalilableMoveCells();
+                        //_game.AvalilableAnswerMoveCells = GetAvalilableAnswerMoveCells(_game.AvalilableMoveCells);
+                        //var count = _game.AvalilableMoveCells.Count;
+                        //_game.CheckWin(count, _game.Direction);
                         // считаем количество непрерывных ходов одной стороной
                         _movedCount++;
                         // определение дамки
@@ -437,8 +438,9 @@ namespace Checkers
                             _movedCount = 0;
                             // передача очерёдности хода
                             _game.Direction = !_game.Direction;
-                            count = GetAvalilableMoveCells().Count;
-                            _game.CheckWin(count, lastDirection);
+                            _game.AvalilableMoveCells = GetAvalilableMoveCells();
+                            _game.AvalilableAnswerMoveCells = GetAvalilableAnswerMoveCells(_game.AvalilableMoveCells);
+                            _game.CheckWin(_game.AvalilableMoveCells.Count, lastDirection);
                             if (_game.WinPlayer == WinPlayer.None)
                                 CheckAvailableGoals();
                             return;
@@ -482,16 +484,32 @@ namespace Checkers
             }
         }
 
-        private List<Cell> GetAvalilableMoveCells()
+        internal List<string> GetAvalilableMoveCells()
         {
-            var list = new List<Cell>();
-            foreach (var item in _cells.Values)
+            var list = new List<string>();
+            foreach (var cell in _cells.Values)
             {
-                var cell = (Cell)item;
                 if (CanCellEnter(cell))
-                    list.Add(cell);
+                    list.Add(cell.Address.ToString());
             }
             return list;
+        }
+
+        internal Dictionary<string, string[]> GetAvalilableAnswerMoveCells(List<string> list)
+        {
+            var dict = new Dictionary<string, string[]>();
+            foreach (var addr in list)
+            {
+                var cell = _cells[new Address(addr)];
+                var steps = new List<Cell>();
+                var battles = new List<Cell>();
+                FillGoalCells(cell, steps, battles);
+                if (battles.Count > 0)
+                    dict.Add(addr, battles.Select(item => item.Address.ToString()).ToArray());
+                else if (steps.Count > 0)
+                    dict.Add(addr, steps.Select(item => item.Address.ToString()).ToArray());
+            }
+            return dict;
         }
 
         /// <summary>
@@ -581,30 +599,30 @@ namespace Checkers
                 case GoalDirection.SW: dx = -1; dy = +1; break;
                 default: return;
             }
-            var source = (Cell)_cells[pos];
+            var source = _cells[pos];
             var combat = false;
             var addr = pos;
             while (true)
             {
                 addr = new Address(addr.Coords.X + dx, addr.Coords.Y + dy);
                 if (addr.IsEmpty()) break;
-                var cell = (Cell)_cells[addr];
+                var cell = _cells[addr];
                 if (cell.State == State.Empty)
                 {
                     if (combat)
-                        battles.Add((Cell)_cells[addr]);
+                        battles.Add(_cells[addr]);
                     else
-                        steps.Add((Cell)_cells[addr]);
+                        steps.Add(_cells[addr]);
                 }
                 else if (cell.State != source.State)
                 {
                     addr = new Address(addr.Coords.X + dx, addr.Coords.Y + dy);
                     if (addr.IsEmpty()) break;
-                    cell = (Cell)_cells[addr];
+                    cell = _cells[addr];
                     if (cell.State == State.Empty)
                     {
                         if (combat) break;
-                        battles.Add((Cell)_cells[addr]);
+                        battles.Add(_cells[addr]);
                         combat = true;
                     }
                     else
@@ -627,7 +645,7 @@ namespace Checkers
             var addr = new Address(pos.Coords.X + dx, pos.Coords.Y + dy);
             var check = CheckMove(pos, addr);
             if (check != MoveResult.Prohibited)
-                goalList.Add((Cell)_cells[addr]);
+                goalList.Add(_cells[addr]);
         }
     }
 }

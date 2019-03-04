@@ -32,6 +32,7 @@
             this.tabNetGame = new System.Windows.Forms.TabPage();
             this.lvRecentGames = new System.Windows.Forms.ListView();
             this.chUser = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chSide = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tbGamerName = new System.Windows.Forms.TextBox();
             this.btnJoinGame = new System.Windows.Forms.Button();
             this.btnRecentGames = new System.Windows.Forms.Button();
@@ -42,9 +43,12 @@
             this.tabSelfGame = new System.Windows.Forms.TabPage();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.chSide = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbRules = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tcSelectGame.SuspendLayout();
             this.tabNetGame.SuspendLayout();
+            this.tabComputerGame.SuspendLayout();
+            this.tabSelfGame.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcSelectGame
@@ -103,6 +107,11 @@
             // 
             this.chUser.Text = "Пользователь";
             this.chUser.Width = 140;
+            // 
+            // chSide
+            // 
+            this.chSide.Text = "Сторона";
+            this.chSide.Width = 80;
             // 
             // tbGamerName
             // 
@@ -169,20 +178,22 @@
             // 
             // tabComputerGame
             // 
+            this.tabComputerGame.Controls.Add(this.textBox1);
             this.tabComputerGame.Location = new System.Drawing.Point(4, 24);
             this.tabComputerGame.Name = "tabComputerGame";
-            this.tabComputerGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabComputerGame.Size = new System.Drawing.Size(306, 184);
+            this.tabComputerGame.Padding = new System.Windows.Forms.Padding(8);
+            this.tabComputerGame.Size = new System.Drawing.Size(348, 227);
             this.tabComputerGame.TabIndex = 1;
             this.tabComputerGame.Text = "С компьютером";
             this.tabComputerGame.UseVisualStyleBackColor = true;
             // 
             // tabSelfGame
             // 
+            this.tabSelfGame.Controls.Add(this.tbRules);
             this.tabSelfGame.Location = new System.Drawing.Point(4, 24);
             this.tabSelfGame.Name = "tabSelfGame";
-            this.tabSelfGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSelfGame.Size = new System.Drawing.Size(306, 184);
+            this.tabSelfGame.Padding = new System.Windows.Forms.Padding(8);
+            this.tabSelfGame.Size = new System.Drawing.Size(348, 227);
             this.tabSelfGame.TabIndex = 0;
             this.tabSelfGame.Text = "Тестовый режим";
             this.tabSelfGame.UseVisualStyleBackColor = true;
@@ -209,10 +220,30 @@
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // chSide
+            // tbRules
             // 
-            this.chSide.Text = "Сторона";
-            this.chSide.Width = 80;
+            this.tbRules.BackColor = System.Drawing.Color.White;
+            this.tbRules.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbRules.Location = new System.Drawing.Point(11, 11);
+            this.tbRules.Multiline = true;
+            this.tbRules.Name = "tbRules";
+            this.tbRules.ReadOnly = true;
+            this.tbRules.Size = new System.Drawing.Size(326, 38);
+            this.tbRules.TabIndex = 2;
+            this.tbRules.Text = "Тестовый режим предназначен для игры с самим собой.\r\nПередвигайте фишки за себя и" +
+    " за противника.";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.White;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(11, 11);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(326, 38);
+            this.textBox1.TabIndex = 3;
+            this.textBox1.Text = "Игра с компьютером задумана, но пока не реализована...";
             // 
             // ChooseGameForm
             // 
@@ -236,6 +267,10 @@
             this.tcSelectGame.ResumeLayout(false);
             this.tabNetGame.ResumeLayout(false);
             this.tabNetGame.PerformLayout();
+            this.tabComputerGame.ResumeLayout(false);
+            this.tabComputerGame.PerformLayout();
+            this.tabSelfGame.ResumeLayout(false);
+            this.tabSelfGame.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -257,5 +292,7 @@
         private System.Windows.Forms.ListView lvRecentGames;
         private System.Windows.Forms.ColumnHeader chUser;
         private System.Windows.Forms.ColumnHeader chSide;
+        private System.Windows.Forms.TextBox tbRules;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

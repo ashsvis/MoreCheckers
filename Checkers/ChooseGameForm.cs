@@ -24,7 +24,7 @@ namespace Checkers
 
         public PlayMode PlayMode { get; set; } = PlayMode.NetGame;
 
-        public string PlayerName { get { return tbGamerName.Text; } set { tbGamerName.Text = value; } }
+        public string PlayerName { get => tbGamerName.Text; set { tbGamerName.Text = value; } }
 
         private void btnRecentGames_Click(object sender, EventArgs e)
         {           
@@ -39,7 +39,7 @@ namespace Checkers
             foreach (var game in games.Where(item => item != gameGuid))
             {
                 var status = await Client.GetGameStatusAsync(game);
-                if (!status.Exists || status.WinPlayer != WinPlayer.Game) continue;
+                if (!status.Exists || status.WinPlayer != WinPlayer.Wait) continue;
                 var lvi = new ListViewItem(status.PlayerName) { Tag = game };
                 lvi.SubItems.Add(new ListViewItem.ListViewSubItem(lvi, status.Player.ToString()) { Tag = status.Player });
                 lvRecentGames.Items.Add(lvi);

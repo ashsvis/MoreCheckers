@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 
 namespace Checkers
 {
@@ -7,11 +8,13 @@ namespace Checkers
     /// Адрес ячейки
     /// </summary>
     [Serializable]
+    [DataContract]
     public struct Address
     {
         const string chars = "abcdefgh";
-
+        [DataMember]
         public char Column { get; set; }
+        [DataMember]
         public int Row { get; set; }
 
         public Address(int x = -1, int y = -1)

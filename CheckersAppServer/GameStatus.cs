@@ -18,6 +18,8 @@ namespace CheckersAppServer
         [DataMember]
         public Player Player { get; set; }
         [DataMember]
+        public bool Direction { get; set; }
+        [DataMember]
         public int BlackScore { get; set; }
         [DataMember]
         public int WhiteScore { get; set; }

@@ -26,6 +26,9 @@ namespace Checkers.CheckersServiceReference {
         private int BlackScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool DirectionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool ExistsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -64,6 +67,19 @@ namespace Checkers.CheckersServiceReference {
                 if ((this.BlackScoreField.Equals(value) != true)) {
                     this.BlackScoreField = value;
                     this.RaisePropertyChanged("BlackScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Direction {
+            get {
+                return this.DirectionField;
+            }
+            set {
+                if ((this.DirectionField.Equals(value) != true)) {
+                    this.DirectionField = value;
+                    this.RaisePropertyChanged("Direction");
                 }
             }
         }
@@ -265,16 +281,19 @@ namespace Checkers.CheckersServiceReference {
         None = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Game = 1,
+        Wait = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        White = 2,
+        Game = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Black = 3,
+        White = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Draw = 4,
+        Black = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Draw = 5,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -366,6 +385,12 @@ namespace Checkers.CheckersServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/StartNewGame", ReplyAction="http://tempuri.org/ICheckersService/StartNewGameResponse")]
         System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player, string playerName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/JoinNewGame", ReplyAction="http://tempuri.org/ICheckersService/JoinNewGameResponse")]
+        bool JoinNewGame(System.Guid gameId, string playerName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/JoinNewGame", ReplyAction="http://tempuri.org/ICheckersService/JoinNewGameResponse")]
+        System.Threading.Tasks.Task<bool> JoinNewGameAsync(System.Guid gameId, string playerName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICheckersService/EndGame", ReplyAction="http://tempuri.org/ICheckersService/EndGameResponse")]
         bool EndGame(System.Guid gameId);
@@ -543,6 +568,14 @@ namespace Checkers.CheckersServiceReference {
         
         public System.Threading.Tasks.Task<bool> StartNewGameAsync(System.Guid gameId, Checkers.CheckersServiceReference.PlayMode gameType, Checkers.CheckersServiceReference.Player player, string playerName) {
             return base.Channel.StartNewGameAsync(gameId, gameType, player, playerName);
+        }
+        
+        public bool JoinNewGame(System.Guid gameId, string playerName) {
+            return base.Channel.JoinNewGame(gameId, playerName);
+        }
+        
+        public System.Threading.Tasks.Task<bool> JoinNewGameAsync(System.Guid gameId, string playerName) {
+            return base.Channel.JoinNewGameAsync(gameId, playerName);
         }
         
         public bool EndGame(System.Guid gameId) {

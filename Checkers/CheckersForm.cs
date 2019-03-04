@@ -103,7 +103,7 @@ namespace Checkers
                 _engineBoard.Parse(script);
             }
             Invalidate();
-            UpdateStatusText();
+            UpdateStatusText(gameStatus);
         }
 
         private void ConnectionUpdated(ConnectionState state)
@@ -115,7 +115,7 @@ namespace Checkers
                     break;
                 case ConnectionState.Opened:
                     _connected = true;
-                    ShowStatus("Соединение установлено");
+                    ShowStatus("Выберите новую игру...");
                     CreateNewGame();
                     break;
                 case ConnectionState.Closing:
@@ -146,13 +146,18 @@ namespace Checkers
                 method();
         }
 
-        private async void UpdateStatusText()
+        private async void UpdateGameStatus()
         {
             var status = await Client.GetGameStatusAsync(_gameGuid);
+            UpdateStatusText(status);
+        }
+
+        private void UpdateStatusText(GameStatus status)
+        {
             if (!status.Exists || string.IsNullOrWhiteSpace(status.Text)) return;
             var method = new MethodInvoker(() =>
             {
-                lbStatus.Text = status.WinPlayer + " : " + status.Text;
+                lbStatus.Text = status.Text;
                 mainStatus.Refresh();
                 lbWhiteScore.Text = $"Белые: {status.WhiteScore}";
                 lbBlackScore.Text = $"Чёрные: {status.BlackScore}";
@@ -264,8 +269,10 @@ namespace Checkers
                 Client.DestroyGame(_gameGuid);
                 _gameGuid = Client.CreateGame();
             }
-            var frm = new ChooseGameForm(_gameGuid);
-            frm.PlayerName = Settings.Default.PlayerName;
+            var frm = new ChooseGameForm(_gameGuid)
+            {
+                PlayerName = Settings.Default.PlayerName
+            };
             var result = frm.ShowDialog(this);
             if (result == DialogResult.OK)
             {
@@ -275,18 +282,27 @@ namespace Checkers
                 {
                     _gameGuid = frm.OpponentGameGuid;
                     _player = Player.Black;
+                    JoinNewGame(frm.PlayerName);
                 }
                 else
+                {
                     _player = Player.White;
-                StartNewGame(frm.PlayMode, _player, frm.PlayerName);
-                _started = true;
+                    StartNewGame(frm.PlayMode, _player, frm.PlayerName);
+                   
+                }
                 Client.UpdateOpponentGameAsync(_gameGuid);
+                _started = true;
             }
         }
 
         private async void StartNewGame(PlayMode playMode, Player player, string playerName)
         {
             await Client.StartNewGameAsync(_gameGuid, playMode, player, playerName);
+        }
+
+        private async void JoinNewGame(string playerName)
+        {
+            await Client.JoinNewGameAsync(_gameGuid, playerName);
         }
 
         private async void EndGame(Guid guid)
@@ -396,6 +412,17 @@ namespace Checkers
             EndGame(_gameGuid);
             Client.UpdateOpponentGameAsync(_gameGuid);
             Client.DestroyGame(_gameGuid);
+        }
+
+        private void tsmiAbout_Click(object sender, EventArgs e)
+        {
+            DialogForm.Show(this, "Русские шашки." + Environment.NewLine + 
+                "Программирование на заказ: ashsvis@gmail.com", "Шашки", false);
+        }
+
+        private void tsmiRules_Click(object sender, EventArgs e)
+        {
+            new RulesForm().ShowDialog(this);
         }
     }
 

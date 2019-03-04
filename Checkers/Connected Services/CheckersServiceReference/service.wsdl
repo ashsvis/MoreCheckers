@@ -142,6 +142,12 @@
   <wsdl:message name="ICheckersService_StartNewGame_OutputMessage">
     <wsdl:part name="parameters" element="tns:StartNewGameResponse" />
   </wsdl:message>
+  <wsdl:message name="ICheckersService_JoinNewGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:JoinNewGame" />
+  </wsdl:message>
+  <wsdl:message name="ICheckersService_JoinNewGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinNewGameResponse" />
+  </wsdl:message>
   <wsdl:message name="ICheckersService_EndGame_InputMessage">
     <wsdl:part name="parameters" element="tns:EndGame" />
   </wsdl:message>
@@ -237,6 +243,10 @@
     <wsdl:operation name="StartNewGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/StartNewGame" message="tns:ICheckersService_StartNewGame_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/StartNewGameResponse" message="tns:ICheckersService_StartNewGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="JoinNewGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/JoinNewGame" message="tns:ICheckersService_JoinNewGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICheckersService/JoinNewGameResponse" message="tns:ICheckersService_JoinNewGame_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="EndGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ICheckersService/EndGame" message="tns:ICheckersService_EndGame_InputMessage" />
@@ -372,6 +382,15 @@
     </wsdl:operation>
     <wsdl:operation name="StartNewGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/StartNewGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="JoinNewGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/JoinNewGame" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -557,6 +576,15 @@
     </wsdl:operation>
     <wsdl:operation name="StartNewGame">
       <soap12:operation soapAction="http://tempuri.org/ICheckersService/StartNewGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="JoinNewGame">
+      <soap12:operation soapAction="http://tempuri.org/ICheckersService/JoinNewGame" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

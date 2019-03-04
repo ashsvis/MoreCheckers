@@ -14,7 +14,7 @@ namespace CheckersAppServer
             var game = new Game();
             var guid = game.Id;
             _games.Add(guid, game);
-            Console.WriteLine($"Создание игры {guid}, тип игры: {game.Mode}");
+            //Console.WriteLine($"Создание игры {guid}, тип игры: {game.Mode}");
             return guid;
         }
 
@@ -23,7 +23,7 @@ namespace CheckersAppServer
             if (!_games.ContainsKey(gameId)) return false;
             var gameMode = _games[gameId].Mode;
             _games.Remove(gameId);
-            Console.WriteLine($"Удаление игры {gameId}, тип игры: {gameMode}");
+            //Console.WriteLine($"Удаление игры {gameId}, тип игры: {gameMode}");
             return true;
         }
 
@@ -34,7 +34,7 @@ namespace CheckersAppServer
             {
                 if (!_games.ContainsKey(gameId)) continue;
                 var game = _games[gameId];
-                if (game.WinPlayer == WinPlayer.Game)
+                if (game.WinPlayer == WinPlayer.Wait)
                     list.AddRange(_games.Keys);
             }
             return list.ToArray();
@@ -60,6 +60,7 @@ namespace CheckersAppServer
             status.Text = game.ToString();
             status.WinPlayer = game.WinPlayer;
             status.Player = game.Player;
+            status.Direction = game.Direction;
             status.PlayerName = game.PlayerName;
             status.BlackScore = game.BlackScore;
             status.WhiteScore = game.WhiteScore;
@@ -75,8 +76,19 @@ namespace CheckersAppServer
             game.Mode = gameType;
             game.Player = player;
             game.PlayerName = playerName;
+            game.WinPlayer = gameType == PlayMode.NetGame ? WinPlayer.Wait : WinPlayer.Game;
+            game.AvalilableMoveCells = game.Board.GetAvalilableMoveCells();
+            game.AvalilableAnswerMoveCells = game.Board.GetAvalilableAnswerMoveCells(game.AvalilableMoveCells);
+            //Console.WriteLine($"Начало игры {gameId}, тип игры: {gameType}");
+            return true;
+        }
+
+        public bool JoinNewGame(Guid gameId, string playerName)
+        {
+            if (!_games.ContainsKey(gameId)) return false;
+            var game = _games[gameId];
             game.WinPlayer = WinPlayer.Game;
-            Console.WriteLine($"Начало игры {gameId}, тип игры: {gameType}");
+            //Console.WriteLine($"Подключение к игре {gameId}, тип игры: {game.Mode}");
             return true;
         }
 
@@ -85,7 +97,7 @@ namespace CheckersAppServer
             if (!_games.ContainsKey(gameId)) return false;
             var game = _games[gameId];
             game.Board.ResetMap(true);
-            Console.WriteLine($"Конец игры {gameId}, тип игры: {game.Mode}");
+            //Console.WriteLine($"Конец игры {gameId}, тип игры: {game.Mode}");
             return true;
         }
 

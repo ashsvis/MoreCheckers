@@ -47,6 +47,9 @@ namespace CheckersAppServer
         bool StartNewGame(Guid gameId, PlayMode gameType, Player player, string playerName);
 
         [OperationContract]
+        bool JoinNewGame(Guid gameId, string playerName);
+
+        [OperationContract]
         bool EndGame(Guid gameId);
 
         [OperationContract]

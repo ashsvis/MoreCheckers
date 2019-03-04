@@ -52,7 +52,8 @@
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRules = new System.Windows.Forms.ToolStripMenuItem();
             this.panelGame = new System.Windows.Forms.Panel();
-            this.lvLog = new ListViewEx();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.lvLog = new Checkers.ListViewEx();
             this.chStep = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chWhite = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chBlack = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -63,6 +64,9 @@
             this.mainStatus.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.panelGame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerClock
@@ -84,7 +88,7 @@
             this.lbStatus,
             this.tsslIpAddress,
             this.tsslDateTime});
-            this.mainStatus.Location = new System.Drawing.Point(0, 449);
+            this.mainStatus.Location = new System.Drawing.Point(0, 450);
             this.mainStatus.Name = "mainStatus";
             this.mainStatus.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.mainStatus.Size = new System.Drawing.Size(442, 24);
@@ -95,7 +99,7 @@
             // lbStatus
             // 
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(205, 19);
+            this.lbStatus.Size = new System.Drawing.Size(236, 19);
             this.lbStatus.Spring = true;
             this.lbStatus.Text = "Инициализация...";
             this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -118,10 +122,10 @@
             // 
             // tsmiAbout
             // 
-            this.tsmiAbout.Enabled = false;
             this.tsmiAbout.Name = "tsmiAbout";
             this.tsmiAbout.Size = new System.Drawing.Size(162, 22);
             this.tsmiAbout.Text = "&О программе...";
+            this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
             // openGameDialog
             // 
@@ -232,15 +236,15 @@
             // 
             // tsmiRules
             // 
-            this.tsmiRules.Enabled = false;
             this.tsmiRules.Name = "tsmiRules";
             this.tsmiRules.Size = new System.Drawing.Size(162, 22);
             this.tsmiRules.Text = "&Правила игры...";
+            this.tsmiRules.Click += new System.EventHandler(this.tsmiRules_Click);
             // 
             // panelGame
             // 
             this.panelGame.BackColor = System.Drawing.Color.LightGray;
-            this.panelGame.Controls.Add(this.lvLog);
+            this.panelGame.Controls.Add(this.splitContainer1);
             this.panelGame.Controls.Add(this.label2);
             this.panelGame.Controls.Add(this.lbBlackScore);
             this.panelGame.Controls.Add(this.lbWhiteScore);
@@ -248,30 +252,45 @@
             this.panelGame.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelGame.Location = new System.Drawing.Point(205, 24);
             this.panelGame.Name = "panelGame";
-            this.panelGame.Size = new System.Drawing.Size(237, 425);
+            this.panelGame.Size = new System.Drawing.Size(237, 426);
             this.panelGame.TabIndex = 10;
             this.panelGame.Visible = false;
             // 
-            // lvLog
+            // splitContainer1
             // 
-            this.lvLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(8, 73);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.lvLog);
+            this.splitContainer1.Panel2Collapsed = true;
+            this.splitContainer1.Size = new System.Drawing.Size(221, 345);
+            this.splitContainer1.SplitterDistance = 200;
+            this.splitContainer1.TabIndex = 3;
+            // 
+            // lvLog
+            // 
             this.lvLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chStep,
             this.chWhite,
             this.chBlack});
+            this.lvLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lvLog.FullRowSelect = true;
             this.lvLog.GridLines = true;
             this.lvLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lvLog.HideSelection = false;
-            this.lvLog.Location = new System.Drawing.Point(8, 74);
+            this.lvLog.Location = new System.Drawing.Point(0, 0);
             this.lvLog.MultiSelect = false;
             this.lvLog.Name = "lvLog";
             this.lvLog.ShowGroups = false;
             this.lvLog.ShowItemToolTips = true;
-            this.lvLog.Size = new System.Drawing.Size(221, 343);
+            this.lvLog.Size = new System.Drawing.Size(221, 345);
             this.lvLog.TabIndex = 1;
             this.lvLog.UseCompatibleStateImageBehavior = false;
             this.lvLog.View = System.Windows.Forms.View.Details;
@@ -337,7 +356,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(442, 473);
+            this.ClientSize = new System.Drawing.Size(442, 474);
             this.Controls.Add(this.panelGame);
             this.Controls.Add(this.mainStatus);
             this.Controls.Add(this.mainMenu);
@@ -358,6 +377,9 @@
             this.mainMenu.PerformLayout();
             this.panelGame.ResumeLayout(false);
             this.panelGame.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -395,6 +417,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiEndGame;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowGamePanel;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 

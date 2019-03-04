@@ -28,10 +28,26 @@ namespace Checkers
 
         public Guid Id { get; set; }
 
+        private List<string> _avalilableMoveCells;
+
+        public List<string> AvalilableMoveCells
+        {
+            get { return _avalilableMoveCells; }
+            set
+            {
+                _avalilableMoveCells.Clear();
+                _avalilableMoveCells.AddRange(value);
+            }
+        }
+
+        public Dictionary<string, string[]> AvalilableAnswerMoveCells { get; set; }
+
         public Game()
         {
             Id = Guid.NewGuid();
             Log = new List<LogItem>();
+            _avalilableMoveCells = new List<string>();
+            AvalilableAnswerMoveCells = new Dictionary<string, string[]>();
             Board = new Board(this);
             Board.CheckerMoved += Board_CheckerMoved;
             Board.ResetMap();
@@ -106,7 +122,9 @@ namespace Checkers
             switch (WinPlayer)
             {
                 case WinPlayer.None:
-                    return "Выберите тип игры...";
+                    return "Выберите новую игру...";
+                case WinPlayer.Wait:
+                    return "Ожидание соперника...";
                 case WinPlayer.Game:
                     return Direction ? "Ход чёрных..." : "Ход белых...";
                 case WinPlayer.White:
